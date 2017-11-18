@@ -18,4 +18,5 @@ This is the official repository of the **Murder Mystery Bot**!
 
 ## Contributers
 [@FireMario211](https://github.com/FireMario211) -> Owner
+
 [@ohlookitsAugust](https://github.com/ohlookitsAugust) -> Main Hoster & Co-Owner
