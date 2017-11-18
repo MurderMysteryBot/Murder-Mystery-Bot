@@ -12,6 +12,7 @@
 
 # Murder Mystery Bot
 This is the official repository of the **Murder Mystery Bot**!
+If you find an issue, please report it in Issues and if you have a fix then please leave it so we can fix it for the future.
 
 ## License
 [View here](https://github.com/FireMario211/Murder-Mystery-Bot/blob/master/LICENSE)
