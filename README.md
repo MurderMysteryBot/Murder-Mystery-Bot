@@ -4,7 +4,7 @@
     Murdery Mystery Bot (MMB)
   <br>
  </h1>
-<h4 align="center">Growing Discord music bot made with Java lib JDA and formerly Discord4J.</h4>
+<h4 align="center">Growing discord bot by playing Murder Mystery!</h4>
   <p align="center">
       <a href="https://discord.gg/utSmNaQ" target="_blank"><img src="https://discordapp.com/api/guilds/319583713262436354/embed.png" alt="Discord"></a>
   
