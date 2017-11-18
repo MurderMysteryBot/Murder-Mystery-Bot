@@ -1,0 +1,78 @@
+<> ---- CHANGE LOG ---- <>
+Update V1.0.5b
+Added mm!votehang
+Fixed a few bugs
+Added a new gamemode (Unlimited Players Mode)
+Improved Database
+Sharding!
+Fixed eval
+Added mm!updates if you want to have the updates role for murder mystery bot official
+Hopefully fixed a feature in which if the assassin or murderer are alive and everyone is dead then the game ends as in "Game Over"
+Added the amount of active games in mm!stats
+
+Update V1.0.4b
+Fixed Stats command
+Fixed Assassin not pinging in #murderer channel
+Fixed Eval
+Fixed Exec
+
+Update V1.0.3_5b
+Fixes Game session
+
+Update V1.0.3_4b
+Fixed the sendembed bug
+
+Update V1.0.3_3b
+Fixed Healer bug where it says that the user doesn't exist.
+Fixed Bug where if you join 2 times, it adds another player.
+Fixed bugs where it says the user doesn't exist (hopefully you work now d.js)
+
+Update V1.0.3_2b
+Fixed the dboats token
+Added 2 meme commands which are **USELESS**, idk i had no ideas on what to add
+dont type mm!mmbo
+
+Update V1.0.3_1b
+Renamed numbers to id so now you can use stuff like mm!shootid or mm!killid, etc...
+Instead of using player ids for the commands, you use user ids.
+Fixed a few bugs
+Fixed a bug where it doesn't remove the player if the player leaves.
+
+Update V1.0.3b
+Added mm!game force @user [Role]!
+Added Game session
+Added stuff for #mmb-logs and #game-logs 
+Fixed a few bugs
+Fixed the bug where anyone can type mm!game fixgame
+
+Update V1.0.2_1b
+Added mm!game fixgame which attempts to fix the game
+Fixed a few bugs (hopefully)
+Fixed a bug where you can type mm!game gamestart twice
+Fixed a bug where the murderer can kill the assassin
+
+Update V1.0.2b
+Added mm!shootnumber
+Added mm!playerids
+Added mm!healnumber
+Added mm!killnumber
+Added mm!searchnumber
+Added mm!jailnumber
+Added Noah to the eval and stuff *he keps asking .-.*
+
+Update V1.0.1_5b
+Fixed Actioned Bug (Hopefully .-.)
+
+Update V1.0.1_3b
+Updated Help and Stats command
+Fixed Healing Issue
+Fixed deleteallplayerz function (hopefully works now)
+Fixed Actioned Issue (hopefully works now)
+Fixed Administrator issue
+
+Update V1.0.1b
+Added "mm!stats"
+Fixes "mm!game stop"
+
+Update V1.0.0b
+Released Boat
