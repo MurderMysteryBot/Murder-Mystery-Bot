@@ -10,6 +10,10 @@
   
 -------------------
 
+<a href="https://discordbots.org/bot/319204121393496064">
+  <img src="https://discordbots.org/api/widget/319204121393496064.png" alt="Discord Bots" />
+</a>
+
 # Murder Mystery Bot
 This is the official repository of the **Murder Mystery Bot**!
 If you find an issue, please report it in Issues and if you have a fix then please leave it so we can fix it for the future.
