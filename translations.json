@@ -1,0 +1,146 @@
+{
+    "English": {
+        "botownerjoin": "👑 The Bot Owner `",
+        "botownerjointwo": "` has joined your server! 👑",
+        "botadminjoin": ":gear: A Bot Administrator `",
+        "botadminjointwo": "` has joined your server! :gear:",
+        "errors": {
+            "error498code": "Error Code 498 at roleupdate",
+            "errorroleupdate": "`ERROR` Role ID not found ",
+            "roleexisting": "That role doesn't exist! (Make sure you have it case-sensetive)",
+            "hostrole": "You have not either put the host role in the database OR you deleted it!",
+            "hostrolenotfound": "Error...\nHost Role Not Found!",
+            "mmrolenotfound": "Error...\nMurder Mystery Role Not Found!",
+            "startcmd": "You haven't started the game yet! Type `mm!game start` to start the game!",
+            "database": "You have not put your data in the database! Please type mm!game setupdata\nto insert your data into the database!"
+        },
+        "about": "Hello! I am ",
+        "about2": " developed by <@126119057232625664> & <@280158289667555328>!\nI was based on the Hypixel game \"Murder Mystery\"; I was being private for 2 months and 30 days (So long...) but I am public as of August 24th, 2017!\nIf you need help, Do **mm!help** or if you need my stats? Use **mm!stats**, Is there a bug? Use **mm!bug [report]** to report a bug!",
+        "lookindms": "Please look in DMs! (If you don't see the DM, enable DMs)",
+        "fixgame": "Attempting to fix the game... (Make sure you deleted all the channels Murder Mystery Bot made, also the role as well)",
+        "fixedgame": "Successfully fixed the game! hopefully it works now ._.",
+        "hostroleperms": "You do not have permission to use this command!\nYou need the Game Hoster role!",
+        "manageroles": "You do not have permission to add a host role! You need the `MANAGE_ROLES` permission",
+        "koefk": "Successfully put the role `",
+        "keeod": "` into the Database!",
+        "tjeoi": "There is already a game going on!",
+        "kreor": "You can't have more then ",
+        "people": "people",
+        "wekfo": "You need more than 0+ people.",
+        "murdergameregular": "Hello everyone! Lets play a game of Murder Mystery shall we? Lets find out who the murderer is! If you died, you will be DM'd this:\nhttp://prntscr.com/gcaf7d\nOnce the user has put in their Last Will it will probably be announced to the server, if some admin is on the game and has the permission Administrator, Then that'll be cheating! (unless if they dont check the other channels ya mean?)\nIf you want to vote to kill someone, type mm!votehang and they will be voted to die!\nThat is the game! Hope Innocents Win!",
+        "gamestart": "Game has started! GL (if you see a error, pls stop the game - if the game is buggy, contact FireMario211 by going on his server (mm!server))",
+        "murdergamemurderparty": "Hello everyone! Lets play a game of Murder Mystery shall we? Lets find out who the murderer is! **Everyone** is a Murderer...wait why is **Everyone** a murderer...? There is suppose to be one murderer...OH I remember! We are playing Murder Party Mode! That means EVERYONE is a murderer, and you should not trust ANYONE If you died, you will be DM'd this:\nhttp://prntscr.com/ffad0j\nOnce the user has put in their Last Will it will probably be announced to the server, where there will be dead players in the chat, if some admin is on the game and has the permission Administrator, then it doesn't matter because everyone is a murderer\nIf you want to vote to kill someone, type mm!votehang and they will be voted to die!\nThat is the game!~~Hope Innocents Win!~~",
+        "keofr": "You don't have enough players! You need 1+ people in order to play",
+        "keofra": "You don't have enough players! You need 2+ people in order to play",
+        "wdkdd": "You cant have more than 8 people!",
+        "fkeow": "You don't have enough players! You need 6+ people in order to play",
+        "gamehasntstart": "The game hasn't been started yet!",
+        "gamealreadystart": "Sorry but the game has already started!",
+        "hasbeenvoted": " has been voted, ",
+        "morevotes": " more votes needed until he dies.",
+        "hasaroundvote": " has been voted, and has around ",
+        "hasaroundvote2": " vote(s), He will now be killed...",
+        "youhavedied": ":skull: You have died! :skull:",
+        "hasbeenhung": " has been hung :skull:",
+        "fkefoekf": "You cannot vote yourself!",
+        "userisnotingame": "That user isn't in the game!",
+        "userdoesntexist": "That user doesn't exist!",
+        "assigneddmd": ":fearful: You feel like you have been assigned... :cold_sweat:",
+        "joinedgame": " You have been succesfully joined the game! Please wait while other players join in...",
+        "alreadyingame": " You are already in the game",
+        "thatuserhasntjoined": "That user hasn't joined the game!",
+        "startc": "You have already started the game",
+        "kfofee": " has setup a ",
+        "dkodee": " Murder Mystery Game! If you want to join, type\nmm!game join\nTo join the match!",
+        "modedoesntexist": "That mode doesn't exist!\nPlease use these categories:\n```md\nRegular - Classic Murder Mystery! (regular)\n\nMurder Party - Everyone is a murderer! (murderparty)\n\nHumans VS Bots - Added extra bots (not added yet)\n\nKiller Mode - There is one Detective and Everyone is a murderer (not added yet)\n\nSpecialist Town - Everyone is either Murderer, dective, healer, etc (not added yet)\n\n5050 - 50 murderers, 50 detectives (not added yet)\n\n2 birds 1 stone - 2 murds 1 detect Or 2 detect 1 murd (not added yet)\nFaster mode - Classic murder mystery but the time is quicker (fastermode)\n\nTime mode - In the day time, the Murderer can attack, but in the night they cant. (not added yet)\n\n1v1 Mode - 1 Detective and 1 Murderer, ONLY 2 People can do this mode. (1v1)\n\nBot Murder Mode - At night the bot types mm!kill (random) (not added yet)\n\nRejected Roles Mode - A mode that contains (most of) the rejected roles (not added yet)\n\nRobbery - 1-5 (varietied by server number) people are dressed in Robber clothing. Then Cops (act like detective) will try to apprehend them. The rest are Shop keepers. (innocents) They are managed to keep the store without being robbed.\nIf Robber/Murderer kills the Shop Keeper or gets detected by camera (camera has 3 seconds before detection) The Cops will get detected on where a robber is at\n(The Town varies around how much there is in the server)\n\n(Small Town: 1-5 People in Server)\n\n(Medium Town: 7-max People in server)\n(Big Town 8+ people in server) (not added yet)\n\nUnlimted Players Mode - Have more than 8 people? this is the mode for you! You can have an unlimited amount of players! (unlimitedmode)\n\nThats all the modes\n```",
+        "stoppedgame": "Successfully (or not) stopped the game!",
+        "stoppedgameglob": "The game has been stopped by `",
+        "jobchannelmsgs": {
+            "murderer": {
+                "channel": "Hello there, You are a **Murderer**, You will try to kill as many people as you can! But remember, do not get caught! The Detective will try to find out who the Murderer is! There is also a Healer that can heal other people, so beware of that, the recommended thing to do is find the Detective and kill him/her. You can murder people by typing\nmm!kill `@user`\nThen someone will be murdered! But remember, it will be logged! It wont show your name though, remember not to talk in the public chat or else people will know who the murderer is! If you die, its game over! If you win, you win! Good luck murdering people... ;)",
+                "channel2": " is the Assassin AND\n",
+                "channel3": ", **YOU** are the murderer. ;)",
+                "channel4": " is the murderer.",
+                "stabstab": "You have stabbed `",
+                "stabbady": "`! But remember....He might be revived by the healer..."
+            },
+            "detective": {
+                "channel": "Hello there, You are a **Detective**, You will try to find out who the Murderer is! The best option is to not trust anyone, Be sure to try your best to find out who the Murderer is, If you die, then there may be a new Detective, If you shoot someone, you cannot get your gun back, You've messed up buddy. If you die that means you can chat in the #general (or the main chat) (if the owner/admin has setup a thing where players with murder mystery role cant chat)\nIn order to search someone to see if they are murderer, Type mm!search `@user`\n(or mm!searchid `(userid)`)\nTo shoot someone, type mm!shoot `@user`\n(or mm!shootid `(userid)`)\nBut don't abuse your gun!\nThats all, hope you find out who the murderer is!"
+            },
+            "healer": {
+                "channel": "Hello there, You are a **Healer**, You are a person that heals people that are dead! If you die, you cannot heal anyone anymore, Quick tip is try to not talk and say anything about your role. If you want to heal someone, just type\nmm!heal `@user`\nand you will be able to heal someone! Hope you avoid being murdered! Have a great game!",
+                "wasteheal": "You realize that you healed yourself, You have successfully wasted a first-aid kit. How terrible, heres another one *gives another one* Now dont use it on yourself!",
+                "hasbeenrevived": " has been revived by a **Healer** :angel:",
+                "youhavehealed": "You have healed ",
+                "youhavehealed2": "!\nThey will be alive in the morning!",
+                "dm": ":angel: You have been revived by a **Healer**! You will be alive tomorrow morning. :angel:"
+            },
+            "jailor": {
+                "channel": "Hello there, You are the **Jailor**, You will jail people every night and ask them questions. If you think the person is the murderer, feel free to type \n**mm!execute**\nTo execute the person, If you want to jail the person, type\nmm!jail `@user`\nTo jail the person you want to interrogate someone, OR you can type\nmm!jailid `id`\nTo jail the user but in a list that will be shown below, If you execute someone, Then it will be announced in the #murdergame, Hope you find out who the murderer is!",
+                "jailchannel": "Hello, Welcome to **Jail**, this is where you have jailed people and you interrogate them by answering some questions, Also hello jailed person! Welcome to jail, If the Jailor thinks your suspicious, then you probably are going to be executed, If you murder the person, They might have a last will and then it will show the public chat the will and show who they jailed. Anyways, Don't try to get executed or else you'll end up like Shadow where he had his head cut off. Anyways, Hope you try to not get executed!",                
+                "alreadyinjail": "That person is already in jail!",
+                "isntinjail": "That person isn't in jail!",
+                "youhaveexecuted": "You have executed ",
+                "wasmurderer": " and they were the **Murderer**!",
+                "wasdetective": " and they were a **Detective**",
+                "washealer": " and they were a **Healer**",
+                "wasradio": " and they were a **Radio Person**",
+                "wasassassin": " and they were an **Assassin**",
+                "wasinnocent": " and they were **Innocent**",
+                "fekfe": " has been executed by the **Jailor**",
+                "alreadyexecuted": "You have already executed someone!",
+                "cantexeute": "You can't execute yourself",
+                "havesss": ":skull: You have been executed by the **Jailor** :skull:",
+                "jailingurself": "You can't jail yourself."
+            },
+            "radioperson": {
+                "channel": "Hello! You are a **Radio Person** and you have the power to annonomously say to the public chat what YOU want to say. If you dont want to say anything, its fine buddy. If you want to broadcast to the public chat, Type\nmm!broadcast (message)\nTo send a message to the #murdergame!"
+            },
+            "assassin": {
+                "channel": "Hello there, You are an **Assassin**, You are a person that is trying to get your target killed, if your target is killed you earn $3 and you will get a new target to kill... Your main goal is to kill your target, The murderer will know who the Assassin is, but you do not know who the Murderer is, You will be DM'd on what your next target is. Make sure the murderer can assign a target AND can kill once per night (Money system coming soon)"
+            }
+        },
+        "enoughplayers": "There are already enough players! (You can go on another server if you have like 17 people or somethin, or play unlimited players mode or 5050.)",
+        "settings": "Hello there! Welcome to the **Settings Help Menu**! Here are the commands!\n\nmm!game settings lang (language) - Sets the language! (Used if you are a different language)",
+        "langsuccess": "**Successfully set your language to** `",
+        "thatpersonisdead": "That person is dead!",
+        "thatpersonisalreadydead": "That person is already dead!",
+        "thatpersonisntdead": "That person isn't dead!",
+        "fekrofr": " has been jailed! Try and interrigate him, if (s)he sounds suspicious, you can execute them by typing mm!execute ",
+        "reee": " has been executed by the **Jailor** and they were the **Murderer**",
+        "eeer": "You cannot do this during the day time.",
+        "nogamegoingon": "There is no game going on!",
+        "reeeeee": "**Sorry but I can't seem to DM you...**",
+        "alreadyvote": "You have already voted!",
+        "alreadymurder": "You have already murdered someone!",
+        "alreadysearch": "You have already searched/shot someone!",
+        "alreadyexecute": "You have already executed someone!",
+        "stabbed": " has been stabbed by the **Murderer**! :dagger:",
+        "stabbed2": ":skull: You have been stabbed by the **Murderer** :skull:",
+        "stabbed3": "A murderer tried to attack you! But you were in jail!",
+        "reeeess": "You can't kill yourself...Are you trying to commit suicide?",
+        "welluhh": "That person is your partner!",
+        "lola": "You cannot do this in the night!",
+        "dledee": "You attack but the person is in cages, they might be in jail...",
+        "isntingame": "You aren't in the game!",
+        "b": "You have already voted!",
+        "c": "Votehang is disabled on this mode.",
+        "goodnight": "Good night...",
+        "goodmorning": "Good morning!\nTo vote to kill you must type mm!votehang `@user`\nThe morning will go on for a minute.\nWhile its morning, chat with others to figure out who the murderer/assassin is!",
+        "help": "`Help Command`\n\n***Regular Commands***\n**mm!invite** - Invite Murder Mystery Bot to your server!\n**mm!shardinfo** - Shows the info of Murder Mystery's shards!\n**mm!server** - Shows you the invite to the Offical Murder Mystery Bot Server!\n\n***Game Commands***\n**mm!game** - Shows the detail of the game and how to play I guess\n**mm!game rules** - Shows you the rules of the game!\n**mm!game start** - Start a game!\n**mm!game fixgame** - Attempts to fix the game.\n**mm!game join** - Join a game!\n**mm!game setupdata** - Add your guild data in our database!\n**mm!game addhostrole <role name>** - Add your host role to the database!\n**mm!game leave** - Leave the game!\n**mm!game gamestart** - Start the game which will create all channels and setup roles, etc...\n**mm!game stop** - Stop the game!\n\n***Ingame Commands***\n**mm!kill <@user>** - Kill a user! (Murderer Permission Needed)\n**mm!search <@user>** - Search the user to see if they are the murderer!\n**mm!shoot <@user>** - Shoot a user if you think they are the murderer!\n**mm!broadcast** - Broadcast a global message to the news!\n**mm!votehang <@user>** - Vote to kill the person if you think they are suspicious!\n**mm!jail <@user>** - Jail a person to interrigate them\n**mm!execute <@user>** - Execute the user if they are suspicious...\n**mm!heal <@user>** - Bring the user back from the dead!\n**mm!lastwill <will>** - When you die or get hung, there will be a lastwill message to all the users to see before you actually die.\n\n***Bot made by FireMario211***\nVersion %version%\nPlease note that there may be bugs, if you see any, please type mm!bug (message)",
+        "shop": "Welcome to the **Shop**! Here you can buy things that will protect you or buy it for killing others that you might think is the murderer...\nWell",
+        "shopitems": {
+            "defenseknife": {
+                "name": "Defense Knife",
+                "price": 10,
+                "description": "A sharp unused knife ready to cut."
+            },
+            "bow": {
+                "name": "Bow",
+                "price": 10,
+                "description": "This is a 50% chance to kill a person or the murderer."
+            }
+        }
+    }
+
+}
