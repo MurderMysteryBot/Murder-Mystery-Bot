@@ -3,7 +3,12 @@
 	"ownerid": "126119057232625664",
 	"playing": "mm!help - Murdering people...on ",
 	"prefix": "mm!",
-	"botlog_channelid": "319586568622964740",
-	"blacklist_message": "Something is wrong! You have been Blacklisted! OR Your guild has been Blacklisted, If you have any questions or want to be unblacklisted, Type mm!server to get the invite and appeal!",
-	"admin_ids": ["126119057232625664", "321363278188249090", "281397352177074177"]
+	"botlog_channelid": "350984977371889664",
+	"blacklist_message": "Something is wrong! You have been Blacklisted! OR Your guild has been Blacklisted, If you have any questions or want to be unblacklisted, Type mm!serverinvite to get the invite and appeal!",
+	"dbltoken": "YOUR DBL TOKEN",
+	"admin_ids": ["126119057232625664", "321363278188249090", "281397352177074177"],
+	"guildid": "319583713262436354",
+	"adminroleid": "322168622501855232",
+	"bugroleid": "321430711473012736",
+	"gamelogs": "351461628635774978"
 }
