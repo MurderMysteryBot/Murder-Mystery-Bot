@@ -363,7 +363,9 @@ bot.on('message', message => {
 
   let args = message.content.split(" ").slice(1);
 
-
+  if (command === "appealserver") {
+    message.channel.send("https://discord.gg/fNYrqZx")
+  }
 
   if (command === "updates") {
     if (message.guild.id !== "319583713262436354") return;
@@ -1061,7 +1063,7 @@ bot.on('message', message => {
               type: categorya
             })
             */
-            bot.channels.get('385210567834468362').send({
+            bot.channels.get('351461628635774978').send({
               embed: new discord.RichEmbed()
                 .setTitle("Murder Mystery Bot Game Logs")
                 .setDescription("A game has been started")
@@ -1127,7 +1129,7 @@ bot.on('message', message => {
               type: categorya
             })
             */
-            bot.channels.get('385210567834468362').send({
+            bot.channels.get('351461628635774978').send({
               embed: new discord.RichEmbed()
                 .setTitle("Murder Mystery Bot Game Logs")
                 .setDescription("A game has been started")
@@ -1172,7 +1174,7 @@ bot.on('message', message => {
               type: categorya
             })
             */
-            bot.channels.get('385210567834468362').send({
+            bot.channels.get('351461628635774978').send({
               embed: new discord.RichEmbed()
                 .setTitle("Murder Mystery Bot Game Logs")
                 .setDescription("A game has been started")
@@ -1237,7 +1239,7 @@ bot.on('message', message => {
               startedgame: false,
               type: categorya
             })*/
-            bot.channels.get('385210567834468362').send({
+            bot.channels.get('351461628635774978').send({
               embed: new discord.RichEmbed()
                 .setTitle("Murder Mystery Bot Game Logs")
                 .setDescription("A game has been started")
@@ -1280,7 +1282,7 @@ bot.on('message', message => {
               startedgame: false,
               type: categorya
             })*/
-            bot.channels.get('385210567834468362').send({
+            bot.channels.get('351461628635774978').send({
               embed: new discord.RichEmbed()
                 .setTitle("Murder Mystery Bot Game Logs")
                 .setDescription("A game has been started")
@@ -1326,7 +1328,7 @@ bot.on('message', message => {
               startedgame: false,
               type: categorya
             })*/
-            bot.channels.get('385210567834468362').send({
+            bot.channels.get('351461628635774978').send({
               embed: new discord.RichEmbed()
                 .setTitle("Murder Mystery Bot Game Logs")
                 .setDescription("A game has been started")
