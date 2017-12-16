@@ -1,0 +1,33 @@
+{
+  "name": "murder-mystery-bot",
+  "description": "Are you bored and want to play Murder Mystery? Well this is the bot for you! You can play Murder Mystery with Murder Mystery Bot!",
+  "version": "1.0.6b",
+  "main": "Shard.js",
+  "contributors": [{
+      "name": "FireMario211",
+      "email": "firemario07@gmail.com",
+      "web": "https://github.com/FireMario211"
+    },
+    {
+      "name": "ohlookitsAugust",
+      "web": "https://github.com/ohlookitsAugust"
+    }
+  ],
+  "bugs": {
+    "web": "https://github.com/FireMario211/Murder-Mystery-Bot/issues"
+  },
+  "dependencies": {
+    "check-update-github": "0.0.4",
+    "discord.js": "^11.1.0",
+    "humanize-duration": "^3.10.1",
+    "sqlite": "^2.8.0"
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/FireMario211/Murder-Mystery-Bot.git"
+  },
+  "author": "FireMario211 <firemario07@gmail.com>",
+  "license": "Apache-2.0",
+  "homepage": "https://github.com/FireMario211/Murder-Mystery-Bot#readme"
+}
