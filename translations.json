@@ -201,7 +201,8 @@
         "shopthings": "Sorry but you cannot use this item as it isnt usable!",
         "shopthing": "Sorry but you cannot use items or buy items in this Mode!",
         "blacklistusersed": "Hello there, Sorry but you are blacklisted! If you want to appeal please type mm!appealserver and join that server then appeal your blacklist!",
-        "blacklistguildjsa": "Hello there, Sorry but your guild is blacklisted! If you want to appeal your guild, please type mm!appealserver and join that server then appeal your blacklist!"
+        "blacklistguildjsa": "Hello there, Sorry but your guild is blacklisted! If you want to appeal your guild, please type mm!appealserver and join that server then appeal your blacklist!",
+        "alreadyjoinn": "**Sorry but someone is joining the game! Please wait until they have joined the game.**"
     },
     "Dutch": {
         "botownerjoin": "👑 De Bot Eigenaar `",
@@ -405,6 +406,7 @@
         "shopthings": "Sorry, maar je kan dit voorwerp niet gebruiken, want het is niet bruikbaar!",
         "shopthing": "Sorry, maar je kan geen items kopen/gebruiken in deze modus!",
         "blacklistusersed": "Hallo, het spijt ons, maar je staat op de zwarte lijst! Als je een bezwaar wilt indienen, type dan mm!appealserver en wordt lid van die server om je bezwaar te maken!",
-        "blacklistguildjsa": "Hallo, het spijt ons, maar je server staat op de zwarte lijst! If you want to appeal your guild, type dan mm!appealserver en wordt lid van die server om je bezwaar te maken!"
+        "blacklistguildjsa": "Hallo, het spijt ons, maar je server staat op de zwarte lijst! If you want to appeal your guild, type dan mm!appealserver en wordt lid van die server om je bezwaar te maken!",
+        "alreadyjoinn": "**Sorry, maar iemand neemt deel aan het spel! Even geduld tot ze zich bij het spel hebben gevoegd.**"
     }
 }
