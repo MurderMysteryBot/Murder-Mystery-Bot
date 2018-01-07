@@ -1,4 +1,36 @@
 <> ---- CHANGE LOG ---- <>
+
+Update V1.0.6_1b
+Added it so that you cant spam mm!game join and you have to wait until the player joins the game.
+
+Update V1.0.6b
+Added Locales
+Added Shop
+Fixing 1v1 Mode
+Making Day time longer
+Making Night time longer
+Added a few hidden things
+Added new items to the shop! > {
+Bow
+Private Message
+Defense Knife
+} <
+Added the mm!settings command!
+Updated the Database
+Added a Blacklist system
+Added Gold
+Fixed mm!updates
+Added mm!suggest <Type of suggestion> <Suggestion>
+Fixed Actioned Bug
+Fixed assigned command
+Fixed when stopping the game it doesn't delete the #jailor channel
+Fixed the hasjailed bug
+Fixed the bug in which tells that you've already voted.
+Added a command named mm!gamenotify which gives/removes the Game Notify role!
+Adding a feature in which it automatically adds your server to the database when you add the bot
+Adding the usernames for the players who joined in mm!players
+Fixing the join bug in which increases the player count everytime you are already in the game
+
 Update V1.0.5b
 Added mm!votehang
 Fixed a few bugs
