@@ -10,5 +10,7 @@
 	"guildid": "319583713262436354",
 	"adminroleid": "322168622501855232",
 	"bugroleid": "321430711473012736",
-	"gamelogs": "351461628635774978"
+	"gamelogs": "351461628635774978",
+	"enabledblpost": 1,
+	"sharding": 1
 }
