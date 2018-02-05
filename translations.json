@@ -34,6 +34,7 @@
         "keofra": "You don't have enough players! You need 2+ people in order to play",
         "wdkdd": "You cant have more than 8 people!",
         "fkeow": "You don't have enough players! You need 6+ people in order to play",
+        "fkeowa": "You don't have enough players! You need 4+ people in order to play",
         "gamehasntstart": "The game hasn't been started yet!",
         "gamealreadystart": "Sorry but the game has already started!",
         "hasbeenvoted": " has been voted, ",
@@ -53,7 +54,7 @@
         "startc": "You have already started the game",
         "kfofee": " has setup a ",
         "dkodee": " Murder Mystery Game! If you want to join, type\nmm!game join\nTo join the match!",
-        "modedoesntexist": "That mode doesn't exist!\nPlease use these categories:\n```md\nRegular - Classic Murder Mystery! (regular)\n\nMurder Party - Everyone is a murderer! (murderparty)\n\nHumans VS Bots - Added extra bots (not added yet)\n\nKiller Mode - There is one Detective and Everyone is a murderer (not added yet)\n\nSpecialist Town - Everyone is either Murderer, Detective, healer, etc (not added yet)\n\n5050 - 50 murderers, 50 detectives (not added yet)\n\n2 birds 1 stone - 2 murds 1 detect Or 2 detect 1 murd (not added yet)\nFaster mode - Classic murder mystery but the time is quicker (fastermode)\n\nTime mode - In the day time, the Murderer can attack, but in the night they cant. (not added yet)\n\n1v1 Mode - 1 Detective and 1 Murderer, ONLY 2 People can do this mode. (1v1)\n\nBot Murder Mode - At night the bot types mm!kill (random) (not added yet)\n\nRejected Roles Mode - A mode that contains (most of) the rejected roles (not added yet)\n\nRobbery - 1-5 (varietied by server number) people are dressed in Robber clothing. Then Cops (act like detective) will try to apprehend them. The rest are Shop keepers. (innocents) They are managed to keep the store without being robbed.\nIf Robber/Murderer kills the Shop Keeper or gets detected by camera (camera has 3 seconds before detection) The Cops will get detected on where a robber is at\n(The Town varies around how much there is in the server)\n\n(Small Town: 1-5 People in Server)\n\n(Medium Town: 7-max People in server)\n(Big Town 8+ people in server) (not added yet)\n\nUnlimted Players Mode - Have more than 8 people? this is the mode for you! You can have an unlimited amount of players! (unlimitedmode)\n\nThats all the modes\n```",
+        "modedoesntexist": "That mode doesn't exist!\nPlease use these categories:\n```md\nRegular - Classic Murder Mystery! (regular)\n\nMurder Party - Everyone is a murderer! (murderparty)\n\nHumans VS Bots - Added extra bots (not added yet)\n\nKiller Mode - There is one Detective and Everyone is a murderer (not added yet)\n\nSpecialist Town - Everyone is either Murderer, Detective, healer, etc (not added yet)\n\n5050 - 50 murderers, 50 detectives (not added yet)\n\n2 birds 1 stone - 2 murds 1 detect Or 2 detect 1 murd (not added yet)\nFaster mode - Classic murder mystery but the time is quicker (fastermode)\n\nTime mode - In the day time, the Murderer can attack, but in the night they cant. (not added yet)\n\n1v1 Mode - 1 Detective and 1 Murderer, ONLY 2 People can do this mode. (1v1)\n\nBot Murder Mode - At night the bot types mm!kill (random) (not added yet)\n\nRejected Roles Mode - A mode that contains (most of) the rejected roles (not added yet)\n\nRobbery - 1-5 (varietied by server number) people are dressed in Robber clothing. Then Cops (act like detective) will try to apprehend them. The rest are Shop keepers. (innocents) They are managed to keep the store without being robbed.\nIf Robber/Murderer kills the Shop Keeper or gets detected by camera (camera has 3 seconds before detection) The Cops will get detected on where a robber is at\n(The Town varies around how much there is in the server)\n\n(Small Town: 1-5 People in Server)\n\n(Medium Town: 7-max People in server)\n(Big Town 8+ people in server) (not added yet)\n\nUnlimted Players Mode - Have more than 8 people? this is the mode for you! You can have an unlimited amount of players! (unlimitedmode)\n\nShort roles - Want to play Murder Mystery with just 4 roles and 4 people? This is the mode! (shortroles)\n\nThats all the modes\n```",
         "stoppedgame": "Successfully (or not) stopped the game!",
         "stoppedgameglob": "The game has been stopped by `",
         "jobchannelmsgs": {
@@ -137,14 +138,17 @@
         "goodmorning": "Good morning!\nTo vote to kill you must type mm!votehang `@user`\nThe morning will go on for a minute.\nWhile its morning, chat with others to figure out who the murderer/assassin is!",
         "help": "`Help Command`\n\n***Regular Commands***\n**mm!invite** - Invite Murder Mystery Bot to your server!\n**mm!settings** - Change the settings for Murder Mystery Bot!\n**mm!shardinfo** - Shows the info of Murder Mystery's shards!\n**mm!server** - Shows you the invite to the Offical Murder Mystery Bot Server!\n\n***Game Commands***\n**mm!game** - Shows the detail of the game and how to play I guess\n**mm!game rules** - Shows you the rules of the game!\n**mm!game start** - Start a game!\n**mm!game fixgame** - Attempts to fix the game.\n**mm!game join** - Join a game!\n**mm!game setupdata** - Add your guild data in our database!\n**mm!game addhostrole <role name>** - Add your host role to the database!\n**mm!game leave** - Leave the game!\n**mm!game gamestart** - Start the game which will create all channels and setup roles, etc...\n**mm!game stop** - Stop the game!\n\n***Ingame Commands***\n**mm!kill <@user>** - Kill a user! (Murderer Permission Needed)\n**mm!search <@user>** - Search the user to see if they are the murderer!\n**mm!shoot <@user>** - Shoot a user if you think they are the murderer!\n**mm!broadcast** - Broadcast a global message to the news!\n**mm!votehang <@user>** - Vote to kill the person if you think they are suspicious!\n**mm!jail <@user>** - Jail a person to interrogate them\n**mm!execute <@user>** - Execute the user if they are suspicious...\n**mm!heal <@user>** - Bring the user back from the dead!\n**mm!lastwill <will>** - When you die or get hung, there will be a lastwill message to all the users to see before you actually die.\n**mm!buy** <Item ID> - Have enough gold? Well you can buy an item!\n**mm!item <Item ID> <@User (optional)>** - Bought an item? Well you can use your item!\n\n***Bot made by FireMario211***\nVersion %version%\nPlease note that there may be bugs, if you see any, please type mm!bug (message)",
         "shop": "Welcome to the **Shop**! Here you can buy things that will protect you or buy it for killing others that you might think is the murderer...\nWe use currency named \"**Gold**\", You can get 1 **Gold** every day unless you are dead or you are cursed.\n**Items**:\n%item%\n\nIn order to buy a item, type **mm!buy <Item ID>**\nIn order to use the Item, type **mm!item <Item ID>** Or if you have someone to use it on, type **mm!item <Item ID> <@User>**",
+        "darkshop": "Welcome to the **Dark Shop**! This shop is provided by the murderers who attempted to murder everyone in the Town... Here you can buy things that will protect you or buy it for killing others, or even explode the universe...\nThe Murderers and Assassins use currency named \"**Dark Gold**\", You can get 0.5 **Dark Gold** every day unless you are dead...Now if you want to get 1 **Dark Gold**, you can convert **Gold** into **Dark Gold**\n**Items**:\n%item%\n\nIn order to buy a item, type **mm!darkbuy <Item ID>**\nIn order to use the Item, type **mm!darkitem <Item ID>** Or if you have someone to use it on, type **mm!darkitem <Item ID> <@User>**",
         "alreadyshot": "You have already shot someone",
         "plspickitem": "**Please pick an Item ID to buy/use!** (You can find this at the end of an item in the shop by ID:)",
         "unknownitem": "**That is an unknown Item ID!**",
         "notenoughgold": "**You do not have enough gold! You need** `%golamount%` **In order to buy this Item!**",
+        "notenoughgolddark": "**You do not have enough dark gold! You need** `%golamount%` **In order to buy this Item!**",
         "bought": "**You have bought (a)** `%itemname%`!",
         "plstypemsg": "**Please type a message!**",
         "hasnotbought": "**Sorry but you haven't bought this item!**",
         "shopclosed": "**The shop is closed during the night...**",
+        "defaultchannel": "Please mention a channel! (Examaple: #general)",
         "shopitems": [{
                 "name": "Defense Knife",
                 "price": 10,
@@ -153,7 +157,8 @@
                 "usable": 0,
                 "sent": ":skull: You have been stabbed by the person you were trying to shoot/kill! You have died :skull:",
                 "sent2": ":dagger: A user tried to kill you! You stab them and you kill them! No one knows you killed them though. :dagger:",
-                "sent3": ":dagger: The **Detective** tried to shoot someone but the **Detective** has been stabbed! :dagger:"
+                "sent3": ":dagger: The **Detective** tried to shoot someone but the **Detective** has been stabbed! :dagger:",
+                "isDark": 0
             }, {
                 "name": "Bow",
                 "price": 10,
@@ -165,7 +170,8 @@
                 "msgss": "You have shot <@%user%> and they were the **%role%!**",
                 "sent": ":skull: You have been shot by a **Bow**! :skull:",
                 "msgsss": "The shop seller has saw you shoot an **Innocent**! He has not allowed you to buy the Bow anymore!",
-                "seller": "Sorry but you cannot buy/use this item because the Shop Owner denied you from buying/using it!"
+                "seller": "Sorry but you cannot buy/use this item because the Shop Owner denied you from buying/using it!",
+                "isDark": 0
             },
             {
                 "name": "Private Message",
@@ -174,9 +180,42 @@
                 "id": 2,
                 "usable": 1,
                 "privatemsg": "**You have gotten a private message from your House by an Unknown Person**\n```\n%msg%\n```",
-                "sent": "**You send a private message to** <@%us%>'s **House**..."
+                "sent": "**You send a private message to** <@%us%>'s **House**...",
+                "isDark": 0
+            },
+            {
+                "name": "Gold to Dark Gold",
+                "price": 2,
+                "description": "Convert Gold into Dark Gold! *There is no use for it...*",
+                "id": 3,
+                "usable": 0,
+                "isDark": 1
             }
         ],
+        "darkshopitems": [{
+            "name": "Explode the Universe",
+            "price": 20,
+            "description": "Explode the Universe and Kill everyone!",
+            "id": 1,
+            "usable": 1,
+            "isDark": 1,
+            "sent": "The **Murderer** has detonated a bomb inside of earths core! Beep, beep, beep, **bop** *explodes*",
+            "sent2": "You have bought a detonator and planted it inside of the earth. You put the timer on for **2 minutes** and wait."
+        }, {
+            "name": "Frame",
+            "price": 5,
+            "description": "Frame someone and switch their roles over to Murderer for a day!",
+            "id": 2,
+            "usable": 0,
+            "isDark": 1
+        }, {
+            "name": "Broadcast",
+            "price": 1,
+            "description": "Take the position as the Radio Person and broadcast something!",
+            "id": 3,
+            "usable": 1,
+            "isDark": 1
+        }],
         "roles": {
             "murderer": "Murderer",
             "detective": "Detective",
@@ -239,6 +278,7 @@
         "keofra": "Je hebt niet genoeg spelers! Je hebt 2 of meer mensen nodig om te spelen",
         "wdkdd": "Je kan niet meer dan 8 spelers hebben!",
         "fkeow": "YJe hebt niet genoeg spelers! Je hebt 6 of meer mensen nodig om te spelen",
+        "fkeowa": "YJe hebt niet genoeg spelers! Je hebt 4 of meer mensen nodig om te spelen",
         "gamehasntstart": "Het spel is nog niet begonnen!",
         "gamealreadystart": "Sorry, maar het spel is al begonnen!",
         "hasbeenvoted": " is om gestemd, ",
@@ -258,7 +298,7 @@
         "startc": "You have already started the game",
         "kfofee": " heeft een ",
         "dkodee": " Murder Mystery Game gestart! Als je mee wilt doen, type dan\nmm!game join\nom mee te doen aan het spel!",
-        "modedoesntexist": "Deze spelmodus bestaat niet!\nKies een spelmodus uit deze categorieën:\n```md\nRegular - Klassiek Murder Mystery! (regular)\n\nMurder Party - Iedereen is een moordenaar! (murderparty)\n\nMensen VS Bots - Extra computerspelers in het spel (nog niet toegevoegd)\n\nKiller Mode - Er is een één detective en iedereen is een moordenaar (nog niet toegevoegd)\n\nSpecialist Town - Iedereen is hetzelfde, Moordenaar, detective, genezer, etc (nog niet toegevoegd)\n\n50/50 - 50 moordenaars, 50 detectives (nog niet toegevoegd)\n\n2 birds 1 stone - 2 moordenaars 1 detective of 2 detectives en 1 moordenaar (nog niet toegevoegd)\nSnelle modus - Klassiek variant, maar de tijd verloopt sneller (fastermode)\n\nTijd modus - Overdag kan de moordenaar aanvallen, maar niet s'nachts. (nog niet toegevoegd)\n\n1v1 Modus - 1 Detective en 1 Moordenaar, SLECHTS 2 mensen kunnen dit spelen. (1v1)\n\nBot Moordenaar Modus - s'Nachts typt de bot `mm!kill (random) (nog niet toegevoegd)\n\nAfgewezen Rollen Modus - Een modus die de meeste afgewezen rolle bevat (nog niet toegevoegd)\n\nOverval - 1 tot 5 mensen (Verschilt per hoeveelheid serverleden) zijn verkleed als Overvallen. De politie(soort detectives) probeert ze dan te arresteren. De rest zijn winkeliers. (onschuldigen) Ze proberen de winkel te behoeden van een oveval.\nAls de Overvaller/Moordenaar een Winkelier dood of wordt gedetecteerd door een camera (camera's hebben 3 seconden achterstand) informeert dit de politie van zijn locatie\n(De Stad verschilt op basis van het aantal serverleden)\n\n(Kleine Stad: 1-5 mensen in server)\n\n(Normale Stad: Maximaal 7 mensen in de server)\n(Grote Stad: Meer dan 8 mensen in de server) (nog niet toegevoegd)\n\nOnbeperkte Spelers Modus - Meer dan 8 spelers? Gebruik dan deze modus! Je kan net zoveel spelers hebben als je wilt! (unlimitedmode)\n\nDat zijn alle modi!\n```",
+        "modedoesntexist": "Deze spelmodus bestaat niet!\nKies een spelmodus uit deze categorieën:\n```md\nRegular - Klassiek Murder Mystery! (regular)\n\nMurder Party - Iedereen is een moordenaar! (murderparty)\n\nMensen VS Bots - Extra computerspelers in het spel (nog niet toegevoegd)\n\nKiller Mode - Er is een één detective en iedereen is een moordenaar (nog niet toegevoegd)\n\nSpecialist Town - Iedereen is hetzelfde, Moordenaar, detective, genezer, etc (nog niet toegevoegd)\n\n50/50 - 50 moordenaars, 50 detectives (nog niet toegevoegd)\n\n2 birds 1 stone - 2 moordenaars 1 detective of 2 detectives en 1 moordenaar (nog niet toegevoegd)\nSnelle modus - Klassiek variant, maar de tijd verloopt sneller (fastermode)\n\nTijd modus - Overdag kan de moordenaar aanvallen, maar niet s'nachts. (nog niet toegevoegd)\n\n1v1 Modus - 1 Detective en 1 Moordenaar, SLECHTS 2 mensen kunnen dit spelen. (1v1)\n\nBot Moordenaar Modus - s'Nachts typt de bot `mm!kill (random) (nog niet toegevoegd)\n\nAfgewezen Rollen Modus - Een modus die de meeste afgewezen rolle bevat (nog niet toegevoegd)\n\nOverval - 1 tot 5 mensen (Verschilt per hoeveelheid serverleden) zijn verkleed als Overvallen. De politie(soort detectives) probeert ze dan te arresteren. De rest zijn winkeliers. (onschuldigen) Ze proberen de winkel te behoeden van een oveval.\nAls de Overvaller/Moordenaar een Winkelier dood of wordt gedetecteerd door een camera (camera's hebben 3 seconden achterstand) informeert dit de politie van zijn locatie\n(De Stad verschilt op basis van het aantal serverleden)\n\n(Kleine Stad: 1-5 mensen in server)\n\n(Normale Stad: Maximaal 7 mensen in de server)\n(Grote Stad: Meer dan 8 mensen in de server) (nog niet toegevoegd)\n\nOnbeperkte Spelers Modus - Meer dan 8 spelers? Gebruik dan deze modus! Je kan net zoveel spelers hebben als je wilt! (unlimitedmode)\n\nKorte rollen - Wil je Murder Mystery spelen met slechts 4 rollen en 4 personen? Dit is de modus! (shortroles)\n\nDat zijn alle modi!\n```",
         "stoppedgame": "Is gestopt met het spel!",
         "stoppedgameglob": "Het spel is gestopt door `",
         "jobchannelmsgs": {
@@ -342,14 +382,17 @@
         "goodmorning": "Goedemorgen!\nOm een stemming te houden over wie je moet ophangen, type je mm!votehang `@user`\nDe ochtend duurt één minuut.\nNu het morgen is,kan je met andere praten om te achterhalen wie de Moordenaar/Huurmoordenaar is!",
         "help": "`Help Commando`\n\n***Gewone Commando's***\n**mm!invite** - Nodig Murder Mystery Bot uit naar jouw server!\n**mm!shardinfo** - Laat informatie zien over Murder Mystery's shards!\n**mm!server** - Geeft je een uitnodiging naar de officiële Murder Mystery Game server!\n\n***Game Commands***\n**mm!game** - Geeft je details over het spel en hoe je moet spelen\n**mm!game rules** - Laat je de spelregels zien!\n**mm!game start** - Start een spel!\n**mm!game fixgame** - Doet een poging het spel te repareren.\n**mm!game join** - Doe mee aan een spel!\n**mm!game setupdate** - Voeg je serverdata toen aan onze database!\n**mm!game addhostrole <role name>** - Voeg je Host rol toe aan de database!\n**mm!game leave** - Verlaat het spel!\n**mm!game gamestart** - Start een spel waar alle rollen en kanalen automatisch worden aangemaakt, etc...\n**mm!game stop** - Stop het spel!\n\n***Ingame Commands***\n**mm!kill <@user>** - Vermoord iemand! (Moordenaar Permissie Nodig)\n**mm!search <@user>** - Doorzoek een gebruiker om te zien of hij/zij de moordenaar is!\n**mm!shoot <@user>** - Schiet iemand neer die je verdenkt de moordenaar te zijn!\n**mm!broadcast** - Kondig een bericht aan in het nieuws!\n**mm!votehang <@user>** - Doe een stemming om een verdacht persoon te vermoorden!\n**mm!jail <@user>** - Neem iemand gevangen om hem te ondervragen\n**mm!execute <@user>** - Executeerd een verdachte speler...\n**mm!heal <@user>** - Breng de speler terug tot leven!\n**mm!lastwill <will>** - Als je sterft of opgehangen wordt, laat je een Laatste Wens zien aan iedereen voordat je daadwerkelijk sterft.\n**mm!item <item> <@User (optional)>** - Bought an item? Well you can use your item!\n\n***Bot gemaakt door FireMario211***\nVersie %version%\nOnthoudt dat er fouten kunnen zijn. Als je die ziet, type dan mm!bug (bericht)",
         "shop": "Welkom in de **Winkel**! Hier kan je dingen kopen om jezelf te verdedigen of om de verdachte moordenaar mee om te leggen...\nWe gebruiken de valuta \"**Goud**\", Je krijgt 1 **Goud** per dag, tenzij je dood of vervloekt bent.\n**Voorwerpen**:\n%item%\n\nOm een voorwerp te kopen, type je **mm!buy <Item ID>**\nOm het voorwerp te gebruiken, type je **mm!item <Item ID>** of als je iemand hebt om het op te gebruiken, type dan **mm!item <Item ID> <@User>**",
+        "darkshop": "Welkom in de **Donker Winkel**! Deze winkel wordt aangeboden door de moordenaars die hebben geprobeerd iedereen in de stad te vermoorden... Hier kun je dingen kopen die je beschermen of kopen voor het doden van anderen, of zelfs het universum ontploffen...\nDe moordenaars en moordenaars gebruiken valuta genaamd \"**Dark Gold**\", Je kunt elke dag 0.5 **Dark Gold** krijgen, tenzij je dood bent...Als je nu 1 **Dark Gold** wilt, kun je **Gold converteren** in **Donker goud**\n**Items**:\n%item%\n\nType **mm!darkbuy <Item ID>**\nNom een ​​item te kopen Item, type **mm!darkitem <Item ID>** Of gebruik iemand om het te gebruiken, type **mm!darkitem <Item ID> <@User>**",
         "alreadyshot": "Je hebt al iemand beschoten",
         "plspickitem": "**Kies een voorwerp ID om te kopen/gebruiken!** (Dit staat bij het einde van het voorwerp in de winkel:)",
         "unknownitem": "**Dit voorwerp ID is niet bekend!**",
         "notenoughgold": "**Je hebt niet genoeg goud! Je hebt** `%golamount%` **nodig om dit voorwerp te kunnen kopen!**",
+        "notenoughgolddark": "**Je hebt niet genoeg donker goud! Je hebt** `%golamount%` **nodig om dit voorwep te kunnen kopen!**",
         "bought": "**Je kocht (een)** `%itemname%`!",
         "plstypemsg": "**Type alstublieft een bericht!**",
         "hasnotbought": "**Sorry, maar je hebt dit voorwerp niet gekocht!**",
         "shopclosed": "**De winkel is s'nachts gesloten...**",
+        "defaultchannel": "Vermeld een kanaal! (Examaple: #general)",
         "shopitems": [{
                 "name": "Verdedigingsmes",
                 "price": 10,
@@ -358,7 +401,8 @@
                 "usable": 0,
                 "sent": ":skull: Je bent neergestoken door de persoon die je wou neerschieten/doden! Je bent dood :skull:",
                 "sent2": ":dagger: Iemand probeerde je te vermoorden! Je steekt en vermoord hem! Niemand weet gelukkig dat jij het was. :dagger:",
-                "sent3": ":dagger: De **Detective** probeerde op iemand te schieten maar de **Detective** was neergestoken! :dagger:"
+                "sent3": ":dagger: De **Detective** probeerde op iemand te schieten maar de **Detective** was neergestoken! :dagger:",
+                "isDark": 0
             }, {
                 "name": "Boog",
                 "price": 10,
@@ -370,7 +414,8 @@
                 "msgss": "Je schoot op <@%user%> en die was de **%role%!**",
                 "sent": ":skull: Je bent beschoten door een **Boog**! :skull:",
                 "msgsss": "De Winkelier zag je dat je een **Onschuldige** hebt beschoten! Hij laat je de boog niet meer kopen!",
-                "seller": "Sorry, maar je kan dit voorwerp niet meer kopen/gebruiken omdat de Winkelier je heeft verboden het te kopen/gebruiken!"
+                "seller": "Sorry, maar je kan dit voorwerp niet meer kopen/gebruiken omdat de Winkelier je heeft verboden het te kopen/gebruiken!",
+                "isDark": 0
             },
             {
                 "name": "Privébericht",
@@ -379,9 +424,43 @@
                 "id": 2,
                 "usable": 1,
                 "privatemsg": "**Je hebt een privébericht ontvangen van je Huis door een Onbekend Persoon**\n```\n%msg%\n```",
-                "sent": "**Je hebt een privebericht verzonden naar ** <@%us%>'s **Huis**..."
+                "sent": "**Je hebt een privebericht verzonden naar ** <@%us%>'s **Huis**...",
+                "isDark": 0
+            },
+            {
+                "name": "Goud naar donker goud",
+                "price": 2,
+                "description": "Zet goud om in donker goud! *Het heeft geen zin...*",
+                "id": 3,
+                "usable": 0,
+                "isDark": 1
             }
         ],
+        "darkshopitems": [{
+            "name": "Vernietig het Universum",
+            "price": 20,
+            "description": "Vernietig het universum en dood iedereen!",
+            "id": 1,
+            "usable": 1,
+            "isDark": 1,
+            "sent": "De **Moordenaar** heeft een bom geplaatst in de kern van de aarde! Biep, biep, biep, **bop** *BOEM*",
+            "sent2": "Je hebt een ontsteker gekocht en geplant in de aarde. Je zet de timer op **2 minuten* en wacht."
+        }, {
+            "name": "Beschuldigen",
+            "price": 5,
+            "description": "Beschuldig iemand en wissel hun rol naar Moordenaar voor een dag!",
+            "id": 2,
+            "usable": 0,
+            "isDark": 1
+        }, {
+            "name": "Uitzenden",
+            "price": 1,
+            "description": "Neem de positie van de radiohost in en zend iets uit!",
+            "id": 3,
+            "usable": 1,
+            "isDark": 1
+        }],
+
         "roles": {
             "murderer": "Moordenaar",
             "detective": "Detective",
