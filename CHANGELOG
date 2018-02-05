@@ -1,5 +1,18 @@
 <> ---- CHANGE LOG ---- <>
 
+Update V1.0.7b
+Added Dark Gold (only for the murderer)
+Added mm!lastwill
+Added mm!settings defaultchannel <Channel Name>
+Removing Faster Mode
+Added Short Roles Mode
+Fixed Murder Party Mode
+Added a feature in which it automatically adds your server to the database when you add the bot
+Changed mm!game settings to mm!settings
+Fixed the No channel found Bug
+Added it so that when the game ends, it shows who was what roles.
+Fixed bugs
+
 Update V1.0.6_1b
 Added it so that you cant spam mm!game join and you have to wait until the player joins the game.
 
