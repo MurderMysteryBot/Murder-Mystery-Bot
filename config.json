@@ -1,7 +1,7 @@
 {
 	"token": "YOUR BOT TOKEN",
 	"ownerid": "126119057232625664",
-	"playing": "mm!help - Murdering people...on ",
+	"playing": "%prefix%help - Murdering people... [%shard.count%]",
 	"prefix": "mm!",
 	"botlog_channelid": "350984977371889664",
 	"blacklist_message": "Something is wrong! You have been Blacklisted! OR Your guild has been Blacklisted, If you have any questions or want to be unblacklisted, Type mm!serverinvite to get the invite and appeal!",
