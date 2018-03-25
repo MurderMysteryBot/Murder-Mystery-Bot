@@ -1,5 +1,23 @@
 <> ---- CHANGE LOG ---- <>
 
+Update V1.0.8b
+Added The Great Earner (Knife) to the Dark Shop
+Added Bucket of Bacon to the Shop
+Added Bucket of Cooking Oil to the shop
+Added Bucket of Cheese to the shop
+Added The Radio Sapper to the Dark Shop
+Added Time Mode
+Added a randomizer for roles
+Added a feature where if it turns to day 50 the universe explodes and everyone dies
+Updated Database
+Added mm!suggest
+Fixed Assassin not being DM'd about his target
+Fixed Heal bug (if user gets healed they cant see their private channel)
+Fixed Jail bug (murderer could still kill)
+Fixed the execute command
+Fixed bug where it doesnt show jailor if the game ends
+Fixed Murder and heal bug (roles cant see their channel)
+
 Update V1.0.7b
 Added Dark Gold (only for the murderer)
 Added mm!lastwill
