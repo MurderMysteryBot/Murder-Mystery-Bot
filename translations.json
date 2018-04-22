@@ -54,7 +54,7 @@
         "startc": "You have already started the game",
         "kfofee": " has setup a ",
         "dkodee": " Murder Mystery Game! If you want to join, type\nmm!game join\nTo join the match!",
-        "modedoesntexist": "That mode doesn't exist!\nPlease use these categories:\n```md\nRegular - Classic Murder Mystery! (regular)\n\nMurder Party - Everyone is a murderer! (murderparty)\n\nHumans VS Bots - Added extra bots (not added yet)\n\nKiller Mode - There is one Detective and Everyone is a murderer (not added yet)\n\nSpecialist Town - Everyone is either Murderer, Detective, healer, etc (not added yet)\n\n5050 - 50 murderers, 50 detectives (not added yet)\n\n2 birds 1 stone - 2 murds 1 detect Or 2 detect 1 murd (not added yet)\nFaster mode - Classic murder mystery but the time is quicker (fastermode)\n\nTime mode - In the day time, the Murderer can attack, but in the night they cant. (not added yet)\n\n1v1 Mode - 1 Detective and 1 Murderer, ONLY 2 People can do this mode. (1v1)\n\nBot Murder Mode - At night the bot types mm!kill (random) (not added yet)\n\nRejected Roles Mode - A mode that contains (most of) the rejected roles (not added yet)\n\nUnlimted Players Mode - Have more than 8 people? this is the mode for you! You can have an unlimited amount of players! (unlimitedmode)\n\nShort roles - Want to play Murder Mystery with just 4 roles and 4 people? This is the mode! (shortroles)\n\nInsane - Always day, murder can kill anytime and sheriff (insane)\n\nThats all the modes\n```",
+        "modedoesntexist": "That mode doesn't exist!\nPlease use these categories:\n```md\nRegular - Classic Murder Mystery! (regular)\n\nMurder Party - Everyone is a murderer! (murderparty)\n\nHumans VS Bots - Added extra bots (not added yet)\n\nKiller Mode - There is one Detective and Everyone is a murderer (not added yet)\n\nSpecialist Town - Everyone is either Murderer, Detective, healer, etc (not added yet)\n\n5050 - 50 murderers, 50 detectives (not added yet)\n\n2 birds 1 stone - 2 murds 1 detect Or 2 detect 1 murd (not added yet)\nFaster mode - Classic murder mystery but the time is quicker (fastermode)\n\nTime mode - In the day time, the Murderer can attack, but in the night they cant. (not added yet)\n\n1v1 Mode - 1 Detective and 1 Murderer, ONLY 2 People can do this mode. (1v1)\n\nBot Murder Mode - At night the bot types mm!kill (random) (not added yet)\n\nRejected Roles Mode - A mode that contains (most of) the rejected roles (not added yet)\n\nUnlimted Players Mode - Have more than 8 people? this is the mode for you! You can have an unlimited amount of players! (unlimitedmode)\n\nShort roles - Want to play Murder Mystery with just 4 roles and 4 people? This is the mode! (shortroles)\n\nInsane - Always day, murder can kill anytime and sheriff (insane)\n\nSandbox - You have access to everything. (sandbox)\n\nThats all the modes\n```",
         "stoppedgame": "Successfully (or not) stopped the game!",
         "stoppedgameglob": "The game has been stopped by `",
         "jobchannelmsgs": {
@@ -137,7 +137,7 @@
         "c": "Votehang is disabled on this mode.",
         "goodnight": "Good night...",
         "goodmorning": "Good morning!\nTo vote to kill you must type mm!votehang `@user`\nThe morning will go on for a minute.\nWhile its morning, chat with others to figure out who the murderer/assassin is!",
-        "help": "`Help Command`\n\n***Regular Commands***\n**mm!invite** - Invite Murder Mystery Bot to your server!\n**mm!settings** - Change the settings for Murder Mystery Bot!\n**mm!shardinfo** - Shows the info of Murder Mystery's shards!\n**mm!server** - Shows you the invite to the Offical Murder Mystery Bot Server!\n**mm!suggest** - Suggest something for the Bot! (Abusing this will result in a blacklist.)\n\n***Game Commands***\n**mm!game** - Shows the detail of the game and how to play I guess\n**mm!game rules** - Shows you the rules of the game!\n**mm!game start** - Start a game!\n**mm!game fixgame** - Attempts to fix the game.\n**mm!game join** - Join a game!\n**mm!game setupdata** - Add your guild data in our database!\n**mm!game addhostrole <role name>** - Add your host role to the database!\n**mm!game leave** - Leave the game!\n**mm!game gamestart** - Start the game which will create all channels and setup roles, etc...\n**mm!game stop** - Stop the game!\n\n***Ingame Commands***\n**mm!kill <@user>** - Kill a user! (Murderer Permission Needed)\n**mm!search <@user>** - Search the user to see if they are the murderer!\n**mm!shoot <@user>** - Shoot a user if you think they are the murderer!\n**mm!broadcast** - Broadcast a global message to the news!\n**mm!votehang <@user>** - Vote to kill the person if you think they are suspicious!\n**mm!jail <@user>** - Jail a person to interrogate them\n**mm!execute <@user>** - Execute the user if they are suspicious...\n**mm!heal <@user>** - Bring the user back from the dead!\n**mm!lastwill <will>** - When you die or get hung, there will be a lastwill message to all the users to see before you actually die.\n**mm!buy** <Item ID> - Have enough gold? Well you can buy an item!\n**mm!item <Item ID> <@User (optional)>** - Bought an item? Well you can use your item!\n\n***Bot made by FireMario211***\nVersion %version%\nPlease note that there may be bugs, if you see any, please type mm!bug (message)",
+        "help": "`Help Command`\n\n***Regular Commands***\n**mm!invite** - Invite Murder Mystery Bot to your server!\n**mm!settings** - Change the settings for Murder Mystery Bot!\n**mm!shardinfo** - Shows the info of Murder Mystery's shards!\n**mm!server** - Shows you the invite to the Offical Murder Mystery Bot Server!\n**mm!suggest** - Suggest something for the Bot! (Abusing this will result in a blacklist.)\n\n***Game Commands***\n**mm!game** - Shows the detail of the game and how to play I guess\n**mm!game rules** - Shows you the rules of the game!\n**mm!game start** - Start a game!\n**mm!game fixgame** - Attempts to fix the game.\n**mm!game join** - Join a game!\n**mm!game setupdata** - Add your guild data in our database!\n**mm!game modecmds <Options>** - Change the game options! (Right now only used for Sandbox Mode)\n**mm!game addhostrole <role name>** - Add your host role to the database!\n**mm!game leave** - Leave the game!\n**mm!game gamestart** - Start the game which will create all channels and setup roles, etc...\n**mm!game stop** - Stop the game!\n\n***Ingame Commands***\n**mm!kill <@user>** - Kill a user! (Murderer Permission Needed)\n**mm!search <@user>** - Search the user to see if they are the murderer!\n**mm!shoot <@user>** - Shoot a user if you think they are the murderer!\n**mm!broadcast** - Broadcast a global message to the news!\n**mm!votehang <@user>** - Vote to kill the person if you think they are suspicious!\n**mm!jail <@user>** - Jail a person to interrogate them\n**mm!execute <@user>** - Execute the user if they are suspicious...\n**mm!heal <@user>** - Bring the user back from the dead!\n**mm!lastwill <will>** - When you die or get hung, there will be a lastwill message to all the users to see before you actually die.\n**mm!buy** <Item ID> - Have enough gold? Well you can buy an item!\n**mm!item <Item ID> <@User (optional)>** - Bought an item? Well you can use your item!\n\n***Bot made by FireMario211***\nVersion %version%\nPlease note that there may be bugs, if you see any, please type mm!bug (message)",
         "shop": "Welcome to the **Shop**! Here you can buy things that will protect you or buy it for killing others that you might think is the murderer...\nWe use currency named \"**Gold**\", You can get 1 **Gold** every day unless you are dead or you are cursed.\n**Items**:\n%item%\n\nIn order to buy a item, type **mm!buy <Item ID>**\nIn order to use the Item, type **mm!item <Item ID>** Or if you have someone to use it on, type **mm!item <Item ID> <@User>**",
         "darkshop": "Welcome to the **Dark Shop**! This shop is provided by the murderers who attempted to murder everyone in the Town... Here you can buy things that will protect you or buy it for killing others, or even explode the universe...\nThe Murderers and Assassins use currency named \"**Dark Gold**\", You can get 0.5 **Dark Gold** every day unless you are dead...Now if you want to get 1 **Dark Gold**, you can convert **Gold** into **Dark Gold**\n**Items**:\n%item%\n\nIn order to buy a item, type **mm!darkbuy <Item ID>**\nIn order to use the Item, type **mm!darkitem <Item ID>** Or if you have someone to use it on, type **mm!darkitem <Item ID> <@User>**",
         "alreadyshot": "You have already shot someone",
@@ -229,8 +229,9 @@
             "price": 5,
             "description": "Frame someone and switch their roles over to Murderer for a day!",
             "id": 2,
-            "usable": 0,
-            "isDark": 1
+            "usable": 1,
+            "isDark": 1,
+            "sent": "**You have changed %user%'s role for the night.**"
         }, {
             "name": "Broadcast",
             "price": 1,
@@ -251,6 +252,13 @@
             "price": 2,
             "description": "For every kill you get, you get 1 gold.",
             "id": 5,
+            "usable": 0,
+            "isDark": 1
+        }, {
+            "name": "Eternal Justice",
+            "price": 1,
+            "description": "Automatically given to the Assassin, each time he lynches someone, his vote counts twice, but isn't given away.",
+            "id": 6,
             "usable": 0,
             "isDark": 1
         }],
@@ -279,7 +287,21 @@
         "shopthing": "Sorry but you cannot use items or buy items in this Mode!",
         "blacklistusersed": "Hello there, Sorry but you are blacklisted! If you want to appeal please type mm!appealserver and join that server then appeal your blacklist!",
         "blacklistguildjsa": "Hello there, Sorry but your guild is blacklisted! If you want to appeal your guild, please type mm!appealserver and join that server then appeal your blacklist!",
-        "alreadyjoinn": "**Sorry but someone is joining the game! Please wait until they have joined the game.**"
+        "alreadyjoinn": "**Sorry but someone is joining the game! Please wait until they have joined the game.**",
+        "cmdonlyworks": "**This command only works for %modename%.**",
+        "notrightarguments": "**Those weren't the right arguments!**\n%modename% Commands:",
+        "sandboxmode": {
+            "typeofgold": "**Please type in the type of gold!** <Normal/Dark>",
+            "pleaseenteramount": "**Please enter the amount of gold.**",
+            "destruction": "**Successfully killed everyone**",
+            "daytime": "**Successfully set the time to Day**",
+            "nighttime": "**Successfully set the time to Night**",
+            "revive": "**Successfully revived %user%!**",
+            "kill": "**Successfully killed %user%!**",
+            "setgold": "**Successfully set the dark gold/gold to `%goldamount%` for %user%!**",
+            "addgold": "**Successfully added `%goldamount%` for %user%!**",
+            "removegold": "**Successfully removed `%goldamount%` for %user%!**"
+        }
     },
     "Dutch": {
         "botownerjoin": "👑 De Bot Eigenaar `",
@@ -336,7 +358,7 @@
         "startc": "You have already started the game",
         "kfofee": " heeft een ",
         "dkodee": " Murder Mystery Game gestart! Als je mee wilt doen, type dan\nmm!game join\nom mee te doen aan het spel!",
-        "modedoesntexist": "Deze spelmodus bestaat niet!\nKies een spelmodus uit deze categorieën:\n```md\nRegular - Klassiek Murder Mystery! (regular)\n\nMurder Party - Iedereen is een moordenaar! (murderparty)\n\nMensen VS Bots - Extra computerspelers in het spel (nog niet toegevoegd)\n\nKiller Mode - Er is een één detective en iedereen is een moordenaar (nog niet toegevoegd)\n\nSpecialist Town - Iedereen is hetzelfde, Moordenaar, detective, genezer, etc (nog niet toegevoegd)\n\n50/50 - 50 moordenaars, 50 detectives (nog niet toegevoegd)\n\n2 birds 1 stone - 2 moordenaars 1 detective of 2 detectives en 1 moordenaar (nog niet toegevoegd)\nSnelle modus - Klassiek variant, maar de tijd verloopt sneller (fastermode)\n\nTijd modus - Overdag kan de moordenaar aanvallen, maar niet s'nachts. (nog niet toegevoegd)\n\n1v1 Modus - 1 Detective en 1 Moordenaar, SLECHTS 2 mensen kunnen dit spelen. (1v1)\n\nBot Moordenaar Modus - s'Nachts typt de bot `mm!kill (random) (nog niet toegevoegd)\n\nOnbeperkte Spelers Modus - Meer dan 8 spelers? Gebruik dan deze modus! Je kan net zoveel spelers hebben als je wilt! (unlimitedmode)\n\nKorte rollen - Wil je Murder Mystery spelen met slechts 4 rollen en 4 personen? Dit is de modus! (shortroles)\n\nKrankzinnig - Elke dag kan moord op elk moment doden en sheriff (insane)\n\nDat zijn alle modi!\n```",
+        "modedoesntexist": "Deze spelmodus bestaat niet!\nKies een spelmodus uit deze categorieën:\n```md\nRegular - Klassiek Murder Mystery! (regular)\n\nMurder Party - Iedereen is een moordenaar! (murderparty)\n\nMensen VS Bots - Extra computerspelers in het spel (nog niet toegevoegd)\n\nKiller Mode - Er is een één detective en iedereen is een moordenaar (nog niet toegevoegd)\n\nSpecialist Town - Iedereen is hetzelfde, Moordenaar, detective, genezer, etc (nog niet toegevoegd)\n\n50/50 - 50 moordenaars, 50 detectives (nog niet toegevoegd)\n\n2 birds 1 stone - 2 moordenaars 1 detective of 2 detectives en 1 moordenaar (nog niet toegevoegd)\nSnelle modus - Klassiek variant, maar de tijd verloopt sneller (fastermode)\n\nTijd modus - Overdag kan de moordenaar aanvallen, maar niet s'nachts. (nog niet toegevoegd)\n\n1v1 Modus - 1 Detective en 1 Moordenaar, SLECHTS 2 mensen kunnen dit spelen. (1v1)\n\nBot Moordenaar Modus - s'Nachts typt de bot `mm!kill (random) (nog niet toegevoegd)\n\nOnbeperkte Spelers Modus - Meer dan 8 spelers? Gebruik dan deze modus! Je kan net zoveel spelers hebben als je wilt! (unlimitedmode)\n\nKorte rollen - Wil je Murder Mystery spelen met slechts 4 rollen en 4 personen? Dit is de modus! (shortroles)\n\nKrankzinnig - Elke dag kan moord op elk moment doden en sheriff (insane)\n\nSandbox - Je hebt toegang tot alles. (sandbox)\n\nDat zijn alle modi!\n```",
         "stoppedgame": "Is gestopt met het spel!",
         "stoppedgameglob": "Het spel is gestopt door `",
         "jobchannelmsgs": {
@@ -419,7 +441,7 @@
         "c": "Votehang is uitgeschakeld in deze modus.",
         "goodnight": "Welterusten...",
         "goodmorning": "Goedemorgen!\nOm een stemming te houden over wie je moet ophangen, type je mm!votehang `@user`\nDe ochtend duurt één minuut.\nNu het morgen is,kan je met andere praten om te achterhalen wie de Moordenaar/Huurmoordenaar is!",
-        "help": "`Help Commando`\n\n***Gewone Commando's***\n**mm!invite** - Nodig Murder Mystery Bot uit naar jouw server!\n**mm!shardinfo** - Laat informatie zien over Murder Mystery's shards!\n**mm!server** - Geeft je een uitnodiging naar de officiële Murder Mystery Game server!\n**mm!suggest** - Geef een suggestie voor de bot! (Misbruik zal resulteren in een plek op de blacklist.)\n\n***Game Commands***\n**mm!game** - Geeft je details over het spel en hoe je moet spelen\n**mm!game rules** - Laat je de spelregels zien!\n**mm!game start** - Start een spel!\n**mm!game fixgame** - Doet een poging het spel te repareren.\n**mm!game join** - Doe mee aan een spel!\n**mm!game setupdate** - Voeg je serverdata toen aan onze database!\n**mm!game addhostrole <role name>** - Voeg je Host rol toe aan de database!\n**mm!game leave** - Verlaat het spel!\n**mm!game gamestart** - Start een spel waar alle rollen en kanalen automatisch worden aangemaakt, etc...\n**mm!game stop** - Stop het spel!\n\n***Ingame Commands***\n**mm!kill <@user>** - Vermoord iemand! (Moordenaar Permissie Nodig)\n**mm!search <@user>** - Doorzoek een gebruiker om te zien of hij/zij de moordenaar is!\n**mm!shoot <@user>** - Schiet iemand neer die je verdenkt de moordenaar te zijn!\n**mm!broadcast** - Kondig een bericht aan in het nieuws!\n**mm!votehang <@user>** - Doe een stemming om een verdacht persoon te vermoorden!\n**mm!jail <@user>** - Neem iemand gevangen om hem te ondervragen\n**mm!execute <@user>** - Executeerd een verdachte speler...\n**mm!heal <@user>** - Breng de speler terug tot leven!\n**mm!lastwill <will>** - Als je sterft of opgehangen wordt, laat je een Laatste Wens zien aan iedereen voordat je daadwerkelijk sterft.\n**mm!item <item> <@User (optional)>** - Bought an item? Well you can use your item!\n\n***Bot gemaakt door FireMario211***\nVersie %version%\nOnthoudt dat er fouten kunnen zijn. Als je die ziet, type dan mm!bug (bericht)",
+        "help": "`Help Commando`\n\n***Gewone Commando's***\n**mm!invite** - Nodig Murder Mystery Bot uit naar jouw server!\n**mm!shardinfo** - Laat informatie zien over Murder Mystery's shards!\n**mm!server** - Geeft je een uitnodiging naar de officiële Murder Mystery Game server!\n**mm!suggest** - Geef een suggestie voor de bot! (Misbruik zal resulteren in een plek op de blacklist.)\n\n***Game Commands***\n**mm!game** - Geeft je details over het spel en hoe je moet spelen\n**mm!game rules** - Laat je de spelregels zien!\n**mm!game start** - Start een spel!\n**mm!game fixgame** - Doet een poging het spel te repareren.\n**mm!game join** - Doe mee aan een spel!\n**mm!game setupdata** - Voeg je serverdata toen aan onze database!\n**mm!game modecmds <Options>** - Verander de game opties! (Momenteel alleen gebruikt in de Zandbak Modus)\n**mm!game addhostrole <role name>** - Voeg je Host rol toe aan de database!\n**mm!game leave** - Verlaat het spel!\n**mm!game gamestart** - Start een spel waar alle rollen en kanalen automatisch worden aangemaakt, etc...\n**mm!game stop** - Stop het spel!\n\n***Ingame Commands***\n**mm!kill <@user>** - Vermoord iemand! (Moordenaar Permissie Nodig)\n**mm!search <@user>** - Doorzoek een gebruiker om te zien of hij/zij de moordenaar is!\n**mm!shoot <@user>** - Schiet iemand neer die je verdenkt de moordenaar te zijn!\n**mm!broadcast** - Kondig een bericht aan in het nieuws!\n**mm!votehang <@user>** - Doe een stemming om een verdacht persoon te vermoorden!\n**mm!jail <@user>** - Neem iemand gevangen om hem te ondervragen\n**mm!execute <@user>** - Executeerd een verdachte speler...\n**mm!heal <@user>** - Breng de speler terug tot leven!\n**mm!lastwill <will>** - Als je sterft of opgehangen wordt, laat je een Laatste Wens zien aan iedereen voordat je daadwerkelijk sterft.\n**mm!item <item> <@User (optional)>** - Bought an item? Well you can use your item!\n\n***Bot gemaakt door FireMario211***\nVersie %version%\nOnthoudt dat er fouten kunnen zijn. Als je die ziet, type dan mm!bug (bericht)",
         "shop": "Welkom in de **Winkel**! Hier kan je dingen kopen om jezelf te verdedigen of om de verdachte moordenaar mee om te leggen...\nWe gebruiken de valuta \"**Goud**\", Je krijgt 1 **Goud** per dag, tenzij je dood of vervloekt bent.\n**Voorwerpen**:\n%item%\n\nOm een voorwerp te kopen, type je **mm!buy <Item ID>**\nOm het voorwerp te gebruiken, type je **mm!item <Item ID>** of als je iemand hebt om het op te gebruiken, type dan **mm!item <Item ID> <@User>**",
         "darkshop": "Welkom in de **Donker Winkel**! Deze winkel wordt aangeboden door de moordenaars die hebben geprobeerd iedereen in de stad te vermoorden... Hier kun je dingen kopen die je beschermen of kopen voor het doden van anderen, of zelfs het universum ontploffen...\nDe moordenaars en moordenaars gebruiken valuta genaamd \"**Dark Gold**\", Je kunt elke dag 0.5 **Dark Gold** krijgen, tenzij je dood bent...Als je nu 1 **Dark Gold** wilt, kun je **Gold converteren** in **Donker goud**\n**Items**:\n%item%\n\nType **mm!darkbuy <Item ID>**\nNom een ​​item te kopen Item, type **mm!darkitem <Item ID>** Of gebruik iemand om het te gebruiken, type **mm!darkitem <Item ID> <@User>**",
         "alreadyshot": "Je hebt al iemand beschoten",
@@ -510,8 +532,9 @@
             "price": 5,
             "description": "Beschuldig iemand en wissel hun rol naar Moordenaar voor een dag!",
             "id": 2,
-            "usable": 0,
-            "isDark": 1
+            "usable": 1,
+            "isDark": 1,
+            "sent": "**Je hebt de rol van %user%'s voor de nacht veranderd.**"
         }, {
             "name": "Uitzenden",
             "price": 1,
@@ -534,8 +557,14 @@
             "id": 5,
             "usable": 0,
             "isDark": 1
+        }, {
+            "name": "Eeuwige Gerechtigheid",
+            "price": 1,
+            "description": "Automatisch gegeven aan de Assassin, elke keer dat hij iemand lyncheert, telt zijn stem twee keer, maar wordt niet weggegeven.",
+            "id": 6,
+            "usable": 0,
+            "isDark": 1
         }],
-
         "roles": {
             "murderer": "Moordenaar",
             "detective": "Detective",
@@ -561,6 +590,21 @@
         "shopthing": "Sorry, maar je kan geen items kopen/gebruiken in deze modus!",
         "blacklistusersed": "Hallo, het spijt ons, maar je staat op de zwarte lijst! Als je een bezwaar wilt indienen, type dan mm!appealserver en wordt lid van die server om je bezwaar te maken!",
         "blacklistguildjsa": "Hallo, het spijt ons, maar je server staat op de zwarte lijst! If you want to appeal your guild, type dan mm!appealserver en wordt lid van die server om je bezwaar te maken!",
-        "alreadyjoinn": "**Sorry, maar iemand neemt deel aan het spel! Even geduld tot ze zich bij het spel hebben gevoegd.**"
+        "alreadyjoinn": "**Sorry, maar iemand neemt deel aan het spel! Even geduld tot ze zich bij het spel hebben gevoegd.**",
+        "cmdonlyworks": "**Dit commando werkt alleen voor %modename%.**",
+        "notrightarguments": "**Dat waren niet de juiste argumenten!**\n%modename% commandos:",
+        "sandboxmode": {
+            "typeofgold": "**Vul a.u.b. het type goud in!** <Normal/Dark>",
+            "pleaseenteramount": "**Vul a.u.b. de hoeveelheid goud in.**",
+            "destruction": "**Iedereen succesvol vermoord**",
+            "daytime": "**Tijd met succes ingesteld op dag**",
+            "nighttime": "**TIjd met succes ingesteld op nacht**",
+            "revive": "**Succesvol nieuw leven ingeblazen bij %user%!**",
+            "kill": "**%user% is met succes vermoord.!**",
+            "setgold": "**Stel met succes het donkere goud/goud in op `%goldamount%` voor %user%!**",
+            "addgold": "**Succesvol toegevoegd `%goldamount%` voor %user%!**",
+            "removegold": "**Succesvol verwijderde `%goldamount%` voor %user%!**"
+        },
+        "hi": "this isnt in the actual mmb code, YOU THING YOU GOT THE SOURCE CODE AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAvAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
     }
 }
