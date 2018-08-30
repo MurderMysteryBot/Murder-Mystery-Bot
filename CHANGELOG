@@ -1,5 +1,53 @@
 <> ---- CHANGE LOG ---- <>
 
+Update V1.1.0b
+Added a feature where you can join a global game from other people from other servers. < It has to be on your shard only.
+Added a ban system (for global games)
+Removing some unnecessary lines
+Added mm!report <ACCOUNTID> <REASON> (Used in Global Games)
+Added new rules (For global games)
+Added Bot 1v1 mode!
+Added a staff panel for global games (Staff only)
+Added it so for both channels #jailor and #jail you can type mm!jail
+Fixed it so it tells users to enable their dms if they have it disabled
+Added friends in global games (so you can add your friends in global games :D)
+Fixed murderer bug where it doesnt show that anyone was killed
+Fixed dead bug where users that were lynched are dead however, people who were killed by detective/murderer/etc isnt dead
+Updated translations.json
+Added mm!register
+Added mm!globalgames
+Added Global games lobby
+Added classic mode in global games
+Added 1v1 mode in global games
+Added #murdergame to Global Games
+Added #murderer to Global Games
+Added #detective to Global Games
+Added #healer to Global Games
+Added #radio to Global Games
+Added #jailor to Global Games
+Added #jail to Global Games
+Added a shop to global games (not for ingame i mean so you can buy accessories)
+Added a shard id in db (so there is no errors)
+Added the ability to friend request
+Added commands for the roles
+Added a cooldown for these commands: mm!globalgames, mm!taunt
+Added an anti-spam for global games chat
+Added a Lobby Options (So you can manage the lobby i guess)
+Added mm!taunt
+Added logs to games (for reports, security, etc)
+Fixed Murder Party Mode
+[GlobalGames] Added a day/night cycle
+Added Achievements
+Added Daily gold
+Added it so it shows if your in a lobby or game
+Added it so it shows how many times you were the murderer, innocent, etc
+Fixed the unknown channel bug
+Fixed isjailed and dead bug (Meaning that people can use commands while in jail and in some commands people can still type them)
+[GlobalGames] Added it so if you leave the game, itll say you died
+Updated mm!search
+Added mm!leave
+Fixed bugs and testing
+
 Update V1.0.9b
 Added Sandbox Mode
 Added Insane Mode
@@ -45,7 +93,7 @@ Added it so that you cant spam mm!game join and you have to wait until the playe
 Update V1.0.6b
 Added Locales
 Added Shop
-Fixing 1v1 Mode
+Fixed 1v1 Mode
 Making Day time longer
 Making Night time longer
 Added a few hidden things
@@ -66,9 +114,9 @@ Fixed when stopping the game it doesn't delete the #jailor channel
 Fixed the hasjailed bug
 Fixed the bug in which tells that you've already voted.
 Added a command named mm!gamenotify which gives/removes the Game Notify role!
-Adding a feature in which it automatically adds your server to the database when you add the bot
-Adding the usernames for the players who joined in mm!players
-Fixing the join bug in which increases the player count everytime you are already in the game
+Added a feature in which it automatically adds your server to the database when you add the bot
+Added the usernames for the players who joined in mm!players
+Fixed the join bug in which increases the player count everytime you are already in the game
 
 Update V1.0.5b
 Added mm!votehang
