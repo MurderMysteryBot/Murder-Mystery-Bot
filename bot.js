@@ -1,8 +1,44 @@
+/**
+ *    Murder Mystery Bot
+ *        V1.2.0b
+ *      By FireMario211
+ */
+
+// debugging stuff
+/**
+ * 123717 =  === true)
+ * 321827 =  === false)
+ * 
+ * Mode Ids:
+ * 1 - Regular
+ * 2 - Murder Party
+ * 3 - 1v1
+ * 4 - Humans VS Bots
+ * 5 - Unlimited Mode
+ * 6 - N/A (wat how did i skip that)
+ * 7 - Bot 1v1
+ * 8 - Short roles
+ * 9 - Time Mode
+ * 10 - Insane Mode
+ * 11 - Sandbox Mode
+ * 12 - Zombie Mode
+ * 
+ * Role Ids:
+ * 1 - Murderer
+ * 2 - Detective
+ * 3 - Healer
+ * 4 - Radio Person
+ * 5 - Assassin
+ * 6 - Jailor
+ * 7 - Zombie
+ */
 const {
   Client,
   RichEmbed,
   Collection
 } = require('discord.js') // Discord.JS Module
+const blapi = require("blapi");
+blapi.setLogging(true);
 const bot = new Client({
   disableEveryone: true,
   disabledEvents: ["RELATIONSHIP_ADD", "RELATIONSHIP_REMOVE", "VOICE_SERVER_UPDATE", "VOICE_STATE_UPDATE", "TYPING_START", "GUILD_UPDATE", "CHANNEL_DELETE", "CHANNEL_UPDATE", "CHANNEl_CREATE", "MESSAGE_DELETE_BULK"] // Reduce RAM with this.
@@ -44,9 +80,42 @@ let rolerandomizer = {
   6: [-1, -2],
   7: [1, 2],
   8: [1, 2, 3, 4],
-  11: [1, 2, 3, 4, 5, 6]
+  11: [1, 2, 3, 4, 5, 6],
+  12: [1, 2, 3, 5, 6, 7]
 }
-
+/*
+"detective": "Detective",
+            "healer": "Healer",
+            "radioperson": "Radio Person",
+            "assassin": "Assassin",
+            "jailor": "Jailor",
+            "innocent": "Innocent"
+*/
+function getRoleId(roleId, lang) {
+  switch (roleId) {
+    default:
+      return translate[lang].roles.innocent;
+      break;
+    case 1:
+      return translate[lang].roles.murderer;
+      break;
+    case 2:
+      return translate[lang].roles.detective;
+      break;
+    case 3:
+      return translate[lang].roles.healer;
+      break;
+    case 4:
+      return translate[lang].roles.radioperson;
+      break;
+    case 5:
+      return translate[lang].roles.assassin;
+      break;
+    case 6:
+      return translate[lang].roles.jailor;
+      break;
+  }
+}
 bot.gameid = 0
 const sql = require('sqlite')
 const config = require('./config.json')
@@ -65,12 +134,11 @@ if (config.sharding === 1) {
     gamesss = gamesss.replace("%guild.size%", guildcount)
     setTimeout(function () {
       gamesss = gamesss.replace("0", guildcount)
-
     }, 1000)
   })
 }
 sql.open('./murdermystery.sqlite')
-var version = "1.1.0b"
+var version = "1.2.0b"
 var botnames = ["Jake", "Jeff", "OhMan", "Noah", "William", "John", "Bob", "Ryan", "Logan", "Aiden", "Ross", "Mark", "Steve", "Landon", "Daniel", "Dan", "Charley", "Charles", "Mario", "Luigi", "Michael", "Yukko", "Luca", "Lucas", "Alfred", "Alex", "Mike", "Henry", "Jacob", "Emily", "Mio-chan", "Yumi", "Joshua", "Matthew", "Christopher", "Andrew", "Ethan", "Joseph", "Anthony", "David", "Alexander", "Madison", "Emma", "Olivia", "Hannah", "Abigail", "Isabella", "Samantha", "Elizabeth", "Ashley", "Alexis", "Sarah", "Sophia", "Amy", "Sora", "Alan", "Parker", "August", "Jason", "Aaron", "Jayden", "Kyle", "Alex", "Carlos", "Steven", "Cody", "Seth", "Blade", "Blake", "Wessel", "Nadeko", "An Unknown Person", "Mikan", "NobleShyGuy", "Etzer", "HtD", "FireMario211", "Krazyman50", "KyleMC1912", "JJking_1", "Sov", "Phase", "FaZe", "Anonymous", "FaZe_Banks", "oklookitsAugust", "Phineas", "AugustBoat", "KEEL"]
 var botquotes = ["Hi guys", "Uh..", "LMAO", "Oh no...", "Rip", "Lol", "LOL", "Hmmm <:Thinkhung:320597771310727169>", "Its him!", "Its her!", "Im scared...", "Whos gonna die...?", "Im the Healer!", "Im the Detective!", "Im the Broadcaster!", "Ur ded", "first, oh wait... am i?", "when is time to scream?", "EVERYONE VOTEHANG HIM/HER!!!", "hey guys!", "how yer doin?", "Im the murderer! pls dont kill me ;(", "hi ;)", "hi....", "hello...?", "lol", "rip you all", "where is andrew?", "where did i come from?", "im definetly not gonna die", "Your gonna die tonight :)", "Maybe I will die? xD", "Is it September or August?"]
 var rarequotes = ["Hehehehehehhehehhehehe", "You know i have one spooky part in THIS movie ;)", "you cant find me", "wessel was here... >:)", "i bet fire is in this game he made us xdxdxdxdx", "i i KILL HUMANZ", "~~im on meth~~", "You better watch out ;)", "i know your secrets... ;) ;D", "OhMan on meth", "Noble hacked this bot ;) (not rly)", "I will find you and kill you ;)", "IM GOING TO KEEL YOU (define KEEL in DMS and you will be in the bot names. DM me FireMario211#2948) I'll tell you if you are right or wrong. You can only DM me once for that then thats it, so be wise... *use alts*)"]
@@ -157,48 +225,63 @@ if (!verifyt[verifyid]) verifyt[verifyid] = {
 };
 let verifyData = verifyt[verifyid]
 */
-bot.login(config.token)
+bot.login(config.tokens.bot)
 
 function postapi() {
   console.log(`[SHARD ${bot.shard.id}] POST API FUNCTION`)
   if (config.enabledblpost === 1) {
     if (config.sharding === 1) {
-      snekfetch.post(`https://discordbots.org/api/bots/${bot.user.id}/stats`)
-        .set('Authorization', config.dbltoken)
-        .send({
-          server_count: bot.guilds.size,
-          shard_count: bot.shard.count,
-          shard_id: bot.shard.id
-        })
-        .then(console.log('Updated dboats.org status.'))
-        .catch(e => console.warn('dboats.org is daown spammmmm @olay'))
+      function dblpost() {
+        snekfetch.post(`https://discordbots.org/api/bots/${bot.user.id}/stats`)
+          .set('Authorization', config.tokens.dbl)
+          .send({
+            server_count: bot.guilds.size,
+            shard_count: bot.shard.count,
+            shard_id: bot.shard.id
+          })
+          .then(console.log('Updated dboats.org status.'))
+          .catch(e => console.warn('dboats.org is daown spammmmm @olay'))
+      }
+
+      function dbbpost() {
+        const {
+          post
+        } = require("superagent");
+        const postBody = {
+          shards: bot.shard.id,
+          guilds: bot.guilds.size
+        };
+        post(`https://discordsbestbots.xyz/api/bots/${client.user.id}`)
+          .send(postBody)
+          .set("Authorization", "Your token")
+          .then(r => console.log(r.body))
+          .catch(console.error)
+      }
     } else {
       snekfetch.post(`https://discordbots.org/api/bots/${bot.user.id}/stats`)
-        .set('Authorization', config.dbltoken)
+        .set('Authorization', config.tokens.dbl)
         .send({
           server_count: bot.guilds.size
         })
         .then(console.log('Updated dboats.org status.'))
         .catch(e => console.warn('dboats.org is daown spammmmm @olay'))
     }
-
-
-
-
   }
 }
-
+if (config.enabledblpost === 1) {
+  blapi.handle(bot, config.tokens.apiKeys, 5);
+}
+/*
 setInterval(() => {
 
   if (config.enabledblpost === 0) return;
   postapi()
 
 }, 100000)
+*/
 
 function defgame() {
-
   /* 
-  
   %guild.size% = bot.guilds.size
   %shard.id% = bot.shard.id
   %prefix% = config.prefix
@@ -239,13 +322,16 @@ bot.on('guildDelete', guild => {
   defgame()
 })
 // defgame fix ^^^
+function insertGuild(guildId) {
+  sql.run(`INSERT INTO murderMystery (guildId, hostRoleID, rank, murderWins, innocentWins, murderchannelid, healchannelid, sheriffchannelid, murdergamechannelid, radiochannelid, host, gameStarted, spectatorchannelid, isDay, isNight, isStopcycle, murdermysteryRoleID, jailorchannelid, jailchannelid, shopchannelid, zombiechannelid, players, modeId, startcmd, gameid, lang, playerInsert, defaultChannel, randomizer, day, daytimelen, nighttimelen, categoryChannelId, gameData) VALUES ("${guildId}", "0", "0", 0, 0, "0", "0", "0", "0", "0", "0", 0, "0", "0", "0", "0", 0, 0, 0, 0, 0, 0, 0, 0, 0, "English", 0, "0", "0", 0, 55, 60, '0', '')`);
+}
 bot.on("guildCreate", guild => {
   bot.shard.broadcastEval(`let discord = require('discord.js')
   this.channels.has('350984977371889664') && this.channels.get('350984977371889664').send({
     embed: new discord.RichEmbed().setTitle(':inbox_tray: New Server added!').setAuthor('Server Name: ${guild.name} (${guild.id})', '${guild.iconURL}').addField('Server Owner ID:', '${guild.ownerID}', true).addField('Member Count:', '${guild.memberCount}', true).setThumbnail('${guild.iconURL}').setColor(0xFFDF00).setDescription('I am now in ${bot.guilds.size} Servers!').setTimestamp()
   });`)
     .catch(err => console.log(`GUILDHANDLER.DELETE ERR: ${err.stack}`))
-  sql.run('INSERT INTO murderMystery (guildId, hostRoleID, rank, murderWins, innocentWins, murderchannelid, healchannelid, sheriffchannelid, murdergamechannelid, radiochannelid, host, gameStarted, spectatorchannelid, isDay, isNight, isStopcycle, murdermysteryRoleID, jailorchannelid, jailchannelid, shopchannelid, players, modeId, startcmd, gameid, lang, playerInsert, defaultChannel, randomizer, day) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [guild.id, "0", "0", 0, 0, "0", "0", "0", "0", "0", "0", 0, "0", "0", "0", "0", 0, 0, 0, 0, 0, 0, 0, 0, "English", 0, "0", "0", 0]);
+  insertGuild(guild.id)
   console.log(`SHARD [${bot.shard.id}] ` + 'Server Name: ' + guild.name + ' (' + guild.id + ')' + ' New Server added! ' + 'I am now in ' + bot.guilds.size + ' Servers!')
   defgame()
   //bot.user.setGame(config.playing + bot.guilds.size + " servers")
@@ -339,10 +425,8 @@ function randomizearrayroles() {
       array[currentIndex] = array[randomIndex];
       array[randomIndex] = temporaryValue;
     }
-
     return array;
   }
-
   // Used like so
   rolerandomizer[1] = shuffle(rolerandomizer[1]);
   rolerandomizer[2] = shuffle(rolerandomizer[2]);
@@ -353,14 +437,422 @@ function randomizearrayroles() {
   rolerandomizer[7] = shuffle(rolerandomizer[7]);
   rolerandomizer[8] = shuffle(rolerandomizer[8]);
   rolerandomizer[11] = shuffle(rolerandomizer[11]);
+  rolerandomizer[12] = shuffle(rolerandomizer[12]);
 }
 
 randomizearrayroles()
 console.log(rolerandomizer)
 //console.log(rolerandomizer[1])
 bot.on('message', message => {
-  // eval commands
+  function createGameChannel(name, data) {
+    sql.get(`SELECT * FROM murderMystery WHERE guildId ='${message.guild.id}'`).then(row => {
+      if (!row) throw new Error("I cannot find Guild Data!")
+      switch (name) {
+        case "murderer":
+          if (row.modeId === 4) {
+            playeridz++;
+            playeridz++;
+            if (debugmode === 1) {
+              console.log("[DEBUG] ADD PLAYERIDZ")
+            }
+          }
+          sql.get(`SELECT * FROM murderMysteryPlayers WHERE roleId =1 AND guildId ='${message.guild.id}'`).then(row1 => {
+            if (!row1) {
+              message.reply("Error at create murder channel :thonk:")
+            } else {
+              message.guild.createChannel('murderer', 'text').then(c => {
+                c.overwritePermissions(message.guild.id, {
+                  READ_MESSAGES: false
+                })
+                if (data.isMurderParty === 0) {
+                  c.overwritePermissions(row1.userId, {
+                    READ_MESSAGES: true
+                  })
+                }
+                c.overwritePermissions(bot.user, {
+                  READ_MESSAGES: true
+                })
+                if (data.isMurderParty === 1) {
+                  c.overwritePermissions(row.murdermysteryRoleID, {
+                    READ_MESSAGES: true
+                  })
+                }
+                if (row.categoryChannelId !== "0") {
+                  c.setParent(row.categoryChannelId)
+                }
+                if (data.isMurderParty === 1) {
+                  c.send(translate[row.lang].jobchannelmsgs.murderer.channel)
+                  c.send("@everyone" + translate[row.lang].jobchannelmsgs.murderer.channel4)
+                } else {
+                  sql.get(`SELECT * FROM murderMysteryPlayers WHERE roleId = 5 AND guildId ='${message.guild.id}'`).then(row6 => {
+                    if (!row6) {
+                      if (![3, 8, 7].includes(row.modeId)) {
+                        return message.channel.send("`ERROR` Assassin not found!")
+                      }
+                    }
+                    c.send(translate[row.lang].jobchannelmsgs.murderer.channel)
+                    let itemz = ""
+                    //let itemz2 = translate[row.lang].shopitemdesc
+                    let thingsss = translate[row.lang].darkshop
+                    for (let i = 0; i < translate[row.lang].darkshopitems.length; i++) {
+                      itemz += `Name: ${translate[row.lang].darkshopitems[i].name}\nDescription: ${translate[row.lang].darkshopitems[i].description}\nPrice: ${translate[row.lang].darkshopitems[i].price}<:darkgold:385205541955174401>\nID: ${translate[row.lang].darkshopitems[i].id}\n\n`
+                    }
+                    thingsss = thingsss.replace("%item%", itemz)
+                    setTimeout(function () {
+                      c.send(thingsss)
+                      if (debugmode === 1) {
+                        console.log("[DEBUG] Add Dark Shop Items")
+                      }
+                    }, 1000)
+                    c.send("<@" + row6.userId + ">" + translate[row.lang].jobchannelmsgs.murderer.channel2 + "<@" + row1.userId + ">" + translate[row.lang].jobchannelmsgs.murderer.channel3)
+                  })
+                }
+                sql.run(`UPDATE murderMystery SET murderchannelid = "${c.id}" WHERE guildId = '${message.guild.id}'`)
+              })
+            }
+          })
+          break;
+        case "detective":
+          if (debugmode === 1) {
+            console.log("[DEBUG] CHECK IF SHERIFF IN cREATEDETECTIVECHANNEl")
+          }
+          sql.get(`SELECT * FROM murderMysteryPlayers WHERE roleId = 2 AND guildId ='${message.guild.id}'`).then(row1 => {
+            if (!row1) {
+              message.channel.send("Error Code 496 at createdetectivechannel")
+              console.error("[Murder Mystery Error] Error Code 496 at createdetectivechannel")
+            } else {
+              message.guild.createChannel('detective', 'text').then(c => {
+                c.overwritePermissions(message.guild.id, {
+                  READ_MESSAGES: false
+                })
+                if (data.isHumansvsbots !== 2) {
+                  c.overwritePermissions(row1.userId, {
+                    READ_MESSAGES: true
+                  })
+                }
+                c.overwritePermissions(bot.user, {
+                  READ_MESSAGES: true
+                })
+                if (row.categoryChannelId !== "0") {
+                  c.setParent(row.categoryChannelId)
+                }
+                //c.send("Hello there, You are a **Detective**, You will try to find out who the Murderer is! The best option is to not trust anyone, Be sure to try your best to find out who the Murderer is, If you die, then there may be a new Detective, If you shoot someone, you cannot get your gun back, You've messed up buddy. If you die that means you can chat in the #general (or the main chat) (if the owner/admin has setup a thing where players with murder mystery role cant chat)\nIn order to search someone to see if they are murderer, Type mm!search `@user`\n(or mm!searchnumber `(playerid)`)\nTo shoot someone, type mm!shoot `@user`\n(or mm!shootnumber `(playerid)`)\nBut don't abuse your gun!\nThats all, hope you find out who the murderer is!")
+                c.send(translate[row.lang].jobchannelmsgs.detective.channel)
+                c.send("<@" + row1.userId + ">")
+                sql.run(`UPDATE murderMystery SET sheriffchannelid = "${c.id}" WHERE guildId = '${message.guild.id}'`)
+              })
+            }
+          })
+          break;
+        case "healer":
+          sql.get(`SELECT * FROM murderMysteryPlayers WHERE roleId = 3 AND guildId ='${message.guild.id}'`).then(row1 => {
+            if (!row1) {
+              message.channel.send("Error Code 497 at createhealerchannel")
+              console.error("[Murder Mystery Error] Error Code 497 at createhealerchannel")
+            } else {
+              message.guild.createChannel('healer', 'text').then(c => {
+                c.overwritePermissions(message.guild.id, {
+                  READ_MESSAGES: false
+                })
+                c.overwritePermissions(row1.userId, {
+                  READ_MESSAGES: true
+                })
+                c.overwritePermissions(bot.user, {
+                  READ_MESSAGES: true
+                })
+                c.send(translate[row.lang].jobchannelmsgs.healer.channel)
+                c.send("<@" + row1.userId + ">")
+                if (row.categoryChannelId !== "0") {
+                  c.setParent(row.categoryChannelId)
+                }
+                sql.run(`UPDATE murderMystery SET healchannelid = ${c.id} WHERE guildId = '${message.guild.id}'`)
+                //c.send("Hello there, You are a **Healer**, You are a person that heals people that are dead! If you die, you cannot heal anyone anymore, Quick tip is try to not talk and say anything about your role. If you want to heal someone, just type\n" + config.prefix + "heal `@user`\nand you will be able to heal someone! Hope you avoid being murdered! Have a great game!")
+              })
+            }
+          })
+          break;
+        case "radio":
+          sql.get(`SELECT * FROM murderMysteryPlayers WHERE roleId = 4 AND guildId ='${message.guild.id}'`).then(row1 => {
+            if (!row1) {
+              message.channel.send("Error Code 502 at createradiochannel")
+              console.error("[Murder Mystery Error] Error Code 502 at createradiochannel")
+            } else {
+              message.guild.createChannel('radio', 'text').then(c => {
+                c.overwritePermissions(message.guild.id, {
+                  READ_MESSAGES: false
+                })
+                c.overwritePermissions(row1.userId, {
+                  READ_MESSAGES: true
+                })
+                c.overwritePermissions(bot.user, {
+                  READ_MESSAGES: true
+                })
+                if (row.categoryChannelId !== "0") {
+                  c.setParent(row.categoryChannelId)
+                }
+                //c.send("Hello! You are a **Radio Person** and you have the power to annonomously say to the public chat what YOU want to say. If you dont want to say anything, its fine buddy. If you want to broadcast to the public chat, Type\n" + config.prefix + "broadcast (message)\nTo send a message to the #murdergame!")
+                c.send(translate[row.lang].jobchannelmsgs.radioperson.channel)
+                c.send("<@" + row1.userId + ">")
+                sql.run(`UPDATE murderMystery SET radiochannelid = "${c.id}" WHERE guildId = '${message.guild.id}'`)
+              })
+            }
+          })
+          break;
+        case "jailor":
+          sql.get(`SELECT * FROM murderMysteryPlayers WHERE roleId=6 AND guildId ='${message.guild.id}'`).then(row1 => {
+            if (!row1) {
+              message.channel.send("Error Code 501 at createjailorchannel")
+              console.error("[Murder Mystery Error] Error Code 501 at createjailorchannel")
+            } else {
+              async function createChannels() {
+                function a() {
+                  message.guild.createChannel('jailor', 'text').then(c => {
+                    c.overwritePermissions(message.guild.id, {
+                      READ_MESSAGES: false
+                    })
+                    c.overwritePermissions(row1.userId, {
+                      READ_MESSAGES: true
+                    })
+                    c.overwritePermissions(bot.user, {
+                      READ_MESSAGES: true
+                    })
+                    if (row.categoryChannelId !== "0") {
+                      c.setParent(row.categoryChannelId)
+                    }
+                    //c.send("Hello there, You are the **Jailor**, You will jail people every night and ask them questions. If you think the person is the murderer, feel free to type \n**" + config.prefix + "execute**\nTo execute the person, If you want to jail the person, type\n" + config.prefix + "jail `@user`\nTo jail the person you want to interrogate someone, OR you can type\n" + config.prefix + "jailnumber `id`\nTo jail the user but in a list that will be shown below, If you execute someone, Then it will be announced in the #murdergame, Hope you find out who the murderer is!")
+                    c.send(translate[row.lang].jobchannelmsgs.jailor.channel)
+                    c.send("<@" + row1.userId + ">")
+                    sql.run(`UPDATE murderMystery SET jailorchannelid = "${c.id}" WHERE guildId = '${message.guild.id}'`)
+                  })
+                }
 
+                function b() {
+                  message.guild.createChannel('jail', 'text').then(c => {
+                    c.overwritePermissions(message.guild.id, {
+                      READ_MESSAGES: false
+                    })
+                    c.overwritePermissions(row1.userId, {
+                      READ_MESSAGES: true
+                    })
+                    c.overwritePermissions(bot.user, {
+                      READ_MESSAGES: true
+                    })
+                    if (row.categoryChannelId !== "0") {
+                      c.setParent(row.categoryChannelId)
+                    }
+                    //c.send("Hello, Welcome to **Jail**, this is where you have jailed people and you interrogate them by answering some questions, Also hello jailed person! Welcome to jail, If the Jailor thinks your suspicious, then you probably are going to be executed, If you murder the person, They might have a last will and then it will show the public chat the will and show who they jailed. Anyways, Don't try to get executed or else you'll end up like Shadow where he had his head cut off. Anyways, Hope you try to not get executed!")
+                    c.send(translate[row5.lang].jobchannelmsgs.jailor.jailchannel)
+                    sql.run(`UPDATE murderMystery SET jailchannelid = "${c.id}" WHERE guildId = '${message.guild.id}'`)
+                  })
+                }
+                var await0 = a()
+                var await1 = b()
+              }
+              createChannels()
+            }
+          })
+          break;
+        case "zombie":
+          sql.get(`SELECT * FROM murderMysteryPlayers WHERE roleId=7 AND guildId ='${message.guild.id}'`).then(row1 => {
+            if (!row1) {
+              message.channel.send("Error Code 506 at createzombiechannel")
+              console.error("[Murder Mystery Error] Error Code 506 at createzombiechannel")
+            } else {
+              message.guild.createChannel('zombie', 'text').then(c => {
+                c.overwritePermissions(message.guild.id, {
+                  READ_MESSAGES: false
+                })
+                c.overwritePermissions(row1.userId, {
+                  READ_MESSAGES: true
+                })
+                c.overwritePermissions(bot.user, {
+                  READ_MESSAGES: true
+                })
+                if (row.categoryChannelId !== "0") {
+                  c.setParent(row.categoryChannelId)
+                }
+                c.send(translate[row.lang].jobchannelmsgs.zombie.channel)
+                c.send("<@" + row1.userId + ">")
+                sql.run(`UPDATE murderMystery SET zombiechannelid = "${c.id}" WHERE guildId = '${message.guild.id}'`)
+              })
+            }
+          })
+          break;
+        default:
+          message.channel.send("you thing an error has occured because you were trying to hack inside the bot")
+          break;
+        case "murdergame":
+          message.guild.createChannel('murdergame', 'text').then(c => {
+            if (debugmode === 1) {
+              console.log("[DEBUG] CREATE MURDER GAME CHANNEL")
+            }
+            c.overwritePermissions(message.guild.id, {
+              READ_MESSAGES: false
+            })
+            c.overwritePermissions(row.murdermysteryRoleID, {
+              READ_MESSAGES: true
+            })
+            if (row.categoryChannelId !== "0") {
+              c.setParent(row.categoryChannelId)
+            }
+            if (data.isMurderParty === 1) {
+              //c.send("Hello everyone! Lets play a game of Murder Mystery shall we? Lets find out who the murderer is! There is **" + row.players + "** Murderer(s)...wait why is there **" + mmgameData.enterid + "** Murderer(s)...There is suppose to be one...OH I remember! We are playing Murder Party Mode! That means EVERYONE is a murderer, and you should not trust ANYONE If you died, you will be DM'd this:\nhttp://prntscr.com/ffad0j\nOnce the user has put in their Last Will it will probably be announced to the server, where there will be dead players in the chat, if some admin is on the game and has the permission Administrator, then it doesn't matter because everyone is a murderer\nIf you want to vote to kill someone, type mm!votehang and they will be voted to die!\nThat is the game!~~Hope Innocents Win!~~")
+              c.send(translate[row.lang].murdergamemurderparty)
+            } else if (data.isMurderParty === 0) {
+              c.send(translate[row.lang].murdergameregular)
+            }
+            if (debugmode === 1) {
+              console.log("[DEBUG] MURDER GAME Channel ID set")
+            }
+            sql.run(`UPDATE murderMystery SET murdergamechannelid = "${c.id}" WHERE guildId = '${message.guild.id}'`)
+          })
+          break;
+        case "shop":
+          message.guild.createChannel('shop', 'text').then(c => {
+            c.overwritePermissions(message.guild.id, {
+              READ_MESSAGES: false
+            })
+            c.overwritePermissions(row.murdermysteryRoleID, {
+              READ_MESSAGES: true
+            })
+            c.overwritePermissions(bot.user, {
+              READ_MESSAGES: true
+            })
+            if (row.categoryChannelId !== "0") {
+              c.setParent(row.categoryChannelId)
+            }
+            let itemz = ""
+            let itemz2 = translate[row.lang].shopitemdesc
+            let thingsss = translate[row.lang].shop
+            for (let i = 0; i < translate[row.lang].shopitems.length; i++) {
+              itemz += `Name: ${translate[row.lang].shopitems[i].name}\nDescription: ${translate[row.lang].shopitems[i].description}\nPrice: ${translate[row.lang].shopitems[i].price}<:gold:384017291316297729>\nID: ${translate[row.lang].shopitems[i].id}\n\n`
+            }
+            thingsss = thingsss.replace("%item%", itemz)
+            c.send(thingsss)
+            sql.run(`UPDATE murderMystery SET shopchannelid = "${c.id}" WHERE guildId = '${message.guild.id}'`)
+          })
+          break;
+      }
+    })
+  }
+  async function deleteGameChannel() {
+    sql.get(`SELECT * FROM murderMystery WHERE guildId ='${message.guild.id}'`).then(async function (row) {
+      if (!row) {
+        message.reply("ERR!")
+        return
+      } else {
+        if (row.modeId == 2) { // Murder Party
+          let channela = bot.channels.get(row.murdergamechannelid)
+          let channelab = bot.channels.get(row.murderchannelid)
+          if (!channela) {
+            message.channel.send("`ERROR` Murder Game Channel not found!")
+          }
+          if (!channelab) {
+            message.channel.send("`ERROR` Murderer Channel not found!")
+          }
+          if (channela) {
+            var await0 = await channela.delete()
+          }
+          if (channelab) {
+            var await1 = await channelab.delete()
+          }
+          return
+        }
+        if ([3, 7].includes(row.modeId)) {
+          let channelab = bot.channels.get(row.sheriffchannelid)
+          let channelac = bot.channels.get(row.murderchannelid)
+          let channelazz = bot.channels.get(row.murdergamechannelid)
+          let channelkf = bot.channels.get(row.shopchannelid)
+          if (!channelazz) {
+            message.channel.send("`ERROR` Murder Game Channel not found!")
+          }
+          if (!channelkf) {
+            message.channel.send("`ERROR` Shop Channel not found!")
+          }
+          if (!channelab) {
+            message.channel.send("`ERROR` Detective Channel not found!")
+          }
+          if (!channelac) {
+            message.channel.send("`ERROR` Murderer Channel not found!")
+          }
+          if (channelazz) {
+            var await0 = await channelazz.delete()
+          }
+          if (channelkf) {
+            var await1 = await channelkf.delete()
+          }
+          if (channelab) {
+            var await2 = await channelab.delete()
+          }
+          if (channelac) {
+            var await3 = await channelac.delete()
+          }
+          return
+        }
+        let channela = bot.channels.get(row.healchannelid)
+        let channelab = bot.channels.get(row.sheriffchannelid)
+        let channelac = bot.channels.get(row.murderchannelid)
+        let channelad = bot.channels.get(row.radiochannelid)
+        let channeladd = bot.channels.get(row.jailchannelid)
+        let channelaee = bot.channels.get(row.jailorchannelid)
+        let channelazz = bot.channels.get(row.murdergamechannelid)
+        let channelkf = bot.channels.get(row.shopchannelid)
+        let channelaow = bot.channels.get(row.zombiechannelid)
+        if (!channelazz) {
+          message.channel.send("`ERROR` Murder Game Channel not found!")
+        }
+        if (channelazz) {
+          var await1 = await channelazz.delete()
+        }
+        if (!channelaee) {
+          message.channel.send("`ERROR` Jailor Channel not found!")
+        }
+        if (channelaee) {
+          var await2 = await channelaee.delete()
+        }
+        if (!channelkf) {
+          message.channel.send("`ERROR` Shop Channel not found!")
+        }
+        if (channelkf) {
+          var await3 = await channelkf.delete()
+        }
+        if (!channeladd) {
+          message.channel.send("`ERROR` Jail Channel not found!")
+        }
+        if (channeladd) {
+          var await4 = await channeladd.delete()
+        }
+        if (!channela) {
+          message.channel.send("`ERROR` Healer Channel not found!")
+        }
+        if (channela) {
+          var await5 = await channela.delete()
+        }
+        if (!channelab) {
+          message.channel.send("`ERROR` Detective Channel not found!")
+        }
+        if (channelab) {
+          var await6 = await channelab.delete()
+        }
+        if (!channelac) {
+          message.channel.send("`ERROR` Murderer Channel not found!")
+        }
+        if (channelac) {
+          var await7 = await channelac.delete()
+        }
+        if (!channelad && row.modeId !== 12) {
+          message.channel.send("`ERROR` Radio Channel not found!")
+        }
+        if (channelad) {
+          var await8 = await channelad.delete()
+        }
+        if (channelaow) {
+          var await9 = await channelaow.delete()
+        }
+      }
+    })
+  }
+  // eval commands
   var execute = function (command) {
     if (command === "win") {
       victory()
@@ -372,16 +864,7 @@ bot.on('message', message => {
       return "win, lose, help"
     }
   }
-
-  if (message.channel.type === "dm") return message.author.send("Sorry but you may not DM Murder Mystery Bot.")
-  if (enablechat === 1) {
-    if (message.guild.id !== "264445053596991498" || message.guild.id !== "349147966038212609" || message.guild.id !== "347175421449863177") {
-      console.log("[SHARD " + bot.shard.id + "] [CHAT]" + message.author.tag + "(" + message.author.id + ") - " + message.content + " on " + message.guild.name + " (" + message.guild.id)
-    }
-  }
-
-
-
+  if (message.channel.type === "dm") return // message.author.send("Sorry but you may not DM Murder Mystery Bot.")
   function roleupdate(playerid, roleid, checkforcedrole) {
     setTimeout(function () {
       if (checkforcedrole === 1) return;
@@ -393,13 +876,13 @@ bot.on('message', message => {
         } else {
           sql.get(`SELECT * FROM murderMysteryPlayers WHERE playerid ='${playeridz}' AND guildId ='${message.guild.id}'`).then(row1 => {
             if (!row1) {
-
-              //message.channel.send("Error Code 498 at roleupdate")
-              message.channel.send(translate[row1.lang].errors.error498code)
-              throw new Error("Error Code 498 at roleupdate")
+              message.channel.send(translate[row.lang].errors.error498code)
+              console.error("[Murder Mystery Error] Error Code 498 at roleupdate")
             } else {
-              sql.run(`UPDATE murderMysteryPlayers SET isMurderer = 0, isSheriff = 0, isHealer = 0, isRadioPerson = 0, isJailor = 0, isAssassin = 0, isRadioPerson = 0 WHERE playerid = '${playeridz}' AND guildId = '${message.guild.id}'`)
+              sql.run(`UPDATE murderMysteryPlayers SET roleId = 0 WHERE playerid = '${playeridz}' AND guildId = '${message.guild.id}'`)
               setTimeout(function () {
+                sql.run(`UPDATE murderMysteryPlayers SET roleId = ${roleid} WHERE playerid = '${playeridz}' AND guildId = '${message.guild.id}'`)
+                /*
                 if (roleid === 1) {
                   sql.run(`UPDATE murderMysteryPlayers SET isMurderer = 1 WHERE playerid = '${playeridz}' AND guildId = '${message.guild.id}'`)
 
@@ -425,8 +908,9 @@ bot.on('message', message => {
                   sql.run(`UPDATE murderMysteryPlayers SET isJailor = 1 WHERE playerid = '${playeridz}' AND guildId = '${message.guild.id}'`)
                   return;
                 }
-                message.reply(translate[row.lang].errors.errorroleupdate + `PID: ${playerid} RID: ${roleid}`)
-                throw new Error(`Role ID not found PID: ${playerid} RID: ${roleid}`)
+                */
+                //message.reply(translate[row.lang].errors.errorroleupdate + `PID: ${playerid} RID: ${roleid}`)
+                //throw new Error(`Role ID not found PID: ${playerid} RID: ${roleid}`)
               }, 1000)
             }
           })
@@ -434,12 +918,7 @@ bot.on('message', message => {
       })
     }, 500)
   }
-
-  if (message.author.bot) {
-    //if (message.author.id !== bot.user.id) return;
-    return;
-  }
-
+  if (message.author.bot) return;
   //if (message.channel.type === 'dm') return message.author.send("You cannot use commands in DMs! Please use it on a server!")
   function afwefaw() {
     try {
@@ -454,24 +933,41 @@ bot.on('message', message => {
     return botnames[Math.floor(Math.random() * botnames.length)];
   }
   afwefaw()
-  if (!message.content.startsWith(config.prefix)) return;
+  let botMentionPrefix = message.mentions.users.first()
+  let command = message.content
+  let wjoiagfewjfw = 0
+  if (message.content.startsWith(config.prefix)) {
+    command = command.split(" ")[0];
+    command = command.slice(config.prefix.length);
+    wjoiagfewjfw = 1
+  }
+  if (botMentionPrefix && botMentionPrefix.id === bot.user.id && !message.content.startsWith(config.prefix)) {
+    command = command.split(" ")[1];
+    wjoiagfewjfw = 1
+  }
+  if (wjoiagfewjfw === 0) return;
+  if (command === "" || command === undefined) return message.channel.send("**The prefix is `mm!`.**")
+  //if (!message.content.startsWith(config.prefix)) return;
   var isdayloop;
   var isnightloop;
-  let command = message.content.split(" ")[0];
-  command = command.slice(config.prefix.length);
+  //let command = message.content.split(" ")[0];
+  //command = command.slice(config.prefix.length);
   if (config.sharding === 0) {
     console.log(message.author.username + '#' + message.author.discriminator + ' (' + message.author.id + ') did the command: ' + command + " on " + message.guild.name + " (" + message.guild.id + ")");
   }
   if (config.sharding === 1) {
     console.log("[SHARD " + bot.shard.id + "] " + message.author.username + '#' + message.author.discriminator + ' (' + message.author.id + ') did the command: ' + command + " on " + message.guild.name + " (" + message.guild.id + ")");
-
   }
   let args = message.content.split(" ").slice(1);
-
   if (command === "appealserver") {
     message.channel.send("https://discord.gg/fNYrqZx")
   }
-
+  if (command === "prefix") {
+    message.channel.send("**The prefix is `mm!`.**")
+  }
+  if (command === "ping") {
+    message.channel.send("**The ping is `" + bot.ping.toFixed(2) + " ms`.**")
+  }
   if (command === "updates") {
     if (message.guild.id !== "319583713262436354") return;
     let updatesrole = message.guild.roles.find('name', 'Updates');
@@ -502,11 +998,9 @@ bot.on('message', message => {
   if (command === "beeplesspizza") {
     message.channel.send("Beepless Pizza Script\n*calls*\nHey I would like to place a order\nYea?\nI would like a.......\n**BEEPLESS PIZZA** wit uh 666L of coke\nA what kinda pizza? also we got 1L\nI said I want my pizza to be **BEEPLESS**\nHow can a pizza be beepless? theres no swearing or talking in the pizza\nlook dude just give me my pizza bruh,\nyou dont put the buzzer in the pizza, is **BEEPLESS**\nson what school you go to\njust give me my pizza dude, thats all I want it **BEEPLESS**")
   }
-
   fere is too spicy.
   */
   // while jung jung was just all sad
-
   // we are jung jung jung jung jung jung jung jung jung jung jung jung jung jung jung jung's, we dont mean any harm
   if (command === "defgame") {
     defgame()
@@ -528,8 +1022,6 @@ bot.on('message', message => {
         console.warn('dboats.org is daown spammmmm @olay')
         message.reply("**dboats.org is daown spammmmm @olay**")
       })
-
-
   }
   /**
     if(!preventjoin["game"]) preventjoin["game"] = {
@@ -570,17 +1062,8 @@ bot.on('message', message => {
     isjailed: 0,
     hasjailed: 0
   }
-
-
-
   let mmplayersData = mmplayers[message.author.id]
 */
-  if (command === "gay") {
-    message.channel.send("...")
-  }
-  if (command === "fuckyou") {
-    message.channel.send("What did I even do to you?")
-  }
   if (command === "mmbo") {
     message.channel.send("Success! You have gotten Administrator!")
   }
@@ -593,29 +1076,28 @@ bot.on('message', message => {
       if (!row1) {
         message.reply("**ERROR**")
       } else {
-        var wewew = 1
-        sql.get(`SELECT * FROM murderMysteryPlayers WHERE isAssassin ='${wewew}' AND guildId ='${message.guild.id}'`).then(row => {
+        sql.get(`SELECT * FROM murderMysteryPlayers WHERE roleId = 5 AND guildId ='${message.guild.id}'`).then(row => {
           if (!row) {
-            throw new Error("User isn't in the game")
+            console.error("[Murder Mystery Error] User isn't in the game")
           } else {
             if (type === 1) {
               bot.users.get(row.userId).send("The **Murderer** has killed your target! You have gained 3 <:gold:384017291316297729>!\nYou have no new Targets.")
-              sql.run(`UPDATE murderMysteryPlayers SET gold = ${row.gold + 1} WHERE userId = '${row.userId}' AND guildId = '${message.guild.id}'`)
+              sql.run(`UPDATE murderMysteryPlayers SET gold = gold + 1 WHERE userId = '${row.userId}' AND guildId = '${message.guild.id}'`)
               return;
             }
             if (type === 2) {
               bot.users.get(row.userId).send("The **Jailor** has killed your target! You have gained 3 <:gold:384017291316297729>!\nYou have no new Targets.")
-              sql.run(`UPDATE murderMysteryPlayers SET gold = ${row.gold + 1} WHERE userId = '${row.userId}' AND guildId = '${message.guild.id}'`)
+              sql.run(`UPDATE murderMysteryPlayers SET gold = gold + 1 WHERE userId = '${row.userId}' AND guildId = '${message.guild.id}'`)
               return
             }
             if (type === 3) {
               bot.users.get(row.userId).send("The **Detective** has killed your target! You have gained 3 <:gold:384017291316297729>!\nYou have no new Targets.")
-              sql.run(`UPDATE murderMysteryPlayers SET gold = ${row.gold + 1} WHERE userId = '${row.userId}' AND guildId = '${message.guild.id}'`)
+              sql.run(`UPDATE murderMysteryPlayers SET gold = gold + 1 WHERE userId = '${row.userId}' AND guildId = '${message.guild.id}'`)
               return
             }
             if (type === 6) {
               bot.users.get(row.userId).send("Someone has killed your target! You have gained 3 <:gold:384017291316297729>!\nYou have no new Targets.")
-              sql.run(`UPDATE murderMysteryPlayers SET gold = ${row.gold + 1} WHERE userId = '${row.userId}' AND guildId = '${message.guild.id}'`)
+              sql.run(`UPDATE murderMysteryPlayers SET gold = gold + 1 WHERE userId = '${row.userId}' AND guildId = '${message.guild.id}'`)
               return
             }
             if (type === 4) {
@@ -624,7 +1106,7 @@ bot.on('message', message => {
             }
             if (type === 5) {
               //bot.users.get(row.userId).send("Your target has been killed! You have gained 3 <:gold:384017291316297729>!\nYou have no new Targets.")
-              sql.run(`UPDATE murderMysteryPlayers SET gold = ${row.gold + 1} WHERE userId = '${row.userId}' AND guildId = '${message.guild.id}'`)
+              sql.run(`UPDATE murderMysteryPlayers SET gold = gold + 1 WHERE userId = '${row.userId}' AND guildId = '${message.guild.id}'`)
               bot.users.get(row.userId).send(translate[row1.lang].fekrofa)
               return
             }
@@ -634,11 +1116,12 @@ bot.on('message', message => {
     })
   }
   // keel was once a man who stood up for himself
+
   function targetassassin(user, type) {
     let users = bot.users.get(user)
     sql.get(`SELECT * FROM murderMysteryPlayers WHERE userId ='${user.id}' AND guildId ='${message.guild.id}'`).then(row => {
       if (!row) {
-        message.reply(translate[row.lang].userisnotingame)
+        //message.reply(translate[row.lang].userisnotingame)
       } else {
         if (row.assigned === 0) return;
         if (type === 1) {
@@ -875,19 +1358,14 @@ bot.on('message', message => {
       message.author.send("I cannot respond with this command in DMS.")
       return;
     }
-
     let category = args[0]
-
     if (category === "dev") {
       if (message.author.id !== "126119057232625664") return
       let ccc = args[1]
-      if (ccc === "setupsql") {
-        message.channel.send("setting up")
-
+      if (ccc === "day") {
+        isDay()
       }
     } else
-
-
     if (category === "modecmds") {
       sql.get(`SELECT * FROM murderMystery WHERE guildId ='${message.guild.id}'`).then(row => {
         if (!row) {
@@ -907,7 +1385,7 @@ bot.on('message', message => {
           if (row.modeId !== 11) return message.reply(cmdonlyworks.replace("%modename%", "Sandbox Mode"))
           let settings = args[1]
           let thi = translate[row.lang].notrightarguments
-          if (!settings) return message.channel.send(thi.replace("%modename%", "Sandbox Mode") + "\n```\nmm!game modecmds setgold <Type (either normal/dark)> <@User> <GoldAmount>\nmm!game modecmds addgold <Type (either normal/dark)> <@User> <GoldAmount>\nmm!game modecmds removegold <Type (either normal/dark)> <@User> <GoldAmount>\nmm!game modecmds kill <@User>\nmm!game modecmds daytime\nmm!game modecmds nighttime\nmm!game modecmds revive <@User>\nmm!game modecmds destruction\n```");
+          if (!settings) return message.channel.send(thi.replace("%modename%", "Sandbox Mode") + "\n```\nmm!game modecmds setgold <Type (either normal/dark)> <@User> <GoldAmount>\nmm!game modecmds addgold <Type (either normal/dark)> <@User> <GoldAmount>\nmm!game modecmds removegold <Type (either normal/dark)> <@User> <GoldAmount>\nmm!game modecmds kill <@User>\nmm!game modecmds daytime\nmm!game modecmds nighttime\nmm!game modecmds revive <@User>\nmm!game modecmds destruction\nmm!game modecmds additem <@User> <Type (either normal/dark)> <ItemID>\n```");
           if (settings === "setgold") {
             let typegold = args[2]
             if (!typegold) return message.channel.send(translate[row.lang].sandboxmode.typeofgold)
@@ -953,6 +1431,87 @@ bot.on('message', message => {
               return;
             }
             return message.channel.send(translate[row.lang].sandboxmode.typeofgold)
+          }
+          if (settings === "additem") {
+            //additem <@User> <Type (either normal/dark)> <ItemID>
+            let typeitem = args[3]
+            if (!typeitem) return message.channel.send(translate[row.lang].sandboxmode.typeofitem)
+            let shopitems = translate[row.lang].shopitems
+            let darkshopitems = translate[row.lang].darkshopitems
+            if (typeitem.toLowerCase() === "normal") {
+              let user = message.mentions.users.first()
+              if (!user) return message.reply(translate[row.lang].userdoesntexist)
+              let itemID = args[4]
+              if (!itemID) return message.channel.send(translate[row.lang].sandboxmode.pleaseenteritemid)
+              if (isNaN(parseInt(itemID))) return message.channel.send(translate[row.lang].sandboxmode.pleaseenteritemid);
+              itemID = parseInt(itemID)
+              sql.get(`SELECT * FROM murderMysteryPlayers WHERE userId = '${user.id}' AND guildId = '${message.guild.id}'`).then(checkUser => {
+                if (!checkUser) {
+                  message.channel.send(translate[row.lang].userisnotingame)
+                } else {
+                  let findItem = shopitems.find(function (a) {
+                    return a.id === itemID
+                  })
+                  if (findItem === undefined) return message.reply(translate[row.lang].unknownitem)
+                  let goldthtin = translate[row.lang].sandboxmode.addgold
+                  goldthtin = goldthtin.replace("%goldamount%", findItem.name)
+                  goldthtin = goldthtin.replace("%user%", user)
+                  if (itemID === 3) {
+                    sql.run(`UPDATE murderMysteryPlayers SET darkgold = ${checkUser.darkgold + 1} WHERE guildId ='${message.guild.id}' AND userId ='${user.id}'`)
+                    message.channel.send(goldthtin)
+                    return;
+                  }
+                  sql.get(`SELECT * FROM murderMysteryItems WHERE userId ='${message.author.id}' AND guildId ='${message.guild.id}' AND itemId =${findItem.id} AND isDark = 0`).then(row3 => {
+                    if (!row3) {
+                      sql.run('INSERT INTO murderMysteryItems (userId, guildId, itemId, usedItem, itemName, amount, isDark, extraData) VALUES (?, ?, ?, ?, ?, ?, ?, ?)', [user.id, message.guild.id, findItem.id, 0, findItem.name, 1, 0, '']);
+                      message.channel.send(goldthtin)
+                    } else {
+                      if (findItem.id === 1 && findItem.id === 2) {
+                        return message.reply("**ERR** User already has item")
+                      }
+                      sql.run(`UPDATE murderMysteryItems SET amount = ${row3.amount + 1} WHERE guildId ='${message.guild.id}' AND userId ='${user.id}' AND itemId =${findItem.id}`)
+                      message.channel.send(goldthtin)
+                    }
+                  })
+                }
+              })
+              return;
+            }
+            if (typeitem.toLowerCase() === "dark") {
+              let user = message.mentions.users.first()
+              if (!user) return message.reply(translate[row.lang].userdoesntexist)
+              let itemID = args[4]
+              if (!itemID) return message.channel.send(translate[row.lang].sandboxmode.pleaseenteritemid)
+              if (isNaN(parseInt(itemID))) return message.channel.send(translate[row.lang].sandboxmode.pleaseenteritemid);
+              itemID = parseInt(itemID)
+              sql.get(`SELECT * FROM murderMysteryPlayers WHERE userId = '${user.id}' AND guildId = '${message.guild.id}'`).then(checkUser => {
+                if (!checkUser) {
+                  message.channel.send(translate[row.lang].userisnotingame)
+                } else {
+                  let findItem = darkshopitems.find(function (a) {
+                    return a.id === itemID
+                  })
+                  if (findItem === undefined) return message.reply(translate[row.lang].unknownitem)
+                  let goldthtin = translate[row.lang].sandboxmode.addgold
+                  goldthtin = goldthtin.replace("%goldamount%", findItem.name)
+                  goldthtin = goldthtin.replace("%user%", user)
+                  sql.get(`SELECT * FROM murderMysteryItems WHERE userId ='${user.id}' AND guildId ='${message.guild.id}' AND itemId =${findItem.id} AND isDark = 0`).then(row3 => {
+                    if (!row3) {
+                      sql.run('INSERT INTO murderMysteryItems (userId, guildId, itemId, usedItem, itemName, amount, isDark, extraData) VALUES (?, ?, ?, ?, ?, ?, ?, ?)', [user.id, message.guild.id, findItem.id, 0, findItem.name, 1, 1, '']);
+                      message.channel.send(goldthtin)
+                    } else {
+                      if (findItem.id === 1 && findItem.id === 2 && findItem.id === 6) {
+                        return message.reply("**ERR** User already has item")
+                      }
+                      sql.run(`UPDATE murderMysteryItems SET amount = ${row3.amount + 1} WHERE guildId ='${message.guild.id}' AND userId ='${user.id}' AND itemId =${findItem.id} AND isDark = 1`)
+                      message.channel.send(goldthtin)
+                    }
+                  })
+                }
+              })
+              return;
+            }
+            return message.channel.send(translate[row.lang].sandboxmode.typeofitem)
           }
           if (settings === "addgold") {
             let typegold = args[2]
@@ -1052,7 +1611,7 @@ bot.on('message', message => {
                 message.channel.send(translate[row.lang].userisnotingame)
               } else {
                 if (checkUser.isDead === 1) return message.reply(translate[row5.lang].thatpersonisalreadydead)
-                if (checkUser.isMurderer === 1) {
+                if (checkUser.roleId === 1) {
                   let taaaaa = translate[row.lang].sandboxmode.kill
                   message.channel.send(taaaaa.replace("%user%", user))
                   setTimeout(function () {
@@ -1064,9 +1623,9 @@ bot.on('message', message => {
                   message.channel.send(`${user}, ${translate[row.lang].dmsdisabled}`)
                 })
                 sql.run(`UPDATE murderMysteryPlayers SET isDead = 1 WHERE guildId ='${message.guild.id}' AND userId ='${user.id}'`)
-                sql.run(`UPDATE murderMystery SET players = ${row.players - 1} WHERE guildId = '${message.guild.id}'`);
+                sql.run(`UPDATE murderMystery SET players = players - 1 WHERE guildId = '${message.guild.id}'`);
                 nopermstoanychannel(checkUser.playerid)
-                stabbedbymurder(user.id)
+                stabbedbymurder(user.id, 0, 0, checkUser.lastwill, checkUser.roleId)
                 //targetassassin(thing, 1)
                 let taaaaa = translate[row.lang].sandboxmode.kill
                 message.channel.send(taaaaa.replace("%user%", user))
@@ -1143,7 +1702,6 @@ bot.on('message', message => {
         }
       })
     }
-
     if (category === "fixgame") {
       sql.get(`SELECT * FROM murderMystery WHERE guildId ='${message.guild.id}'`).then(row => {
         if (!row) {
@@ -1167,7 +1725,6 @@ bot.on('message', message => {
         }
       })
     }
-
     /**
     It was all....
 
@@ -1179,7 +1736,6 @@ bot.on('message', message => {
 
     ( ͡° ͜ʖ ͡°)
     **/
-
     function insertbot(playercount) {
       sql.get(`SELECT * FROM murderMystery WHERE guildId ='${message.guild.id}'`).then(row => {
         if (!row) {
@@ -1199,7 +1755,6 @@ bot.on('message', message => {
             sql.get(`SELECT * FROM murderMysteryPlayers WHERE userId ='${bot.user.id}' AND guildId ='${message.guild.id}'`).then(row1 => {
               if (!row1) {
                 //addplayer()
-
                 if (playeridz === 1) {
                   //sql.run('INSERT INTO murderMysteryPlayers (guildId, userId, isMurderer, isSheriff, isHealer, isRadioPerson, isAssassin, isJailor, isReady, isDead, voted, lastwill, actioned, isenter, assigned, isjailed, hasjailed, beenassigned, playerid, hasVoted, gold, darkgold, isGlobalGames) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [message.guild.id, message.author.id, 0, 0, 0, 0, 0, 0, 0, 0, 0, "", 0, 0, 0, 0, 0, 0, playeridz, 0, 1, 0, 0]);
                   //roleupdate(1, 1)
@@ -1216,9 +1771,8 @@ bot.on('message', message => {
                 }
                 sql.run(`UPDATE murderMystery SET playerInsert = 0 WHERE guildId = '${message.guild.id}'`)
               } else {
-
                 message.reply("`ERROR` Bot is already in the game!")
-                throw new Error("Bot is already in the game!")
+                console.error("[Murder Mystery Error] Bot is already in the game!")
                 sql.run(`UPDATE murderMystery SET playerInsert = 0 WHERE guildId = '${message.guild.id}'`)
               }
             })
@@ -1230,19 +1784,9 @@ bot.on('message', message => {
               sql.run(`UPDATE murderMystery SET players = players + 1 WHERE guildId = '${message.guild.id}'`)
             } else {
               message.reply("`ERROR` Bot is already in the game!")
-              throw new Error("Bot is already in the game!")
+              console.error("[Murder Mystery Error] Bot is already in the game!")
             }
           })
-        }
-      })
-    }
-
-    function addplayer() {
-      sql.get(`SELECT * FROM murderMystery WHERE guildId ='${message.guild.id}'`).then(row => {
-        if (!row) {
-          return message.reply("Error 404 Data not found.")
-        } else {
-          sql.run(`UPDATE murderMystery SET players = ${row.players + 1} WHERE guildId = '${message.guild.id}'`);
         }
       })
     }
@@ -1264,29 +1808,11 @@ bot.on('message', message => {
           if (row.modeId === 3 || row.modeId === 7) {
             sql.get(`SELECT * FROM murderMysteryPlayers WHERE userId ='${message.author.id}' AND guildId ='${message.guild.id}'`).then(row1 => {
               if (!row1) {
-                //addplayer()
-
-                if (playeridz === 1) {
-                  //sql.run('INSERT INTO murderMysteryPlayers (guildId, userId, isMurderer, isSheriff, isHealer, isRadioPerson, isAssassin, isJailor, isReady, isDead, voted, lastwill, actioned, isenter, assigned, isjailed, hasjailed, beenassigned, playerid, hasVoted, gold, darkgold, isGlobalGames) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [message.guild.id, message.author.id, 0, 0, 0, 0, 0, 0, 0, 0, 0, "", 0, 0, 0, 0, 0, 0, playeridz, 0, 1, 0, 0]);
-                  //roleupdate(1, 1)
-                  sql.run('INSERT INTO murderMysteryPlayers (guildId, userId, isMurderer, isSheriff, isHealer, isRadioPerson, isAssassin, isJailor, isReady, isDead, voted, lastwill, actioned, isenter, assigned, isjailed, hasjailed, beenassigned, playerid, hasVoted, gold, darkgold, isGlobalGames) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [message.guild.id, message.author.id, 0, 0, 0, 0, 0, 0, 0, 0, 0, "", 0, 0, 0, 0, 0, 0, rolerand[0], 0, 1, 0, 0]);
-                  console.log(rolerand)
-                  roleupdate(parseInt(rolerand[0]), parseInt(rolerand[0]))
-
-                }
-                if (playeridz === 2) {
-                  //sql.run('INSERT INTO murderMysteryPlayers (guildId, userId, isMurderer, isSheriff, isHealer, isRadioPerson, isAssassin, isJailor, isReady, isDead, voted, lastwill, actioned, isenter, assigned, isjailed, hasjailed, beenassigned, playerid, hasVoted, gold, darkgold, isGlobalGames) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [message.guild.id, message.author.id, 0, 0, 0, 0, 0, 0, 0, 0, 0, "", 0, 0, 0, 0, 0, 0, playeridz, 0, 1, 0, 0]);
-                  //roleupdate(2, 2)
-                  sql.run('INSERT INTO murderMysteryPlayers (guildId, userId, isMurderer, isSheriff, isHealer, isRadioPerson, isAssassin, isJailor, isReady, isDead, voted, lastwill, actioned, isenter, assigned, isjailed, hasjailed, beenassigned, playerid, hasVoted, gold, darkgold, isGlobalGames) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [message.guild.id, message.author.id, 0, 0, 0, 0, 0, 0, 0, 0, 0, "", 0, 0, 0, 0, 0, 0, rolerand[1], 0, 1, 0, 0]);
-                  roleupdate(parseInt(rolerand[1]), parseInt(rolerand[1]))
-
-                }
-                //sql.run('INSERT INTO murderMysteryPlayers (guildId, userId, isMurderer, isSheriff, isHealer, isRadioPerson, isAssassin, isJailor, isReady, isDead, voted, lastwill, actioned, isenter, assigned, isjailed, hasjailed, beenassigned, playerid, hasVoted, gold, darkgold, isGlobalGames) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [message.guild.id, message.author.id, 0, 0, 0, 0, 0, 0, 0, 0, 0, "", 0, 0, 0, 0, 0, 0, playeridz, 0, 1, 0, 0]);
-
+                sql.run('INSERT INTO murderMysteryPlayers (guildId, userId, roleId, isReady, isDead, voted, lastwill, actioned, isenter, assigned, isjailed, hasjailed, beenassigned, playerid, hasVoted, gold, darkgold, isGlobalGames) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [message.guild.id, message.author.id, 0, 0, 0, 0, "", 0, 0, 0, 0, 0, 0, rolerand[playeridz - 1], 0, 1, 0, 0]);
+                console.log(rolerand)
+                roleupdate(parseInt(rolerand[playeridz - 1]), parseInt(rolerand[playeridz - 1]))
                 let murdermysterydataa = message.guild.roles.get(mmroleid)
-
                 if (!murdermysterydataa) return message.reply("Error...")
-                //arr.push(message.author.id)
                 message.guild.member(message.author).addRole(murdermysterydataa)
 
                 message.channel.fetchMessage(msgid).then(m => {
@@ -1298,7 +1824,6 @@ bot.on('message', message => {
 
                 //message.reply("SETUP!")
               } else {
-
                 message.channel.fetchMessage(msgid).then(m => {
                   //m.edit(message.author + " You are already in the game")
                   m.edit(message.author + translate[row.lang].alreadyingame)
@@ -1312,13 +1837,8 @@ bot.on('message', message => {
           if (row.modeId === 2) {
             sql.get(`SELECT * FROM murderMysteryPlayers WHERE userId ='${message.author.id}' AND guildId ='${message.guild.id}'`).then(row1 => {
               if (!row1) {
-                //addplayer()
-
-                sql.run('INSERT INTO murderMysteryPlayers (guildId, userId, isMurderer, isSheriff, isHealer, isRadioPerson, isAssassin, isJailor, isReady, isDead, voted, lastwill, actioned, isenter, assigned, isjailed, hasjailed, beenassigned, playerid, hasVoted, gold, darkgold, isGlobalGames) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [message.guild.id, message.author.id, 0, 0, 0, 0, 0, 0, 0, 0, 0, "", 0, 0, 0, 0, 0, 0, playeridz, 0, 1, 0, 0]);
-
-
                 //sql.run('INSERT INTO murderMysteryPlayers (guildId, userId, isMurderer, isSheriff, isHealer, isRadioPerson, isAssassin, isJailor, isReady, isDead, voted, lastwill, actioned, isenter, assigned, isjailed, hasjailed, beenassigned, playerid, hasVoted, gold, darkgold, isGlobalGames) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [message.guild.id, message.author.id, 0, 0, 0, 0, 0, 0, 0, 0, 0, "", 0, 0, 0, 0, 0, 0, playeridz, 0, 1, 0, 0]);
-
+                sql.run('INSERT INTO murderMysteryPlayers (guildId, userId, roleId, isReady, isDead, voted, lastwill, actioned, isenter, assigned, isjailed, hasjailed, beenassigned, playerid, hasVoted, gold, darkgold, isGlobalGames) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [message.guild.id, message.author.id, 1, 0, 0, 0, "", 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0]);
                 let murdermysterydataa = message.guild.roles.get(mmroleid)
 
                 if (!murdermysterydataa) return message.reply("Error...")
@@ -1329,10 +1849,7 @@ bot.on('message', message => {
                   m.edit(message.author + translate[row.lang].joinedgame)
                 })
                 sql.run(`UPDATE murderMystery SET playerInsert = 0 WHERE guildId = '${message.guild.id}'`)
-                //sql.run(`UPDATE murderMysteryPlayers SET playerid = ${row1.playerid = } WHERE userId = '${message.author.id}' AND guildId = '${message.guild.id}'`);
-                //message.reply("SETUP!")
               } else {
-
                 message.channel.fetchMessage(msgid).then(m => {
                   m.edit(message.author + translate[row.lang].alreadyingame)
                 })
@@ -1345,6 +1862,11 @@ bot.on('message', message => {
             sql.get(`SELECT * FROM murderMysteryPlayers WHERE userId ='${message.author.id}' AND guildId ='${message.guild.id}'`).then(row1 => {
               if (!row1) {
                 //addplayer()
+                sql.run('INSERT INTO murderMysteryPlayers (guildId, userId, roleId, isReady, isDead, voted, lastwill, actioned, isenter, assigned, isjailed, hasjailed, beenassigned, playerid, hasVoted, gold, darkgold, isGlobalGames) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [message.guild.id, message.author.id, 0, 0, 0, 0, "", 0, 0, 0, 0, 0, 0, rolerand[playeridz - 1], 0, 1, 0, 0]);
+                if (playeridz <= 4) {
+                  roleupdate(parseInt(rolerand[playeridz - 1]), parseInt(rolerand[playeridz - 1]))
+                }
+                /*
                 if (playeridz === 1) {
                   //sql.run('INSERT INTO murderMysteryPlayers (guildId, userId, isMurderer, isSheriff, isHealer, isRadioPerson, isAssassin, isJailor, isReady, isDead, voted, lastwill, actioned, isenter, assigned, isjailed, hasjailed, beenassigned, playerid, hasVoted, gold, darkgold, isGlobalGames) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [message.guild.id, message.author.id, 0, 0, 0, 0, 0, 0, 0, 0, 0, "", 0, 0, 0, 0, 0, 0, playeridz, 0, 1, 0, 0]);
                   //roleupdate(1, 1)
@@ -1355,20 +1877,7 @@ bot.on('message', message => {
                   //roleupdate(2, 2)
                   sql.run('INSERT INTO murderMysteryPlayers (guildId, userId, isMurderer, isSheriff, isHealer, isRadioPerson, isAssassin, isJailor, isReady, isDead, voted, lastwill, actioned, isenter, assigned, isjailed, hasjailed, beenassigned, playerid, hasVoted, gold, darkgold, isGlobalGames) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [message.guild.id, message.author.id, 0, 0, 0, 0, 0, 0, 0, 0, 0, "", 0, 0, 0, 0, 0, 0, rolerand[1], 0, 1, 0, 0]);
                   roleupdate(parseInt(rolerand[1]), parseInt(rolerand[1]))
-                } else if (playeridz === 3) {
-                  //sql.run('INSERT INTO murderMysteryPlayers (guildId, userId, isMurderer, isSheriff, isHealer, isRadioPerson, isAssassin, isJailor, isReady, isDead, voted, lastwill, actioned, isenter, assigned, isjailed, hasjailed, beenassigned, playerid, hasVoted, gold, darkgold, isGlobalGames) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [message.guild.id, message.author.id, 0, 0, 0, 0, 0, 0, 0, 0, 0, "", 0, 0, 0, 0, 0, 0, playeridz, 0, 1, 0, 0]);
-                  //roleupdate(3, 3)
-                  sql.run('INSERT INTO murderMysteryPlayers (guildId, userId, isMurderer, isSheriff, isHealer, isRadioPerson, isAssassin, isJailor, isReady, isDead, voted, lastwill, actioned, isenter, assigned, isjailed, hasjailed, beenassigned, playerid, hasVoted, gold, darkgold, isGlobalGames) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [message.guild.id, message.author.id, 0, 0, 0, 0, 0, 0, 0, 0, 0, "", 0, 0, 0, 0, 0, 0, rolerand[2], 0, 1, 0, 0]);
-                  roleupdate(parseInt(rolerand[2]), parseInt(rolerand[2]))
-                } else if (playeridz === 4) {
-                  //sql.run('INSERT INTO murderMysteryPlayers (guildId, userId, isMurderer, isSheriff, isHealer, isRadioPerson, isAssassin, isJailor, isReady, isDead, voted, lastwill, actioned, isenter, assigned, isjailed, hasjailed, beenassigned, playerid, hasVoted, gold, darkgold, isGlobalGames) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [message.guild.id, message.author.id, 0, 0, 0, 0, 0, 0, 0, 0, 0, "", 0, 0, 0, 0, 0, 0, playeridz, 0, 1, 0, 0]);
-                  //roleupdate(4, 4)
-                  sql.run('INSERT INTO murderMysteryPlayers (guildId, userId, isMurderer, isSheriff, isHealer, isRadioPerson, isAssassin, isJailor, isReady, isDead, voted, lastwill, actioned, isenter, assigned, isjailed, hasjailed, beenassigned, playerid, hasVoted, gold, darkgold, isGlobalGames) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [message.guild.id, message.author.id, 0, 0, 0, 0, 0, 0, 0, 0, 0, "", 0, 0, 0, 0, 0, 0, rolerand[3], 0, 1, 0, 0]);
-                  roleupdate(parseInt(rolerand[3]), parseInt(rolerand[3]))
-                } else
-                if (playeridz > 4) {
-                  sql.run('INSERT INTO murderMysteryPlayers (guildId, userId, isMurderer, isSheriff, isHealer, isRadioPerson, isAssassin, isJailor, isReady, isDead, voted, lastwill, actioned, isenter, assigned, isjailed, hasjailed, beenassigned, playerid, hasVoted, gold, darkgold, isGlobalGames) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [message.guild.id, message.author.id, 0, 0, 0, 0, 0, 0, 0, 0, 0, "", 0, 0, 0, 0, 0, 0, playeridz, 0, 1, 0, 0]);
-                }
+*/
                 //sql.run('INSERT INTO murderMysteryPlayers (guildId, userId, isMurderer, isSheriff, isHealer, isRadioPerson, isAssassin, isJailor, isReady, isDead, voted, lastwill, actioned, isenter, assigned, isjailed, hasjailed, beenassigned, playerid, hasVoted, gold, darkgold, isGlobalGames) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [message.guild.id, message.author.id, 0, 0, 0, 0, 0, 0, 0, 0, 0, "", 0, 0, 0, 0, 0, 0, playeridz, 0, 1, 0, 0]);
                 let murdermysterydataa = message.guild.roles.get(mmroleid)
                 if (!murdermysterydataa) return message.reply("Error...")
@@ -1392,40 +1901,41 @@ bot.on('message', message => {
           sql.get(`SELECT * FROM murderMysteryPlayers WHERE userId ='${message.author.id}' AND guildId ='${message.guild.id}'`).then(row1 => {
             if (!row1) {
               //addplayer()
-
-              if (playeridz === 1) {
-                //sql.run('INSERT INTO murderMysteryPlayers (guildId, userId, isMurderer, isSheriff, isHealer, isRadioPerson, isAssassin, isJailor, isReady, isDead, voted, lastwill, actioned, isenter, assigned, isjailed, hasjailed, beenassigned, playerid, hasVoted, gold, darkgold, isGlobalGames) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [message.guild.id, message.author.id, 0, 0, 0, 0, 0, 0, 0, 0, 0, "", 0, 0, 0, 0, 0, 0, playeridz, 0, 1, 0, 0]);
-                //roleupdate(1, 1)
-                sql.run('INSERT INTO murderMysteryPlayers (guildId, userId, isMurderer, isSheriff, isHealer, isRadioPerson, isAssassin, isJailor, isReady, isDead, voted, lastwill, actioned, isenter, assigned, isjailed, hasjailed, beenassigned, playerid, hasVoted, gold, darkgold, isGlobalGames) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [message.guild.id, message.author.id, 0, 0, 0, 0, 0, 0, 0, 0, 0, "", 0, 0, 0, 0, 0, 0, rolerand[0], 0, 1, 0, 0]);
-                roleupdate(parseInt(rolerand[0]), parseInt(rolerand[0]))
-              } else if (playeridz === 2) {
-                sql.run('INSERT INTO murderMysteryPlayers (guildId, userId, isMurderer, isSheriff, isHealer, isRadioPerson, isAssassin, isJailor, isReady, isDead, voted, lastwill, actioned, isenter, assigned, isjailed, hasjailed, beenassigned, playerid, hasVoted, gold, darkgold, isGlobalGames) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [message.guild.id, message.author.id, 0, 0, 0, 0, 0, 0, 0, 0, 0, "", 0, 0, 0, 0, 0, 0, rolerand[1], 0, 1, 0, 0]);
-                roleupdate(parseInt(rolerand[1]), parseInt(rolerand[1]))
-              } else if (playeridz === 3) {
-                sql.run('INSERT INTO murderMysteryPlayers (guildId, userId, isMurderer, isSheriff, isHealer, isRadioPerson, isAssassin, isJailor, isReady, isDead, voted, lastwill, actioned, isenter, assigned, isjailed, hasjailed, beenassigned, playerid, hasVoted, gold, darkgold, isGlobalGames) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [message.guild.id, message.author.id, 0, 0, 0, 0, 0, 0, 0, 0, 0, "", 0, 0, 0, 0, 0, 0, rolerand[2], 0, 1, 0, 0]);
-                roleupdate(parseInt(rolerand[2]), parseInt(rolerand[2]))
-              } else if (playeridz === 4) {
-                sql.run('INSERT INTO murderMysteryPlayers (guildId, userId, isMurderer, isSheriff, isHealer, isRadioPerson, isAssassin, isJailor, isReady, isDead, voted, lastwill, actioned, isenter, assigned, isjailed, hasjailed, beenassigned, playerid, hasVoted, gold, darkgold, isGlobalGames) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [message.guild.id, message.author.id, 0, 0, 0, 0, 0, 0, 0, 0, 0, "", 0, 0, 0, 0, 0, 0, rolerand[3], 0, 1, 0, 0]);
-                roleupdate(parseInt(rolerand[3]), parseInt(rolerand[3]))
-              } else
-              if (playeridz === 5) {
-                sql.run('INSERT INTO murderMysteryPlayers (guildId, userId, isMurderer, isSheriff, isHealer, isRadioPerson, isAssassin, isJailor, isReady, isDead, voted, lastwill, actioned, isenter, assigned, isjailed, hasjailed, beenassigned, playerid, hasVoted, gold, darkgold, isGlobalGames) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [message.guild.id, message.author.id, 0, 0, 0, 0, 0, 0, 0, 0, 0, "", 0, 0, 0, 0, 0, 0, rolerand[4], 0, 1, 0, 0]);
-                roleupdate(parseInt(rolerand[4]), parseInt(rolerand[4]))
-              } else if (playeridz === 6) {
-                sql.run('INSERT INTO murderMysteryPlayers (guildId, userId, isMurderer, isSheriff, isHealer, isRadioPerson, isAssassin, isJailor, isReady, isDead, voted, lastwill, actioned, isenter, assigned, isjailed, hasjailed, beenassigned, playerid, hasVoted, gold, darkgold, isGlobalGames) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [message.guild.id, message.author.id, 0, 0, 0, 0, 0, 0, 0, 0, 0, "", 0, 0, 0, 0, 0, 0, rolerand[5], 0, 1, 0, 0]);
-                roleupdate(parseInt(rolerand[5]), parseInt(rolerand[5]))
-              } else if (playeridz > 6) {
-                sql.run('INSERT INTO murderMysteryPlayers (guildId, userId, isMurderer, isSheriff, isHealer, isRadioPerson, isAssassin, isJailor, isReady, isDead, voted, lastwill, actioned, isenter, assigned, isjailed, hasjailed, beenassigned, playerid, hasVoted, gold, darkgold, isGlobalGames) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [message.guild.id, message.author.id, 0, 0, 0, 0, 0, 0, 0, 0, 0, "", 0, 0, 0, 0, 0, 0, playeridz, 0, 1, 0, 0]);
+              sql.run('INSERT INTO murderMysteryPlayers (guildId, userId, roleId, isReady, isDead, voted, lastwill, actioned, isenter, assigned, isjailed, hasjailed, beenassigned, playerid, hasVoted, gold, darkgold, isGlobalGames) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [message.guild.id, message.author.id, 0, 0, 0, 0, "", 0, 0, 0, 0, 0, 0, (playeridz <= 6) ? rolerand[playeridz - 1] : playeridz, 0, 1, 0, 0]);
+              if (playeridz <= 6) {
+                roleupdate(parseInt(rolerand[playeridz - 1]), parseInt(rolerand[playeridz - 1]))
               }
-
+              /*
+                            if (playeridz === 1) {
+                              //sql.run('INSERT INTO murderMysteryPlayers (guildId, userId, isMurderer, isSheriff, isHealer, isRadioPerson, isAssassin, isJailor, isReady, isDead, voted, lastwill, actioned, isenter, assigned, isjailed, hasjailed, beenassigned, playerid, hasVoted, gold, darkgold, isGlobalGames) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [message.guild.id, message.author.id, 0, 0, 0, 0, 0, 0, 0, 0, 0, "", 0, 0, 0, 0, 0, 0, playeridz, 0, 1, 0, 0]);
+                              //roleupdate(1, 1)
+                              sql.run('INSERT INTO murderMysteryPlayers (guildId, userId, isMurderer, isSheriff, isHealer, isRadioPerson, isAssassin, isJailor, isReady, isDead, voted, lastwill, actioned, isenter, assigned, isjailed, hasjailed, beenassigned, playerid, hasVoted, gold, darkgold, isGlobalGames) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [message.guild.id, message.author.id, 0, 0, 0, 0, 0, 0, 0, 0, 0, "", 0, 0, 0, 0, 0, 0, rolerand[0], 0, 1, 0, 0]);
+                              roleupdate(parseInt(rolerand[0]), parseInt(rolerand[0]))
+                            } else if (playeridz === 2) {
+                              sql.run('INSERT INTO murderMysteryPlayers (guildId, userId, isMurderer, isSheriff, isHealer, isRadioPerson, isAssassin, isJailor, isReady, isDead, voted, lastwill, actioned, isenter, assigned, isjailed, hasjailed, beenassigned, playerid, hasVoted, gold, darkgold, isGlobalGames) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [message.guild.id, message.author.id, 0, 0, 0, 0, 0, 0, 0, 0, 0, "", 0, 0, 0, 0, 0, 0, rolerand[1], 0, 1, 0, 0]);
+                              roleupdate(parseInt(rolerand[1]), parseInt(rolerand[1]))
+                            } else if (playeridz === 3) {
+                              sql.run('INSERT INTO murderMysteryPlayers (guildId, userId, isMurderer, isSheriff, isHealer, isRadioPerson, isAssassin, isJailor, isReady, isDead, voted, lastwill, actioned, isenter, assigned, isjailed, hasjailed, beenassigned, playerid, hasVoted, gold, darkgold, isGlobalGames) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [message.guild.id, message.author.id, 0, 0, 0, 0, 0, 0, 0, 0, 0, "", 0, 0, 0, 0, 0, 0, rolerand[2], 0, 1, 0, 0]);
+                              roleupdate(parseInt(rolerand[2]), parseInt(rolerand[2]))
+                            } else if (playeridz === 4) {
+                              sql.run('INSERT INTO murderMysteryPlayers (guildId, userId, isMurderer, isSheriff, isHealer, isRadioPerson, isAssassin, isJailor, isReady, isDead, voted, lastwill, actioned, isenter, assigned, isjailed, hasjailed, beenassigned, playerid, hasVoted, gold, darkgold, isGlobalGames) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [message.guild.id, message.author.id, 0, 0, 0, 0, 0, 0, 0, 0, 0, "", 0, 0, 0, 0, 0, 0, rolerand[3], 0, 1, 0, 0]);
+                              roleupdate(parseInt(rolerand[3]), parseInt(rolerand[3]))
+                            } else
+                            if (playeridz === 5) {
+                              sql.run('INSERT INTO murderMysteryPlayers (guildId, userId, isMurderer, isSheriff, isHealer, isRadioPerson, isAssassin, isJailor, isReady, isDead, voted, lastwill, actioned, isenter, assigned, isjailed, hasjailed, beenassigned, playerid, hasVoted, gold, darkgold, isGlobalGames) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [message.guild.id, message.author.id, 0, 0, 0, 0, 0, 0, 0, 0, 0, "", 0, 0, 0, 0, 0, 0, rolerand[4], 0, 1, 0, 0]);
+                              roleupdate(parseInt(rolerand[4]), parseInt(rolerand[4]))
+                            } else if (playeridz === 6) {
+                              sql.run('INSERT INTO murderMysteryPlayers (guildId, userId, isMurderer, isSheriff, isHealer, isRadioPerson, isAssassin, isJailor, isReady, isDead, voted, lastwill, actioned, isenter, assigned, isjailed, hasjailed, beenassigned, playerid, hasVoted, gold, darkgold, isGlobalGames) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [message.guild.id, message.author.id, 0, 0, 0, 0, 0, 0, 0, 0, 0, "", 0, 0, 0, 0, 0, 0, rolerand[5], 0, 1, 0, 0]);
+                              roleupdate(parseInt(rolerand[5]), parseInt(rolerand[5]))
+                            } else if (playeridz > 6) {
+                              sql.run('INSERT INTO murderMysteryPlayers (guildId, userId, isMurderer, isSheriff, isHealer, isRadioPerson, isAssassin, isJailor, isReady, isDead, voted, lastwill, actioned, isenter, assigned, isjailed, hasjailed, beenassigned, playerid, hasVoted, gold, darkgold, isGlobalGames) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [message.guild.id, message.author.id, 0, 0, 0, 0, 0, 0, 0, 0, 0, "", 0, 0, 0, 0, 0, 0, playeridz, 0, 1, 0, 0]);
+                            }
+                            */
               //sql.run('INSERT INTO murderMysteryPlayers (guildId, userId, isMurderer, isSheriff, isHealer, isRadioPerson, isAssassin, isJailor, isReady, isDead, voted, lastwill, actioned, isenter, assigned, isjailed, hasjailed, beenassigned, playerid, hasVoted, gold, darkgold, isGlobalGames) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [message.guild.id, message.author.id, 0, 0, 0, 0, 0, 0, 0, 0, 0, "", 0, 0, 0, 0, 0, 0, playeridz, 0, 1, 0, 0]);
-
               let murdermysterydataa = message.guild.roles.get(mmroleid)
-
               if (!murdermysterydataa) return message.reply("Error...")
               //arr.push(message.author.id)
               message.guild.member(message.author).addRole(murdermysterydataa)
-
               message.channel.fetchMessage(msgid).then(m => {
                 m.edit(message.author + translate[row.lang].joinedgame)
               })
@@ -1443,28 +1953,21 @@ bot.on('message', message => {
         }
       })
     }
-
-
-    // IDEA: ak
     if (category === "addhostrole") {
       sql.get(`SELECT * FROM murderMystery WHERE guildId ='${message.guild.id}'`).then(row => {
         if (!row) {
           message.reply("You have not put your data in the database! Please type " + config.prefix + "game setupdata\nto insert your data into the database!")
           return
         } else {
-
-
           let staff = message.guild.member(message.author).permissions.has('MANAGE_ROLES')
-
           //if (!staff) return message.reply("You do not have permission to add a host role! You need the `MANAGE_ROLES` permission")
           if (!staff) return message.reply(translate[row.lang].manageroles)
-
           let rolename = args.splice(1).join(' ')
           let roledata = message.guild.roles.find('name', rolename)
           //if (!roledata) return message.reply(mm.msgs.errors.roleexisting)
           if (!roledata) return message.reply(translate[row.lang].errors.roleexisting)
           let aaaa = message.guild.roles.find('name', rolename);
-          sql.run(`UPDATE murderMystery SET hostRoleID = ${aaaa.id} WHERE guildId = '${message.guild.id}'`);
+          sql.run(`UPDATE murderMystery SET hostRoleID = ? WHERE guildId = '${message.guild.id}'`, [aaaa.id]);
           //message.reply("Successfully put the role '" + rolename + "' into the Database! ")
           message.reply(translate[row.lang].koefk + rolename + translate[row.lang].keeod)
         }
@@ -1473,14 +1976,9 @@ bot.on('message', message => {
     if (category === "setupdata") {
       sql.get(`SELECT * FROM murderMystery WHERE guildId ='${message.guild.id}'`).then(row => {
         if (!row) {
-          sql.run('INSERT INTO murderMystery (guildId, hostRoleID, rank, murderWins, innocentWins, murderchannelid, healchannelid, sheriffchannelid, murdergamechannelid, radiochannelid, host, gameStarted, spectatorchannelid, isDay, isNight, isStopcycle, murdermysteryRoleID, jailorchannelid, jailchannelid, shopchannelid, players, modeId, startcmd, gameid, lang, playerInsert, defaultChannel, randomizer, day) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [message.guild.id, "0", "0", 0, 0, "0", "0", "0", "0", "0", "0", 0, "0", "0", "0", "0", 0, 0, 0, 0, 0, 0, 0, 0, "English", 0, "0", "0", 0]);
-
+          insertGuild(message.guild.id)
           message.reply("Successfully put your server into the database!")
-
-
         } else {
-
-          //sql.run(`UPDATE guildLogs SET balance = ${row.balance + 1000} WHERE userId = ${message.author.id}`);
           message.reply("You have already setup this.")
         }
       })
@@ -1489,7 +1987,6 @@ bot.on('message', message => {
     function forcerole(userid) {
 
     }
-
     if (category === "force") {
       sql.get(`SELECT * FROM murderMystery WHERE guildId ='${message.guild.id}'`).then(row => {
         if (!row) {
@@ -1584,6 +2081,13 @@ bot.on('message', message => {
           message.reply("You have not put your data in the database! Please type " + config.prefix + "game setupdata\nto insert your data into the database!")
           return
         } else {
+          if (row.categoryChannelId !== "0") {
+            let findCategoryExists = message.guild.channels.find('id', row.categoryChannelId)
+            if (!findCategoryExists) {
+              sql.run(`UPDATE murderMystery SET categoryChannelId = 0 WHERE guildId = "${message.guild.id}"`)
+              message.channel.send("**The setting you've entered for \"category\" had been reset because the category you've provided doesn't exist!")
+            }
+          }
           //if(preventjoinData.start === 1) return message.reply("There is already a game going on in another server")
           let roledata = message.guild.roles.get(row.hostRoleID)
           //let murdermysterydataa = message.guild.roles.get(row.murdermysteryRoleID)
@@ -1604,9 +2108,7 @@ bot.on('message', message => {
           if (categorya === "murderparty") {
             message.guild.createRole({
               name: 'Playing Murder Mystery (Murder Party)'
-            }).then(role => sql.run(`UPDATE murderMystery SET murdermysteryRoleID = ${row.murdermysteryRoleID = role.id} WHERE guildId = '${message.guild.id}'`))
-
-
+            }).then(role => sql.run(`UPDATE murderMystery SET murdermysteryRoleID = "${role.id}" WHERE guildId = '${message.guild.id}'`))
             //return message.reply("That mode hasn't even been added yet...")
             gameid++;
             if (config.sharding === 1) {
@@ -1616,33 +2118,8 @@ bot.on('message', message => {
             //sql.run(`UPDATE murderMystery SET isMurderparty = ${row.isMurderparty = 1} WHERE guildId = '${message.guild.id}'`);
             //message.channel.send(message.author + " has setup a **Murder Party** Murder Mystery Game! If you want to join, type\n" + config.prefix + "game join\nTo join the match!")
             message.channel.send(message.author + translate[row.lang].kfofee + "**Murder Party**" + translate[row.lang].dkodee)
-
-
             return;
           }
-          /*
-                    if (categorya === "fastermode") {
-                      return message.reply("This mode has been added but it has been put as a development build due to bugs and stuff. If you want to test out this build, you must be staff on our server.")
-
-                      message.guild.createRole({
-                        name: 'Playing Murder Mystery (Faster Mode)'
-                      }).then(role => sql.run(`UPDATE murderMystery SET murdermysteryRoleID = ${row.murdermysteryRoleID = role.id} WHERE guildId = '${message.guild.id}'`))
-
-
-                      //return message.reply("That mode hasn't even been added yet...")
-
-                      sql.run(`UPDATE murderMystery SET isFasterMode = ${row.isFasterMode = 1} WHERE guildId = '${message.guild.id}'`);
-                      sql.run(`UPDATE murderMystery SET startcmd = ${row.startcmd = 1} WHERE guildId = '${message.guild.id}'`);
-                      //message.channel.send(message.author + " has setup a **Faster Mode** Murder Mystery Game! If you want to join, type\n" + config.prefix + "game join\nTo join the match!")
-                      message.channel.send(message.author + translate[row.lang].kfofee + "**Faster Mode**" + translate[row.lang].dkodee)
-
-
-                      //         fs.writeFile('./preventjoin.json', JSON.stringify(preventjoin), (err) => {
-                      //   	if (err) console.error(err)
-                      // });
-                      return;
-                    }
-                    */
           if (categorya === "bot1v1") {
             message.guild.createRole({
               name: 'Playing Murder Mystery (Bot 1v1 Mode)'
@@ -1668,14 +2145,11 @@ bot.on('message', message => {
               bot.gameid = gameid
             }
             sql.run(`UPDATE murderMystery SET gameid = ${gameid}, modeId = ${row.modeId = 3}, startcmd = 1 WHERE guildId = '${message.guild.id}'`);
-
             //preventjoinData.start = 1
             //sql.run(`UPDATE murderMystery SET isOneVOne = ${row.isOneVOne = 1} WHERE guildId = '${message.guild.id}'`);
             sql.run(`UPDATE murderMystery SET randomizer = "${rolerandomizer[row.modeId][0]}|${rolerandomizer[row.modeId][1]}" WHERE guildId = '${message.guild.id}'`)
             //message.reply("has setup a **1v1 Mode** Murder Mystery Game! If you want to join, type\n" + config.prefix + "game join\nTo join the match!")
             message.channel.send(message.author + translate[row.lang].kfofee + "**1v1 Mode**" + translate[row.lang].dkodee)
-
-
             //            fs.writeFile('./preventjoin.json', JSON.stringify(preventjoin), (err) => {
             //      	if (err) console.error(err)
             //    });
@@ -1685,7 +2159,7 @@ bot.on('message', message => {
             //return message.reply("That mode hasn't even been added yet...")
             message.guild.createRole({
               name: 'Playing Murder Mystery (Sandbox Mode)'
-            }).then(role => sql.run(`UPDATE murderMystery SET murdermysteryRoleID = ${row.murdermysteryRoleID = role.id} WHERE guildId = '${message.guild.id}'`))
+            }).then(role => sql.run(`UPDATE murderMystery SET murdermysteryRoleID = ${role.id} WHERE guildId = '${message.guild.id}'`))
             gameid++;
             if (config.sharding === 1) {
               bot.gameid = gameid
@@ -1706,17 +2180,13 @@ bot.on('message', message => {
             //       });
             return;
           }
-
           if (categorya === "humansvsbots") {
             if (message.author.id !== "126119057232625664") return message.reply("This mode has been added but it has been put as a development build due to bugs and stuff. If you want to test out this build, you must be staff on our server.")
             message.guild.createRole({
               name: 'Playing Murder Mystery (Humans VS Bots)'
             }).then(role => sql.run(`UPDATE murderMystery SET murdermysteryRoleID = ${row.murdermysteryRoleID = role.id} WHERE guildId = '${message.guild.id}'`))
-
-
             //return message.reply("That mode hasn't even been added yet...")
             //preventjoinData.isOneVOne = 1
-
             //preventjoinData.guildID = message.guild.id
             gameid++;
             if (config.sharding === 1) {
@@ -1760,7 +2230,7 @@ bot.on('message', message => {
           if (categorya === "unlimitedmode") {
             message.guild.createRole({
               name: 'Playing Murder Mystery (Unlimited Players Mode)'
-            }).then(role => sql.run(`UPDATE murderMystery SET murdermysteryRoleID = ${row.murdermysteryRoleID = role.id} WHERE guildId = '${message.guild.id}'`))
+            }).then(role => sql.run(`UPDATE murderMystery SET murdermysteryRoleID = ${role.id} WHERE guildId = '${message.guild.id}'`))
 
             sql.run(`UPDATE murderMystery SET host = ${message.author.id} WHERE guildId = '${message.guild.id}'`)
 
@@ -1777,9 +2247,9 @@ bot.on('message', message => {
           if (categorya === "shortroles") {
             message.guild.createRole({
               name: 'Playing Murder Mystery (Short Roles Mode)'
-            }).then(role => sql.run(`UPDATE murderMystery SET murdermysteryRoleID = ${row.murdermysteryRoleID = role.id} WHERE guildId = '${message.guild.id}'`))
+            }).then(role => sql.run(`UPDATE murderMystery SET murdermysteryRoleID = ${role.id} WHERE guildId = '${message.guild.id}'`))
 
-            sql.run(`UPDATE murderMystery SET host = ${row.host = message.author.id} WHERE guildId = '${message.guild.id}'`)
+            sql.run(`UPDATE murderMystery SET host = "${message.author.id}" WHERE guildId = '${message.guild.id}'`)
 
             gameid++;
             if (config.sharding === 1) {
@@ -1811,6 +2281,20 @@ bot.on('message', message => {
             //fs.writeFile('./preventjoin.json', JSON.stringify(preventjoin), (err) => {
             //if (err) console.error(err)
             // });
+            return;
+          }
+          if (categorya === "zombie") {
+            message.guild.createRole({
+              name: 'Playing Murder Mystery (Zombie Mode)'
+            }).then(role => sql.run(`UPDATE murderMystery SET murdermysteryRoleID = ${row.murdermysteryRoleID = role.id} WHERE guildId = '${message.guild.id}'`))
+            sql.run(`UPDATE murderMystery SET host = "${message.author.id}" WHERE guildId = '${message.guild.id}'`)
+            gameid++;
+            if (config.sharding === 1) {
+              bot.gameid = gameid
+            }
+            message.reply(message.author + translate[row.lang].kfofee + "**Zombie Mode**" + translate[row.lang].dkodee)
+            row.modeId = 12
+            sql.run(`UPDATE murderMystery SET gameid = ${gameid}, modeId = 12, startcmd = 1, randomizer = "${rolerandomizer[row.modeId][0]}|${rolerandomizer[row.modeId][1]}|${rolerandomizer[row.modeId][2]}|${rolerandomizer[row.modeId][3]}|${rolerandomizer[row.modeId][4]}|${rolerandomizer[row.modeId][5]}" WHERE guildId = '${message.guild.id}'`);
             return;
           }
           if (categorya === "insane") {
@@ -1856,12 +2340,9 @@ bot.on('message', message => {
             sql.run(`UPDATE murderMystery SET modeId = ${row.modeId = 1} WHERE guildId = '${message.guild.id}'`);
             sql.run(`UPDATE murderMystery SET startcmd = ${row.startcmd = 1} WHERE guildId = '${message.guild.id}'`);
             sql.run(`UPDATE murderMystery SET randomizer = "${rolerandomizer[row.modeId][0]}|${rolerandomizer[row.modeId][1]}|${rolerandomizer[row.modeId][2]}|${rolerandomizer[row.modeId][3]}|${rolerandomizer[row.modeId][4]}|${rolerandomizer[row.modeId][5]}" WHERE guildId = '${message.guild.id}'`)
-
-
             //fs.writeFile('./preventjoin.json', JSON.stringify(preventjoin), (err) => {
             //if (err) console.error(err)
             // });
-
           } else
             //message.reply("That mode doesn't exist!\nPlease use these categories:\n```md\nRegular - Classic Murder Mystery! (regular)\n\nMurder Party - Everyone is a murderer! (murderparty)\n\nHumans VS Bots - Added extra bots (not added yet)\n\nKiller Mode - There is one Detective and Everyone is a murderer (not added yet)\n\nSpecialist Town - Everyone is either Murderer, dective, healer, etc (not added yet)\n\n5050 - 50 murderers, 50 detectives (not added yet)\n\n2 birds 1 stone - 2 murds 1 detect Or 2 detect 1 murd (not added yet)\nFaster mode - Classic murder mystery but the time is quicker (fastermode)\n\nTime mode - In the day time, the Murderer can attack, but in the night they cant. (not added yet)\n\n1v1 Mode - 1 Detective and 1 Murderer, ONLY 2 People can do this mode. (1v1)\n\nBot Murder Mode - At night the bot types mm!kill (random) (not added yet)\n\nRejected Roles Mode - A mode that contains (most of) the rejected roles (not added yet)\n\nRobbery - 1-5 (varietied by server number) people are dressed in Robber clothing. Then Cops (act like detective) will try to apprehend them. The rest are Shop keepers. (innocents) They are managed to keep the store without being robbed.\nIf Robber/Murderer kills the Shop Keeper or gets detected by camera (camera has 3 seconds before detection) The Cops will get detected on where a robber is at\n(The Town varies around how much there is in the server)\n\n(Small Town: 1-5 People in Server)\n\n(Medium Town: 7-max People in server)\n(Big Town 8+ people in server) (not added yet)\n\nUnlimted Players Mode - Have more than 8 people? this is the mode for you! You can have an unlimited amount of players! (unlimitedmode)\n\nThats all the modes\n```")
             message.reply(translate[row.lang].modedoesntexist)
@@ -1869,7 +2350,6 @@ bot.on('message', message => {
       })
     } else
     if (category === "stop") {
-
       sql.get(`SELECT * FROM murderMystery WHERE guildId ='${message.guild.id}'`).then(row => {
         if (!row) {
           message.reply("You have not put your data in the database! Please type " + config.prefix + "game setupdata\nto insert your data into the database!")
@@ -1898,7 +2378,6 @@ bot.on('message', message => {
                     fs.writeFile('./preventjoin.json', '{}', 'utf8')
             **/
             //bot.channels.get(row.defaultChannel).send("The game has been stopped by `" + message.author.tag + "`!")
-
             setTimeout(aaaaaaa, 1500)
             setTimeout(deleteallplayerz, 2000)
             let murdererr = 'N/A'
@@ -1910,389 +2389,35 @@ bot.on('message', message => {
             let innocentes = ''
             sql.all(`SELECT * FROM murderMysteryPlayers WHERE guildId ='${message.guild.id}'`).then((rows) => {
               for (let row21 of rows) {
-                if (row21.isMurderer === 1) {
+                if (row21.roleId === 1) {
                   murdererr = bot.users.get(row21.userId).tag
-                } else if (row21.isSheriff === 1) {
+                } else if (row21.roleId === 2) {
                   detectiveee = bot.users.get(row21.userId).tag
-                } else if (row21.isHealer === 1) {
+                } else if (row21.roleId === 3) {
                   healerr = bot.users.get(row21.userId).tag
-                } else if (row21.isHealer === 1) {
+                } else if (row21.roleId === 3) {
                   healerr = bot.users.get(row21.userId).tag
-                } else if (row21.isRadioPerson === 1) {
+                } else if (row21.roleId === 4) {
                   radiopersonn = bot.users.get(row21.userId).tag
-                } else if (row21.isAssassin === 1) {
+                } else if (row21.roleId === 5) {
                   asssassisnsz = bot.users.get(row21.userId).tag
-                } else if (row21.isJailor === 1) {
+                } else if (row21.roleId === 6) {
                   jialirzo = bot.users.get(row21.userId).tag
                 } else
                   innocentes += bot.users.get(row21.userId).tag + "\n"
               }
               bot.channels.get(row.defaultChannel).send({
-                embed: new RichEmbed().setTitle(translate[row.lang].stoppedgameglob + message.author.tag + "`!").addField(translate[row.lang].roles.murderer, murdererr, true).addField(translate[row.lang].roles.detective, detectiveee, true).addField(translate[row.lang].roles.healer, healerr, true).addField(translate[row.lang].roles.radioperson, radiopersonn, true).addField(translate[row.lang].roles.assassin, asssassisnsz, true).addField(translate[row.lang].roles.jailor, jialirzo, true).setDescription("**Innocents**\n" + innocentes).setFooter("If they dont say anything, then ignore it.")
+                embed: new RichEmbed().setTitle(translate[row.lang].stoppedgameglob + message.author.tag + "`!").addField(translate[row.lang].roles.murderer, murdererr, true).addField(translate[row.lang].roles.detective, detectiveee, true).addField(translate[row.lang].roles.healer, healerr, true).addField(translate[row.lang].roles.radioperson, radiopersonn, true).addField(translate[row.lang].roles.assassin, asssassisnsz, true).addField(translate[row.lang].roles.jailor, jialirzo, true).setDescription("**Innocents**\n" + innocentes).setFooter("If they just say N/A, then ignore it.")
               })
             })
             //bot.channels.get(row.defaultChannel).send(translate[row.lang].stoppedgameglob + message.author.tag + "`!")
             return
           }
-          //if (row.isMurderparty === 1) {
-          if (row.modeId === 2) {
-
-
-            let murdermysteryrole = message.guild.roles.get(row.murdermysteryRoleID)
-            murdermysteryrole.delete()
-            /**
-                    //fs.writeFile('./mmplayers.json', '{}', 'utf8')
-                    fs.writeFile('./mmgame.json', '{}', 'utf8')
-
-                    fs.writeFile('./preventjoin.json', '{}', 'utf8')
-            **/
-            bot.channels.get(row.murdergamechannelid).delete()
-            bot.channels.get(row.murderchannelid).delete()
-
-
-
-            setTimeout(aaaaaaa, 1500)
-            setTimeout(deleteallplayerz, 2000)
-            let murdererr = 'N/A'
-            let detectiveee = 'N/A'
-            let healerr = 'N/A'
-            let radiopersonn = 'N/A'
-            let asssassisnsz = 'N/A'
-            let jialirzo = 'N/A'
-            let innocentes = ''
-            sql.all(`SELECT * FROM murderMysteryPlayers WHERE guildId ='${message.guild.id}'`).then((rows) => {
-              for (let row21 of rows) {
-                if (row21.isMurderer === 1) {
-                  murdererr = bot.users.get(row21.userId).tag
-                } else if (row21.isSheriff === 1) {
-                  detectiveee = bot.users.get(row21.userId).tag
-                } else if (row21.isHealer === 1) {
-                  healerr = bot.users.get(row21.userId).tag
-                } else if (row21.isHealer === 1) {
-                  healerr = bot.users.get(row21.userId).tag
-                } else if (row21.isRadioPerson === 1) {
-                  radiopersonn = bot.users.get(row21.userId).tag
-                } else if (row21.isAssassin === 1) {
-                  asssassisnsz = bot.users.get(row21.userId).tag
-                } else if (row21.isJailor === 1) {
-                  jialirzo = bot.users.get(row21.userId).tag
-                } else
-                  innocentes += bot.users.get(row21.userId).tag + "\n"
-              }
-              bot.channels.get(row.defaultChannel).send({
-                embed: new RichEmbed().setTitle(translate[row.lang].stoppedgameglob + message.author.tag + "`!").addField(translate[row.lang].roles.murderer, murdererr, true).addField(translate[row.lang].roles.detective, detectiveee, true).addField(translate[row.lang].roles.healer, healerr, true).addField(translate[row.lang].roles.radioperson, radiopersonn, true).addField(translate[row.lang].roles.assassin, asssassisnsz, true).addField(translate[row.lang].roles.jailor, jialirzo, true).setDescription("**Innocents**\n" + innocentes).setFooter("If they dont say anything, then ignore it.")
-              })
-            })
-            //bot.channels.get(row.defaultChannel).send(translate[row.lang].stoppedgameglob + message.author.tag + "`!")
-
-            return
-          }
-
-          //if (row.isOneVOne === 1) {
-          if (row.modeId === 3) {
-            /**
-                    fs.writeFile('./mmplayers.json', '{}', 'utf8')
-                    fs.writeFile('./mmgame.json', '{}', 'utf8')
-
-                    fs.writeFile('./preventjoin.json', '{}', 'utf8')
-            **/
-
-            let murdermysteryrole = message.guild.roles.get(row.murdermysteryRoleID)
-            murdermysteryrole.delete()
-
-
-            let channelab = bot.channels.get(row.sheriffchannelid)
-            let channelac = bot.channels.get(row.murderchannelid)
-            let channelazz = bot.channels.get(row.murdergamechannelid)
-            let channelkf = bot.channels.get(row.shopchannelid)
-            if (!channelazz) {
-              message.channel.send("`ERROR` Murder Game Channel not found!")
-            }
-            if (channelazz) {
-              channelazz.delete()
-            }
-            if (!channelkf) {
-              message.channel.send("`ERROR` Shop Channel not found!")
-            }
-            if (channelkf) {
-              channelkf.delete()
-            }
-            if (!channelab) {
-              message.channel.send("`ERROR` Detective Channel not found!")
-            }
-            if (channelab) {
-              channelab.delete()
-            }
-            if (!channelac) {
-              message.channel.send("`ERROR` Murderer Channel not found!")
-            }
-            if (channelac) {
-              channelac.delete()
-            }
-            //bot.channels.get(row.murdergamechannelid).delete()
-            //bot.channels.get(row.sheriffchannelid).delete()
-            //bot.channels.get(row.shopchannelid).delete()
-            //bot.channels.get(row.murderchannelid).delete()
-            //bot.channels.get(row.radiochannelid).delete()
-            setTimeout(aaaaaaa, 1500)
-            setTimeout(deleteallplayerz, 1000, 1)
-
-
-
-            let murdererr = 'N/A'
-            let detectiveee = 'N/A'
-            let healerr = 'N/A'
-            let radiopersonn = 'N/A'
-            let asssassisnsz = 'N/A'
-            let jialirzo = 'N/A'
-            let innocentes = ''
-            sql.all(`SELECT * FROM murderMysteryPlayers WHERE guildId ='${message.guild.id}'`).then((rows) => {
-              for (let row21 of rows) {
-                if (row21.isMurderer === 1) {
-                  murdererr = bot.users.get(row21.userId).tag
-                } else if (row21.isSheriff === 1) {
-                  detectiveee = bot.users.get(row21.userId).tag
-                } else if (row21.isHealer === 1) {
-                  healerr = bot.users.get(row21.userId).tag
-                } else if (row21.isHealer === 1) {
-                  healerr = bot.users.get(row21.userId).tag
-                } else if (row21.isRadioPerson === 1) {
-                  radiopersonn = bot.users.get(row21.userId).tag
-                } else if (row21.isAssassin === 1) {
-                  asssassisnsz = bot.users.get(row21.userId).tag
-                } else if (row21.isJailor === 1) {
-                  jialirzo = bot.users.get(row21.userId).tag
-                } else
-                  innocentes += bot.users.get(row21.userId).tag + "\n"
-              }
-              bot.channels.get(row.defaultChannel).send({
-                embed: new RichEmbed().setTitle(translate[row.lang].stoppedgameglob + message.author.tag + "`!").addField(translate[row.lang].roles.murderer, murdererr, true).addField(translate[row.lang].roles.detective, detectiveee, true).addField(translate[row.lang].roles.healer, healerr, true).addField(translate[row.lang].roles.radioperson, radiopersonn, true).addField(translate[row.lang].roles.assassin, asssassisnsz, true).addField(translate[row.lang].roles.jailor, jialirzo, true).setDescription("**Innocents**\n" + innocentes).setFooter("If they dont say anything, then ignore it.")
-              })
-            })
-            //bot.channels.get(row.defaultChannel).send(translate[row.lang].stoppedgameglob + message.author.tag + "`!")
-
-            return
-          }
-          if (row.modeId === 7) {
-
-            let murdermysteryrole = message.guild.roles.get(row.murdermysteryRoleID)
-            murdermysteryrole.delete()
-
-            let channelab = bot.channels.get(row.sheriffchannelid)
-            let channelac = bot.channels.get(row.murderchannelid)
-            let channelazz = bot.channels.get(row.murdergamechannelid)
-            let channelkf = bot.channels.get(row.shopchannelid)
-            if (!channelazz) {
-              message.channel.send("`ERROR` Murder Game Channel not found!")
-            }
-            if (channelazz) {
-              channelazz.delete()
-            }
-            if (!channelkf) {
-              message.channel.send("`ERROR` Shop Channel not found!")
-            }
-            if (channelkf) {
-              channelkf.delete()
-            }
-            if (!channelab) {
-              message.channel.send("`ERROR` Detective Channel not found!")
-            }
-            if (channelab) {
-              channelab.delete()
-            }
-            if (!channelac) {
-              message.channel.send("`ERROR` Murderer Channel not found!")
-            }
-            if (channelac) {
-              channelac.delete()
-            }
-            //bot.channels.get(row.murdergamechannelid).delete()
-            //bot.channels.get(row.sheriffchannelid).delete()
-            //bot.channels.get(row.shopchannelid).delete()
-            //bot.channels.get(row.murderchannelid).delete()
-            //bot.channels.get(row.healchannelid).delete()
-            //bot.channels.get(row.radiochannelid).delete()
-            setTimeout(aaaaaaa, 1500)
-            setTimeout(deleteallplayerz, 1000, 1)
-            // Bot 1v1 Mode
-            let murdererr = 'N/A'
-            let detectiveee = 'N/A'
-            let healerr = 'N/A'
-            let radiopersonn = 'N/A'
-            let asssassisnsz = 'N/A'
-            let jialirzo = 'N/A'
-            let innocentes = ''
-            sql.all(`SELECT * FROM murderMysteryPlayers WHERE guildId ='${message.guild.id}'`).then((rows) => {
-              for (let row21 of rows) {
-                if (row21.isMurderer === 1) {
-                  murdererr = bot.users.get(row21.userId).tag
-                } else if (row21.isSheriff === 1) {
-                  detectiveee = bot.users.get(row21.userId).tag
-                } else if (row21.isHealer === 1) {
-                  healerr = bot.users.get(row21.userId).tag
-                } else if (row21.isHealer === 1) {
-                  healerr = bot.users.get(row21.userId).tag
-                } else if (row21.isRadioPerson === 1) {
-                  radiopersonn = bot.users.get(row21.userId).tag
-                } else if (row21.isAssassin === 1) {
-                  asssassisnsz = bot.users.get(row21.userId).tag
-                } else if (row21.isJailor === 1) {
-                  jialirzo = bot.users.get(row21.userId).tag
-                } else
-                  innocentes += bot.users.get(row21.userId).tag + "\n"
-              }
-              bot.channels.get(row.defaultChannel).send({
-                embed: new RichEmbed().setTitle(translate[row.lang].stoppedgameglob + message.author.tag + "`!").addField(translate[row.lang].roles.murderer, murdererr, true).addField(translate[row.lang].roles.detective, detectiveee, true).addField(translate[row.lang].roles.healer, healerr, true).addField(translate[row.lang].roles.radioperson, radiopersonn, true).addField(translate[row.lang].roles.assassin, asssassisnsz, true).addField(translate[row.lang].roles.jailor, jialirzo, true).setDescription("**Innocents**\n" + innocentes).setFooter("If they dont say anything, then ignore it.")
-              })
-            })
-            //bot.channels.get(row.defaultChannel).send(translate[row.lang].stoppedgameglob + message.author.tag + "`!")
-            return
-          }
-          if (row.modeId === 8) {
-            fs.writeFile('./mmplayers.json', '{}', 'utf8')
-            fs.writeFile('./mmgame.json', '{}', 'utf8')
-            fs.writeFile('./preventjoin.json', '{}', 'utf8')
-            let murdermysteryrole = message.guild.roles.get(row.murdermysteryRoleID)
-            murdermysteryrole.delete()
-            let channela = bot.channels.get(row.healchannelid)
-            let channelab = bot.channels.get(row.sheriffchannelid)
-            let channelac = bot.channels.get(row.murderchannelid)
-            let channelad = bot.channels.get(row.radiochannelid)
-            let channelazz = bot.channels.get(row.murdergamechannelid)
-            let channelkf = bot.channels.get(row.shopchannelid)
-            if (!channelazz) {
-              message.channel.send("`ERROR` Murder Game Channel not found!")
-            }
-            if (channelazz) {
-              channelazz.delete()
-            }
-            if (!channelkf) {
-              message.channel.send("`ERROR` Shop Channel not found!")
-            }
-            if (channelkf) {
-              channelkf.delete()
-            }
-            if (!channela) {
-              message.channel.send("`ERROR` Healer Channel not found!")
-            }
-            if (channela) {
-              channela.delete()
-            }
-            if (!channelab) {
-              message.channel.send("`ERROR` Detective Channel not found!")
-            }
-            if (channelab) {
-              channelab.delete()
-            }
-            if (!channelac) {
-              message.channel.send("`ERROR` Murderer Channel not found!")
-            }
-            if (channelac) {
-              channelac.delete()
-            }
-            if (!channelad) {
-              message.channel.send("`ERROR` Radio Channel not found!")
-            }
-            if (channelad) {
-              channelad.delete()
-            }
-            setTimeout(aaaaaaa, 1500)
-            setTimeout(deleteallplayerz, 1000, 0)
-            let murdererr = 'N/A'
-            let detectiveee = 'N/A'
-            let healerr = 'N/A'
-            let radiopersonn = 'N/A'
-            let asssassisnsz = 'N/A'
-            let jialirzo = 'N/A'
-            let innocentes = ''
-            sql.all(`SELECT * FROM murderMysteryPlayers WHERE guildId ='${message.guild.id}'`).then((rows) => {
-              for (let row21 of rows) {
-                if (row21.isMurderer === 1) {
-                  murdererr = bot.users.get(row21.userId).tag
-                } else if (row21.isSheriff === 1) {
-                  detectiveee = bot.users.get(row21.userId).tag
-                } else if (row21.isHealer === 1) {
-                  healerr = bot.users.get(row21.userId).tag
-                } else if (row21.isHealer === 1) {
-                  healerr = bot.users.get(row21.userId).tag
-                } else if (row21.isRadioPerson === 1) {
-                  radiopersonn = bot.users.get(row21.userId).tag
-                } else if (row21.isAssassin === 1) {
-                  asssassisnsz = bot.users.get(row21.userId).tag
-                } else if (row21.isJailor === 1) {
-                  jialirzo = bot.users.get(row21.userId).tag
-                } else
-                  innocentes += bot.users.get(row21.userId).tag + "\n"
-              }
-              bot.channels.get(row.defaultChannel).send({
-                embed: new RichEmbed().setTitle(translate[row.lang].stoppedgameglob + message.author.tag + "`!").addField(translate[row.lang].roles.murderer, murdererr, true).addField(translate[row.lang].roles.detective, detectiveee, true).addField(translate[row.lang].roles.healer, healerr, true).addField(translate[row.lang].roles.radioperson, radiopersonn, true).addField(translate[row.lang].roles.assassin, asssassisnsz, true).addField(translate[row.lang].roles.jailor, jialirzo, true).setDescription("**Innocents**\n" + innocentes).setFooter("If they dont say anything, then ignore it.")
-              })
-            })
-            //bot.channels.get(row.defaultChannel).send(translate[row.lang].stoppedgameglob + message.author.tag + "`!")
-          }
-          fs.writeFile('./mmplayers.json', '{}', 'utf8')
-          fs.writeFile('./mmgame.json', '{}', 'utf8')
-          fs.writeFile('./preventjoin.json', '{}', 'utf8')
           let murdermysteryrole = message.guild.roles.get(row.murdermysteryRoleID)
           murdermysteryrole.delete()
-          let channela = bot.channels.get(row.healchannelid)
-          let channelab = bot.channels.get(row.sheriffchannelid)
-          let channelac = bot.channels.get(row.murderchannelid)
-          let channelad = bot.channels.get(row.radiochannelid)
-          let channeladd = bot.channels.get(row.jailchannelid)
-          let channelaee = bot.channels.get(row.jailorchannelid)
-          let channelazz = bot.channels.get(row.murdergamechannelid)
-          let channelkf = bot.channels.get(row.shopchannelid)
-          if (!channelazz) {
-            message.channel.send("`ERROR` Murder Game Channel not found!")
-          }
-          if (channelazz) {
-            channelazz.delete()
-          }
-          if (!channelaee) {
-            message.channel.send("`ERROR` Jailor Channel not found!")
-          }
-          if (channelaee) {
-            channelaee.delete()
-          }
-          if (!channelkf) {
-            message.channel.send("`ERROR` Shop Channel not found!")
-          }
-          if (channelkf) {
-            channelkf.delete()
-          }
-          if (!channeladd) {
-            message.channel.send("`ERROR` Jail Channel not found!")
-          }
-          if (channeladd) {
-            channeladd.delete()
-          }
-          if (!channela) {
-            message.channel.send("`ERROR` Healer Channel not found!")
-          }
-          if (channela) {
-            channela.delete()
-          }
-          if (!channelab) {
-            message.channel.send("`ERROR` Detective Channel not found!")
-          }
-          if (channelab) {
-            channelab.delete()
-          }
-          if (!channelac) {
-            message.channel.send("`ERROR` Murderer Channel not found!")
-          }
-          if (channelac) {
-            channelac.delete()
-          }
-          if (!channelad) {
-            message.channel.send("`ERROR` Radio Channel not found!")
-          }
-          if (channelad) {
-            channelad.delete()
-          }
+          deleteGameChannel()
           setTimeout(aaaaaaa, 1500)
-          setTimeout(deleteallplayerz, 1000, 0)
+          setTimeout(deleteallplayerz, 2000)
           let murdererr = 'N/A'
           let detectiveee = 'N/A'
           let healerr = 'N/A'
@@ -2302,124 +2427,38 @@ bot.on('message', message => {
           let innocentes = ''
           sql.all(`SELECT * FROM murderMysteryPlayers WHERE guildId ='${message.guild.id}'`).then((rows) => {
             for (let row21 of rows) {
-              if (row21.isMurderer === 1) {
+              if (row21.roleId === 1) {
                 murdererr = bot.users.get(row21.userId).tag
-              } else if (row21.isSheriff === 1) {
+              } else if (row21.roleId === 2) {
                 detectiveee = bot.users.get(row21.userId).tag
-              } else if (row21.isHealer === 1) {
+              } else if (row21.roleId === 3) {
                 healerr = bot.users.get(row21.userId).tag
-              } else if (row21.isHealer === 1) {
+              } else if (row21.roleId === 3) {
                 healerr = bot.users.get(row21.userId).tag
-              } else if (row21.isRadioPerson === 1) {
+              } else if (row21.roleId === 4) {
                 radiopersonn = bot.users.get(row21.userId).tag
-              } else if (row21.isAssassin === 1) {
+              } else if (row21.roleId === 5) {
                 asssassisnsz = bot.users.get(row21.userId).tag
-              } else if (row21.isJailor === 1) {
+              } else if (row21.roleId === 6) {
                 jialirzo = bot.users.get(row21.userId).tag
               } else
                 innocentes += bot.users.get(row21.userId).tag + "\n"
             }
             bot.channels.get(row.defaultChannel).send({
-              embed: new RichEmbed().setTitle(translate[row.lang].stoppedgameglob + message.author.tag + "`!").addField(translate[row.lang].roles.murderer, murdererr, true).addField(translate[row.lang].roles.detective, detectiveee, true).addField(translate[row.lang].roles.healer, healerr, true).addField(translate[row.lang].roles.radioperson, radiopersonn, true).addField(translate[row.lang].roles.assassin, asssassisnsz, true).addField(translate[row.lang].roles.jailor, jialirzo, true).setDescription("**Innocents**\n" + innocentes).setFooter("If they dont say anything, then ignore it.")
+              embed: new RichEmbed().setTitle(translate[row.lang].stoppedgameglob + message.author.tag + "`!").addField(translate[row.lang].roles.murderer, murdererr, true).addField(translate[row.lang].roles.detective, detectiveee, true).addField(translate[row.lang].roles.healer, healerr, true).addField(translate[row.lang].roles.radioperson, radiopersonn, true).addField(translate[row.lang].roles.assassin, asssassisnsz, true).addField(translate[row.lang].roles.jailor, jialirzo, true).setDescription("**Innocents**\n" + innocentes).setFooter("If they just say N/A, then ignore it.")
             })
           })
-          //bot.channels.get(row.defaultChannel).send(translate[row.lang].stoppedgameglob + message.author.tag + "`!")
         }
       })
     } else
 
-    function murderchannelidz(id) {
-
-      sql.get(`SELECT * FROM murderMystery WHERE guildId ='${message.guild.id}'`).then(row => {
-        if (!row) {
-          message.reply("ERR, WHAT THE HELL JUST HAPPENED? 824-6815")
-        } else {
-
-          sql.run(`UPDATE murderMystery SET murderchannelid = ${row.murderchannelid = id} WHERE guildId = '${message.guild.id}'`)
-        }
-      })
-    }
-
-    function detectivechannelidz(id) {
-      sql.get(`SELECT * FROM murderMystery WHERE guildId ='${message.guild.id}'`).then(row => {
-        if (!row) {
-          message.reply("ERR, WHAT THE HELL JUST HAPPENED? 824-6815")
-        } else {
-          sql.run(`UPDATE murderMystery SET sheriffchannelid = ${row.sheriffchannelid = id} WHERE guildId = '${message.guild.id}'`)
-        }
-      })
-    }
-
-    function jailchannelidz(id) {
-      sql.get(`SELECT * FROM murderMystery WHERE guildId ='${message.guild.id}'`).then(row => {
-        if (!row) {
-          message.reply("ERR, WHAT THE HELL JUST HAPPENED? 824-6815")
-        } else {
-          if (debugmode === 1) {
-            console.log("[DEBUG] Jail Channel ID set")
-          }
-          sql.run(`UPDATE murderMystery SET jailchannelid = ${row.jailchannelid = id} WHERE guildId = '${message.guild.id}'`)
-        }
-
-      })
-
-
-    }
-
-    function jailorchannelidz(id) {
-      sql.get(`SELECT * FROM murderMystery WHERE guildId ='${message.guild.id}'`).then(row => {
-        if (!row) {
-          message.reply("ERR, WHAT THE HELL JUST HAPPENED? 824-6815")
-        } else {
-          sql.run(`UPDATE murderMystery SET jailorchannelid = ${row.jailorchannelid = id} WHERE guildId = '${message.guild.id}'`)
-        }
-
-      })
-    }
-
-    function radiochannelidz(id) {
-      sql.get(`SELECT * FROM murderMystery WHERE guildId ='${message.guild.id}'`).then(row => {
-        if (!row) {
-          message.reply("ERR, WHAT THE HELL JUST HAPPENED? 824-6815")
-        } else {
-          if (debugmode === 1) {
-            console.log("[DEBUG] Radio Channel ID set")
-          }
-
-          sql.run(`UPDATE murderMystery SET radiochannelid = ${row.sheriffchannelid = id} WHERE guildId = '${message.guild.id}'`)
-        }
-
-      })
-    }
-
-    function healerchannelidz(id) {
-
-      sql.get(`SELECT * FROM murderMystery WHERE guildId ='${message.guild.id}'`).then(row => {
-        if (!row) {
-          message.reply("ERR, WHAT THE HELL JUST HAPPENED? 824-6815")
-        } else {
-
-          if (debugmode === 1) {
-            console.log("[DEBUG] Healer Channel ID set")
-          }
-
-          sql.run(`UPDATE murderMystery SET healchannelid = ${row.healchannelid = id} WHERE guildId = '${message.guild.id}'`)
-        }
-      })
-
-
-    }
-
     function createhealerchannel() {
       //var playeridz = 3
-      var ishealer = 1
       //sql.get(`SELECT * FROM murderMysteryPlayers WHERE playerid ='${playeridz}' AND guildId ='${message.guild.id}'`).then(row1 => {
-      sql.get(`SELECT * FROM murderMysteryPlayers WHERE isHealer ='${ishealer}' AND guildId ='${message.guild.id}'`).then(row1 => {
-
+      sql.get(`SELECT * FROM murderMysteryPlayers WHERE roleId = 3 AND guildId ='${message.guild.id}'`).then(row1 => {
         if (!row1) {
-
           message.channel.send("Error Code 497 at createhealerchannel")
-          throw new Error("Error Code 497 at createhealerchannel")
+          console.error("[Murder Mystery Error] Error Code 497 at createhealerchannel")
         } else {
 
           message.guild.createChannel('healer', 'text').then(c => {
@@ -2432,18 +2471,16 @@ bot.on('message', message => {
             c.overwritePermissions(bot.user, {
               READ_MESSAGES: true
             })
-
-
             //let healerida = arr[2]
             sql.get(`SELECT * FROM murderMystery WHERE guildId ='${message.guild.id}'`).then(row => {
-
-
               c.send(translate[row.lang].jobchannelmsgs.healer.channel)
-              healerchannelidz(c.id)
+              if (row.categoryChannelId !== "0") {
+                c.setParent(row.categoryChannelId)
+              }
+              sql.run(`UPDATE murderMystery SET healchannelid = ${c.id} WHERE guildId = '${message.guild.id}'`)
             })
             //c.send("Hello there, You are a **Healer**, You are a person that heals people that are dead! If you die, you cannot heal anyone anymore, Quick tip is try to not talk and say anything about your role. If you want to heal someone, just type\n" + config.prefix + "heal `@user`\nand you will be able to heal someone! Hope you avoid being murdered! Have a great game!")
             //healerchannelidz(c.id)
-
           })
         }
       })
@@ -2451,8 +2488,6 @@ bot.on('message', message => {
 
     function createdetectivechannel(isHumansvsbots) {
       sql.get(`SELECT * FROM murderMystery WHERE guildId ='${message.guild.id}'`).then(row5 => {
-
-
         //var playeridz = 2
         //var aaa = 1
         if (isHumansvsbots === 2) {
@@ -2463,7 +2498,7 @@ bot.on('message', message => {
             if (!row1) {
 
               message.channel.send("Error Code 496 at createdetectivechannel")
-              throw new Error("Error Code 496 at createdetectivechannel")
+              console.error("[Murder Mystery Error] Error Code 496 at createdetectivechannel")
             } else {
               message.guild.createChannel('detective', 'text').then(c => {
                 c.overwritePermissions(message.guild.id, {
@@ -2472,6 +2507,9 @@ bot.on('message', message => {
                 c.overwritePermissions(bot.user, {
                   READ_MESSAGES: true
                 })
+                if (row5.categoryChannelId !== "0") {
+                  c.setParent(row5.categoryChannelId)
+                }
                 //let sheriffthang = arr[1]
 
                 c.send("ok wow admin, you broke the game ONCE AGAIN") // wow github user, just wow....Im sad about this.
@@ -2489,10 +2527,7 @@ bot.on('message', message => {
                             if(arr.length === 5){
                             c.send('List of numbers:\n\n1. ' + bot.users.get(arr[0]).tag + '\n2. ' + bot.users.get(arr[1]).tag + '\n3. ' + bot.users.get(arr[2]).tag + '\n4. ' + bot.users.get(arr[3]).tag + '\n5. ' + bot.users.get(arr[4]).tag)
                 **/
-
-                detectivechannelidz(c.id)
-
-
+                sql.run(`UPDATE murderMystery SET sheriffchannelid = ${c.id} WHERE guildId = '${message.guild.id}'`)
               })
             }
           })
@@ -2506,7 +2541,7 @@ bot.on('message', message => {
             if (!row1) {
 
               message.channel.send("Error Code 496 at createdetectivechannel")
-              throw new Error("Error Code 496 at createdetectivechannel")
+              console.error("[Murder Mystery Error] Error Code 496 at createdetectivechannel")
             } else {
 
               message.guild.createChannel('detective', 'text').then(c => {
@@ -2520,7 +2555,9 @@ bot.on('message', message => {
                   READ_MESSAGES: true
                 })
                 //let sheriffthang = arr[1]
-
+                if (row5.categoryChannelId !== "0") {
+                  c.setParent(row5.categoryChannelId)
+                }
                 c.send("Hello there, You are a **Detective**, You will try to find out who the Murderer is! The best option is to not trust anyone, Be sure to try your best to find out who the Murderer is, If you die, then there may be a new Detective, If you shoot someone, you cannot get your gun back, You've messed up buddy. If you die that means you can chat in the #general (or the main chat) (if the owner/admin has setup a thing where players with murder mystery role cant chat)\nIn order to search someone to see if they are murderer, Type mm!search `@user`\n(or mm!searchnumber `(playerid)`)\nTo shoot someone, type mm!shoot `@user`\n(or mm!shootnumber `(playerid)`)\nBut don't abuse your gun!\nThats all, hope you find out who the murderer is!")
                 /**
                             //if(arr.length === 7){
@@ -2536,10 +2573,7 @@ bot.on('message', message => {
                             if(arr.length === 5){
                             c.send('List of numbers:\n\n1. ' + bot.users.get(arr[0]).tag + '\n2. ' + bot.users.get(arr[1]).tag + '\n3. ' + bot.users.get(arr[2]).tag + '\n4. ' + bot.users.get(arr[3]).tag + '\n5. ' + bot.users.get(arr[4]).tag)
                 **/
-
-                detectivechannelidz(c.id)
-
-
+                sql.run(`UPDATE murderMystery SET sheriffchannelid = ${c.id} WHERE guildId = '${message.guild.id}'`)
               })
             }
           })
@@ -2551,12 +2585,12 @@ bot.on('message', message => {
         if (debugmode === 1) {
           console.log("[DEBUG] CHECK IF SHERIFF IN cREATEDETECTIVECHANNEl")
         }
-        sql.get(`SELECT * FROM murderMysteryPlayers WHERE isSheriff = 1 AND guildId ='${message.guild.id}'`).then(row1 => {
+        sql.get(`SELECT * FROM murderMysteryPlayers WHERE roleId = 2 AND guildId ='${message.guild.id}'`).then(row1 => {
 
           //sql.get(`SELECT * FROM murderMysteryPlayers WHERE isSheriff ='${aaa}' AND guildId ='${message.guild.id}'`).then(row1 => {
           if (!row1) {
             message.channel.send("Error Code 496 at createdetectivechannel")
-            throw new Error("Error Code 496 at createdetectivechannel")
+            console.error("[Murder Mystery Error] Error Code 496 at createdetectivechannel")
           } else {
 
             message.guild.createChannel('detective', 'text').then(c => {
@@ -2569,6 +2603,9 @@ bot.on('message', message => {
               c.overwritePermissions(bot.user, {
                 READ_MESSAGES: true
               })
+              if (row5.categoryChannelId !== "0") {
+                c.setParent(row5.categoryChannelId)
+              }
               //let sheriffthang = arr[1]
 
               //c.send("Hello there, You are a **Detective**, You will try to find out who the Murderer is! The best option is to not trust anyone, Be sure to try your best to find out who the Murderer is, If you die, then there may be a new Detective, If you shoot someone, you cannot get your gun back, You've messed up buddy. If you die that means you can chat in the #general (or the main chat) (if the owner/admin has setup a thing where players with murder mystery role cant chat)\nIn order to search someone to see if they are murderer, Type mm!search `@user`\n(or mm!searchnumber `(playerid)`)\nTo shoot someone, type mm!shoot `@user`\n(or mm!shootnumber `(playerid)`)\nBut don't abuse your gun!\nThats all, hope you find out who the murderer is!")
@@ -2587,8 +2624,7 @@ bot.on('message', message => {
                           if(arr.length === 5){
                           c.send('List of numbers:\n\n1. ' + bot.users.get(arr[0]).tag + '\n2. ' + bot.users.get(arr[1]).tag + '\n3. ' + bot.users.get(arr[2]).tag + '\n4. ' + bot.users.get(arr[3]).tag + '\n5. ' + bot.users.get(arr[4]).tag)
               **/
-
-              detectivechannelidz(c.id)
+              sql.run(`UPDATE murderMystery SET sheriffchannelid = ${c.id} WHERE guildId = '${message.guild.id}'`)
             })
           }
         })
@@ -2832,9 +2868,9 @@ bot.on('message', message => {
           }
           if (row.isNight === 1) {
             //murder attack
-            sql.get(`SELECT * FROM murderMysteryPlayers WHERE isMurderer =1 AND userId ='${bot.user.id}' AND guildId ='${message.guild.id}'`).then(row1 => {
+            sql.get(`SELECT * FROM murderMysteryPlayers WHERE roleId = 1 AND userId ='${bot.user.id}' AND guildId ='${message.guild.id}'`).then(row1 => {
               if (!row1) {
-                sql.get(`SELECT * FROM murderMysteryPlayers WHERE isSheriff =1 AND userId ='${bot.user.id}' AND guildId ='${message.guild.id}'`).then(row2 => {
+                sql.get(`SELECT * FROM murderMysteryPlayers WHERE roleId = 2 AND userId ='${bot.user.id}' AND guildId ='${message.guild.id}'`).then(row2 => {
                   if (!row2) {
 
                   } else {
@@ -2844,7 +2880,7 @@ bot.on('message', message => {
                       if (row.players === 2) {
                         sql.get(`SELECT * FROM murderMysteryPlayers WHERE playerid ='${userz}' AND guildId ='${message.guild.id}'`).then(row3 => {
                           if (!row3) {
-                            new Error("Murder Mystery - Player not found.")
+                            console.log("Murder Mystery - Player not found.")
                           } else {
                             let users = bot.users.get(row3.userId)
                             if (row3.isDead === 1) return //new Error("That person is already dead!")
@@ -2852,7 +2888,6 @@ bot.on('message', message => {
                             if (users.id === bot.user.id) return;
                             setTimeout(function () {
                               shoot(users.id, bot.user.id, row.murdergamechannelid, "")
-                              setTimeout(unaction, 20000)
                             }, 2000)
                             if (row.modeId === 3 || row.modeId === 7) {
                               sql.run(`UPDATE murderMystery SET players = ${row.players - 1} WHERE guildId = '${message.guild.id}'`);
@@ -2885,7 +2920,7 @@ bot.on('message', message => {
                     sql.get(`SELECT * FROM murderMysteryPlayers WHERE playerid ='${userz}' AND guildId ='${message.guild.id}'`).then(row2 => {
                       if (!row2) {
                         //message.reply("ERROR")
-                        throw new Error("USER NOT FOUND")
+                        console.error("[Murder Mystery Error] USER NOT FOUND")
                         //nochannelfound()
                         return;
                       }
@@ -2936,17 +2971,6 @@ bot.on('message', message => {
       })
     }
 
-    function getassassin() {
-      let wew = 1
-      sql.get(`SELECT * FROM murderMysteryPlayers WHERE isAssassin ='${wew}' AND guildId ='${message.guild.id}'`).then(row1 => {
-        if (!row) {
-          message.channel.send("`ERROR` Assassin not found!")
-        } else {
-          return row.userId
-        }
-      })
-    }
-
     function createmurderchannel(ismurderparty, mmroleidd) {
       var playeridz = 1;
       sql.get(`SELECT * FROM murderMystery WHERE guildId ='${message.guild.id}'`).then(row5 => {
@@ -2962,18 +2986,13 @@ bot.on('message', message => {
               if (debugmode === 1) {
                 console.log("[DEBUG] ADD PLAYERIDZ")
               }
-
             }
           })
           console.log(playeridz)
           sql.get(`SELECT * FROM murderMysteryPlayers WHERE playerid ='${playeridz}' AND guildId ='${message.guild.id}'`).then(row1 => {
-
             if (!row1) {
               message.reply("Error at create murder channel :thonk:")
-
             } else {
-
-
               if (ismurderparty === 1) {
                 if (debugmode === 1) {
                   console.log("[DEBUG] IS MURDER PARTY IN createmurderchannel()")
@@ -2990,14 +3009,16 @@ bot.on('message', message => {
                   c.overwritePermissions(bot.user, {
                     READ_MESSAGES: true
                   })
-
+                  if (row5.categoryChannelId !== "0") {
+                    c.setParent(row5.categoryChannelId)
+                  }
                   c.send(translate[row5.lang].jobchannelmsgs.murderer.channel)
                   c.send("@everyone" + translate[row5.lang].jobchannelmsgs.murderer.channel4)
 
                   //c.send("Hello there, You are a **Murderer**, You will try to kill as many people as you can! But remember, do not get caught! The Detective will try to find out who the Murderer is! There is also a Healer that can heal other people, so beware of that **actually there isnt cuz of murderparty**, the recommended thing to do is find the Detective and kill him/her. You can murder people by typing\n" + config.prefix + "kill `@user`\nThen someone will be murdered! But remember, it will be logged! It wont show your name though, remember not to talk in the public chat or else people will know who the murderer is! If you die, its game over! If you win, you win! Good luck murdering people... ;)")
                   //c.send("@everyone is the murderer.")
 
-                  murderchannelidz(c.id)
+                  sql.run(`UPDATE murderMystery SET murderchannelid = ${c.id} WHERE guildId = '${message.guild.id}'`)
                 })
 
 
@@ -3015,10 +3036,10 @@ bot.on('message', message => {
                 c.overwritePermissions(bot.user, {
                   READ_MESSAGES: true
                 })
-
-                //the number says it
-                let wew = 1
-                sql.get(`SELECT * FROM murderMysteryPlayers WHERE isAssassin ='${wew}' AND guildId ='${message.guild.id}'`).then(row6 => {
+                if (row5.categoryChannelId !== "0") {
+                  c.setParent(row5.categoryChannelId)
+                }
+                sql.get(`SELECT * FROM murderMysteryPlayers WHERE roleId = 5 AND guildId ='${message.guild.id}'`).then(row6 => {
                   if (!row6) {
                     if (row5.modeId !== 3 && row5.modeId !== 8 && row5.modeId !== 7) {
                       message.channel.send("`ERROR` Assassin not found!")
@@ -3040,27 +3061,14 @@ bot.on('message', message => {
                       console.log("[DEBUG] Add Dark Shop Items")
                     }
                   }, 1000)
-                  c.send("<@" + row6.userId + ">" + translate[row5.lang].jobchannelmsgs.murderer.channel2 + "<@" + row1.userId + ">" + translate[row5.lang].jobchannelmsgs.murderer.channel3)
+                  if (row6) {
+                    c.send("<@" + row6.userId + ">" + translate[row5.lang].jobchannelmsgs.murderer.channel2 + "<@" + row1.userId + ">" + translate[row5.lang].jobchannelmsgs.murderer.channel3)
+                  }
+
 
                 })
 
-                //let sheriffthang = arr[0]
-                //if(arr.length === 7){
-                //c.send('List of numbers:\n\n1. ' + bot.users.get(arr[0]).tag + '\n2. ' + bot.users.get(arr[1]).tag + '\n3. ' + bot.users.get(arr[2]).tag + '\n4. ' + bot.users.get(arr[3]).tag + '\n5. ' + bot.users.get(arr[4]).tag + '\n6. ' + bot.users.get(arr[5]).tag + '\n7. ' + bot.users.get(arr[6]).tag)
-                //}
-                //if(arr.length === 8){
-                //c.send('List of numbers:\n\n1. ' + bot.users.get(arr[0]).tag + '\n2. ' + bot.users.get(arr[1]).tag + '\n3. ' + bot.users.get(arr[2]).tag + '\n4. ' + bot.users.get(arr[3]).tag + '\n5. ' + bot.users.get(arr[4]).tag + '\n6. ' + bot.users.get(arr[5]).tag + '\n7. ' + bot.users.get(arr[6]).tag + '\n8. ' + bot.users.get(arr[7]).tag)
-                //}
-
-                //if(arr.length === 6){
-                //c.send('List of numbers:\n\n1. ' + bot.users.get(arr[0]).tag + '\n2. ' + bot.users.get(arr[1]).tag + '\n3. ' + bot.users.get(arr[2]).tag + '\n4. ' + bot.users.get(arr[3]).tag + '\n5. ' + bot.users.get(arr[4]).tag + '\n6. ' + bot.users.get(arr[5]).tag)
-                //}
-                //if(arr.length === 5){
-                //c.send('List of numbers:\n\n1. ' + bot.users.get(arr[0]).tag + '\n2. ' + bot.users.get(arr[1]).tag + '\n3. ' + bot.users.get(arr[2]).tag + '\n4. ' + bot.users.get(arr[3]).tag + '\n5. ' + bot.users.get(arr[4]).tag)
-
-                //sql.run(`UPDATE murderMystery SET murderchannelid = ${c.id} WHERE guildId = '${message.guild.id}'`)
-                //sql.run(`UPDATE murderMystery SET murderchannelid = ${row.murdererid = sheriffthang} WHERE guildId = '${message.guild.id}'`)
-                murderchannelidz(c.id)
+                sql.run(`UPDATE murderMystery SET murderchannelid = ${c.id} WHERE guildId = '${message.guild.id}'`)
               })
             }
           })
@@ -3074,7 +3082,7 @@ bot.on('message', message => {
         sql.get(`SELECT * FROM murderMysteryPlayers WHERE playerid ='${playeridz}' AND guildId ='${message.guild.id}'`).then(row1 => {
           if (!row1) {
             message.channel.send("Error Code 502 at createradiochannel")
-            throw new Error("Error Code 502 at createradiochannel")
+            console.error("[Murder Mystery Error] Error Code 502 at createradiochannel")
           } else {
             message.guild.createChannel('radio', 'text').then(c => {
               c.overwritePermissions(message.guild.id, {
@@ -3086,9 +3094,12 @@ bot.on('message', message => {
               c.overwritePermissions(bot.user, {
                 READ_MESSAGES: true
               })
+              if (row.categoryChannelId !== "0") {
+                c.setParent(row.categoryChannelId)
+              }
               //c.send("Hello! You are a **Radio Person** and you have the power to annonomously say to the public chat what YOU want to say. If you dont want to say anything, its fine buddy. If you want to broadcast to the public chat, Type\n" + config.prefix + "broadcast (message)\nTo send a message to the #murdergame!")
               c.send(translate[row.lang].jobchannelmsgs.radioperson.channel)
-              radiochannelidz(c.id)
+              sql.run(`UPDATE murderMystery SET radiochannelid = ${c.id} WHERE guildId = '${message.guild.id}'`)
             })
           }
         })
@@ -3100,17 +3111,12 @@ bot.on('message', message => {
         if (!row5) {
           message.channel.send("**ERROR**\nData not found!")
         } else {
-
-
           var playeridz = 6
           sql.get(`SELECT * FROM murderMysteryPlayers WHERE playerid ='${playeridz}' AND guildId ='${message.guild.id}'`).then(row1 => {
             if (!row1) {
-
               message.channel.send("Error Code 501 at createjailorchannel")
-              throw new Error("Error Code 501 at createjailorchannel")
-
+              console.error("[Murder Mystery Error] Error Code 501 at createjailorchannel")
             } else {
-
               message.guild.createChannel('jailor', 'text').then(c => {
                 c.overwritePermissions(message.guild.id, {
                   READ_MESSAGES: false
@@ -3121,6 +3127,9 @@ bot.on('message', message => {
                 c.overwritePermissions(bot.user, {
                   READ_MESSAGES: true
                 })
+                if (row5.categoryChannelId !== "0") {
+                  c.setParent(row5.categoryChannelId)
+                }
                 //let sheriffthang = arr[5]
 
                 //c.send("Hello there, You are the **Jailor**, You will jail people every night and ask them questions. If you think the person is the murderer, feel free to type \n**" + config.prefix + "execute**\nTo execute the person, If you want to jail the person, type\n" + config.prefix + "jail `@user`\nTo jail the person you want to interrogate someone, OR you can type\n" + config.prefix + "jailnumber `id`\nTo jail the user but in a list that will be shown below, If you execute someone, Then it will be announced in the #murdergame, Hope you find out who the murderer is!")
@@ -3141,7 +3150,7 @@ bot.on('message', message => {
                               }
                   **/
 
-                  jailorchannelidz(c.id)
+                  sql.run(`UPDATE murderMystery SET jailorchannelid = ${c.id} WHERE guildId = '${message.guild.id}'`)
                 })
 
                 message.guild.createChannel('jail', 'text').then(c => {
@@ -3154,10 +3163,12 @@ bot.on('message', message => {
                   c.overwritePermissions(bot.user, {
                     READ_MESSAGES: true
                   })
+                  if (row5.categoryChannelId !== "0") {
+                    c.setParent(row5.categoryChannelId)
+                  }
                   //c.send("Hello, Welcome to **Jail**, this is where you have jailed people and you interrogate them by answering some questions, Also hello jailed person! Welcome to jail, If the Jailor thinks your suspicious, then you probably are going to be executed, If you murder the person, They might have a last will and then it will show the public chat the will and show who they jailed. Anyways, Don't try to get executed or else you'll end up like Shadow where he had his head cut off. Anyways, Hope you try to not get executed!")
                   c.send(translate[row5.lang].jobchannelmsgs.jailor.jailchannel)
-                  jailchannelidz(c.id)
-
+                  sql.run(`UPDATE murderMystery SET jailchannelid = ${c.id} WHERE guildId = '${message.guild.id}'`)
                 })
 
               })
@@ -3170,7 +3181,7 @@ bot.on('message', message => {
     function forceplayerid(playeridz, forced) {
       sql.get(`SELECT * FROM murderMysteryPlayers WHERE playerid ='${playeridz}' AND guildId ='${message.guild.id}'`).then(row1 => {
         if (!row1) {
-          throw new Error("Error Code 500101 at Force Player ID")
+          console.error("[Murder Mystery Error] Error Code 500101 at Force Player ID")
         } else {
           sql.run(`UPDATE murderMysteryPlayers SET playerid = ${row1.playerid = forced} WHERE playerid = '${playeridz}' AND guildId = '${message.guild.id}'`);
         }
@@ -3183,7 +3194,7 @@ bot.on('message', message => {
         sql.get(`SELECT * FROM murderMysteryPlayers WHERE playerid ='${playeridz}' AND guildId ='${message.guild.id}'`).then(row1 => {
           if (!row1) {
             message.channel.send("Error Code 500 at assassinDM")
-            throw new Error("Error Code 500 at assassinDM")
+            console.error("[Murder Mystery Error] Error Code 500 at assassinDM")
           } else {
             //bot.users.get(row1.userId).send("Hello there, You are an **Assassin**, You are a person that is trying to get your target killed, if your target is killed you earn $3 and you will get a new target to kill... Your main goal is to kill your target, The murderer will know who the Assassin is, but you do not know who the Murderer is, You will be DM'd on what your next target is. Make sure the murderer can assign a target AND can kill once per night (Money system coming soon)")
             bot.users.get(row1.userId).send(translate[row.lang].jobchannelmsgs.assassin.channel).catch(e => {
@@ -3192,6 +3203,29 @@ bot.on('message', message => {
             })
           }
         })
+      })
+    }
+
+    function aaaaaxxx() {
+      sql.get(`SELECT * FROM murderMystery WHERE guildId ='${message.guild.id}'`).then(row => {
+        if (!row) {
+          message.reply("You have not put your data in the database! Please type " + config.prefix + "game setupdata\nto insert your data into the database!")
+          return
+        } else {
+          sql.all(`SELECT * FROM murderMysteryPlayers WHERE guildId ='${message.guild.id}'`).then(rows => {
+            for (let playerData of rows) {
+              if (playerData.roleId === 5) {
+                bot.users.get(playerData.userId).send(translate[row.lang].youarean + getRoleId(playerData.roleId, row.lang)).catch(e => {
+                  message.channel.send(`<@${playerData.userId}>, ${translate[row.lang].dmsdisabled}`)
+                })
+              } else {
+                bot.users.get(playerData.userId).send(translate[row.lang].youarea + getRoleId(playerData.roleId, row.lang)).catch(e => {
+                  message.channel.send(`<@${playerData.userId}>, ${translate[row.lang].dmsdisabled}`)
+                })
+              }
+            }
+          })
+        }
       })
     }
     if (category === "gamestart") {
@@ -3245,6 +3279,7 @@ bot.on('message', message => {
             if (debugmode === 1) {
               console.log("[DEBUG] CREATING CHANNELS")
             }
+            aaaaaxxx()
             sql.run(`UPDATE murderMystery SET isStopcycle = 0 WHERE guildId = '${message.guild.id}'`)
             if (debugmode === 1) {
               console.log("[DEBUG] STOP CYCLE = 0")
@@ -3257,55 +3292,20 @@ bot.on('message', message => {
               console.log("[DEBUG] ROLE UPDATE")
             }
             setTimeout(function () {
-              createdetectivechannel(0)
+              createGameChannel("detective", {
+                isHumansvsbots: 0
+              }) //createdetectivechannel(0)
               if (debugmode === 1) {
                 console.log("[DEBUG] CREATE DETECTIVE CHANNEL")
               }
-              createmurderchannel(0, 0)
+              createGameChannel("murderer", {
+                isMurderParty: 0
+              }) //createmurderchannel(0, 0)
               if (debugmode === 1) {
                 console.log("[DEBUG] CREATE MURDERER CHANNEL")
               }
-              message.guild.createChannel('shop', 'text').then(c => {
-
-                c.overwritePermissions(message.guild.id, {
-                  READ_MESSAGES: false
-                })
-
-                c.overwritePermissions(murdermysterydataa.id, {
-                  READ_MESSAGES: true
-                })
-                c.overwritePermissions(bot.user, {
-                  READ_MESSAGES: true
-                })
-                let itemz = ""
-                let itemz2 = translate[row.lang].shopitemdesc
-                let thingsss = translate[row.lang].shop
-                for (let i = 0; i < translate[row.lang].shopitems.length; i++) {
-                  itemz += `Name: ${translate[row.lang].shopitems[i].name}\nDescription: ${translate[row.lang].shopitems[i].description}\nPrice: ${translate[row.lang].shopitems[i].price}<:gold:384017291316297729>\nID: ${translate[row.lang].shopitems[i].id}\n\n`
-                }
-                thingsss = thingsss.replace("%item%", itemz)
-                c.send(thingsss)
-                sql.run(`UPDATE murderMystery SET shopchannelid = ${c.id} WHERE guildId = '${message.guild.id}'`)
-
-              })
-              message.guild.createChannel('murdergame', 'text').then(c => {
-                if (debugmode === 1) {
-                  console.log("[DEBUG] CREATE MURDER GAME CHANNEL")
-                }
-                c.overwritePermissions(message.guild.id, {
-                  READ_MESSAGES: false
-                })
-                c.overwritePermissions(murdermysterydataa.id, {
-                  READ_MESSAGES: true
-                })
-                c.send(translate[row.lang].murdergameregular)
-                if (debugmode === 1) {
-                  console.log("[DEBUG] MURDER GAME Channel ID set")
-                }
-
-                sql.run(`UPDATE murderMystery SET murdergamechannelid = ${c.id} WHERE guildId = '${message.guild.id}'`)
-
-              })
+              createGameChannel("shop")
+              createGameChannel("murdergame", {isMurderParty: 0})
               message.reply(translate[row.lang].gamestart)
               if (debugmode === 1) {
                 console.log("[DEBUG] SEND GAME STARTED, GOOD LUCK")
@@ -3353,56 +3353,20 @@ bot.on('message', message => {
             if (debugmode === 1) {
               console.log("[DEBUG] ROLE UPDATE")
             }
-            createmurderchannel(0, 0)
+            createGameChannel("murderer", {
+              isMurderParty: 0
+            }) //createmurderchannel(0, 0)
             if (debugmode === 1) {
               console.log("[DEBUG] CREATE MURDERER CHANNEL")
             }
             if (debugmode === 1) {
               console.log("[DEBUG] CREATE DETECTIVE CHANNEL")
             }
-            createdetectivechannel(0)
-            message.guild.createChannel('shop', 'text').then(c => {
-
-              c.overwritePermissions(message.guild.id, {
-                READ_MESSAGES: false
-              })
-
-              c.overwritePermissions(murdermysterydataa.id, {
-                READ_MESSAGES: true
-              })
-              c.overwritePermissions(bot.user, {
-                READ_MESSAGES: true
-              })
-              let itemz = ""
-              let itemz2 = translate[row.lang].shopitemdesc
-              let thingsss = translate[row.lang].shop
-              for (let i = 0; i < translate[row.lang].shopitems.length; i++) {
-                itemz += `Name: ${translate[row.lang].shopitems[i].name}\nDescription: ${translate[row.lang].shopitems[i].description}\nPrice: ${translate[row.lang].shopitems[i].price}<:gold:384017291316297729>\nID: ${translate[row.lang].shopitems[i].id}\n\n`
-              }
-              thingsss = thingsss.replace("%item%", itemz)
-              c.send(thingsss)
-              sql.run(`UPDATE murderMystery SET shopchannelid = ${c.id} WHERE guildId = '${message.guild.id}'`)
-
-            })
-            message.guild.createChannel('murdergame', 'text').then(c => {
-              if (debugmode === 1) {
-                console.log("[DEBUG] CREATE MURDER GAME CHANNEL")
-              }
-              c.overwritePermissions(message.guild.id, {
-                READ_MESSAGES: false
-              })
-
-              c.overwritePermissions(murdermysterydataa.id, {
-                READ_MESSAGES: true
-              })
-              c.send(translate[row.lang].murdergameregular)
-              if (debugmode === 1) {
-                console.log("[DEBUG] MURDER GAME Channel ID set")
-              }
-
-              sql.run(`UPDATE murderMystery SET murdergamechannelid = ${c.id} WHERE guildId = '${message.guild.id}'`)
-
-            })
+            createGameChannel("detective", {
+              isHumansvsbots: 0
+            }) //createdetectivechannel(0)
+            createGameChannel("shop")
+            createGameChannel("murdergame", {isMurderParty: 0})
             message.reply(translate[row.lang].gamestart)
             if (debugmode === 1) {
               console.log("[DEBUG] SEND GAME STARTED, GOOD LUCK")
@@ -3418,7 +3382,6 @@ bot.on('message', message => {
           //-------------------------------------------------------------------------------------------------------------------------------
           //faster mode
           if (row.modeId === 6) {
-
             //start
             //if(message.guild.id !== preventjoinData.guildID) return message.reply("That is not your game!")
             //if(mmgameData.enterid < 4) return message.reply("You don't have enough players! You need 4+ people in order to play")
@@ -3431,68 +3394,42 @@ bot.on('message', message => {
                           message.reply("**There was an error!** - Game Session not found\nThis issue keeps on repeating? Type `mm!bug 41829 - Game Session`")
                           stop()
                         }
-
                         gamesess.players = row.players
                         gamesess.startedgame = true
             */
             sql.run(`UPDATE murderMystery SET gameStarted = 1 WHERE guildId = '${message.guild.id}'`)
-
             //message.reply("Randomizing...")
             /**
                                   function shuffle(array) {
                                     var currentIndex = array.length, temporaryValue, randomIndex;
-
                                     // While there remain elements to shuffle...
                                     while (0 !== currentIndex) {
-
                                       // Pick a remaining element...
                                       randomIndex = Math.floor(Math.random() * currentIndex);
                                       currentIndex -= 1;
-
                                       // And swap it with the current element.
                                       temporaryValue = array[currentIndex];
                                       array[currentIndex] = array[randomIndex];
                                       array[randomIndex] = temporaryValue;
                                     }
-
                                     return array;
                                   }
-
                                   // Used like so
                                   arr = shuffle(arr);
             **/
             //message.reply(arr[0]);
-
             message.reply("Creating Channels...")
             sql.run(`UPDATE murderMystery SET isStopcycle = 0 WHERE guildId = '${message.guild.id}'`)
-
-
-            //let mmplayersDataheal2 = mmplayers[arr[0]]
-            //mmplayersDataheal2.isMurderer = 1
             roleupdate(1, 1)
-
-            //let mmplayersDatadetect = mmplayers[arr[1]]
-            //mmplayersDatadetect.isSheriff = 1
             roleupdate(2, 2)
-            //let mmplayersDataheal = mmplayers[arr[2]]
-            //mmplayersDataheal.isHealer = 1
             roleupdate(3, 3)
-            //let mmplayersDataaa = mmplayers[arr[3]]
-            //mmplayersDataaa.isRadioPerson = 1
             roleupdate(4, 4)
-
-
-
-            //let mmplayersDataheal2 = mmplayers['128296384200835073']
-            //mmplayersDataheal2.isMurderer = 1
-
-            //let mmplayersDatadetect = mmplayers['281397352177074177']
-            //mmplayersDatadetect.isSheriff = 1
-
-            //let mmplayersDataheal = mmplayers['275722540981288960']
-            //mmplayersDataheal.isHealer = 1
-            createmurderchannel(0, 0)
-            createdetectivechannel(0)
+            createGameChannel("murderer", {
+              isMurderParty: 0
+            }) //createmurderchannel(0, 0)
+            createGameChannel("detective", {
+              isHumansvsbots: 0
+            }) //createdetectivechannel(0)
             /**
             message.guild.createChannel('detective', 'text').then(c => {
             c.overwritePermissions(message.guild.id, {
@@ -3520,11 +3457,7 @@ bot.on('message', message => {
             if(arr.length === 5){
             c.send('List of numbers:\n\n1. ' + bot.users.get(arr[0]).tag + '\n2. ' + bot.users.get(arr[1]).tag + '\n3. ' + bot.users.get(arr[2]).tag + '\n4. ' + bot.users.get(arr[3]).tag + '\n5. ' + bot.users.get(arr[4]).tag)
    **/
-
-
-
             //sql.run(`UPDATE murderMystery SET sheriffchannelid = ${row.sheriffchannelid = c.id} WHERE guildId = '${message.guild.id}'`)
-
             //})
             message.guild.createChannel('radio', 'text').then(c => {
               c.overwritePermissions(message.guild.id, {
@@ -3536,15 +3469,13 @@ bot.on('message', message => {
               c.overwritePermissions(bot.user, {
                 READ_MESSAGES: true
               })
+              if (row.categoryChannelId !== "0") {
+                c.setParent(row.categoryChannelId)
+              }
               //c.send("Hello! You are a **Radio Person** and you have the power to annonomously say to the public chat what YOU want to say. If you dont want to say anything, its fine buddy. If you want to broadcast to the public chat, Type\n" + config.prefix + "broadcast (message)\nTo send a message to the #murdergame!")
               c.send(translate[row.lang].jobchannelmsgs.healer.channel)
-
-              sql.run(`UPDATE murderMystery SET radiochannelid = ${row.sheriffchannelid = c.id} WHERE guildId = '${message.guild.id}'`)
-
+              sql.run(`UPDATE murderMystery SET radiochannelid = ${c.id} WHERE guildId = '${message.guild.id}'`)
             })
-
-
-
             message.guild.createChannel('healer', 'text').then(c => {
               c.overwritePermissions(message.guild.id, {
                 READ_MESSAGES: false
@@ -3555,10 +3486,10 @@ bot.on('message', message => {
               c.overwritePermissions(bot.user, {
                 READ_MESSAGES: true
               })
-
+              if (row.categoryChannelId !== "0") {
+                c.setParent(row.categoryChannelId)
+              }
               let healerida = arr[2]
-
-
               c.send(translate[row.lang].jobchannelmsgs.healer.channel)
 
               if (arr.length === 7) {
@@ -3579,17 +3510,18 @@ bot.on('message', message => {
             })
 
             message.guild.createChannel('murdergame', 'text').then(c => {
-
               c.overwritePermissions(message.guild.id, {
                 READ_MESSAGES: false
               })
-
               c.overwritePermissions(murdermysterydataa.id, {
                 READ_MESSAGES: true
               })
               c.overwritePermissions(bot.user, {
                 READ_MESSAGES: true
               })
+              if (row.categoryChannelId !== "0") {
+                c.setParent(row.categoryChannelId)
+              }
               c.send("Hello everyone! Lets play a game of Murder Mystery shall we? Lets find out who the murderer is! There is **1** Detective(s) and **1** Healer(s) AND **1** Murderer. If you died, you will be DM'd this:\nhttp://prntscr.com/ffad0j\nOnce the user has put in their Last Will it will probably be announced to the server, where there will be dead players in the chat, if some admin is on the game and has the permission Administrator, Then that'll be cheating! (unless if they dont check the other channels ya mean?)\nIf you want to vote to kill someone, type mm!votehang and they will be voted to die!\nThat is the game! Hope Innocents Win!")
               sql.run(`UPDATE murderMystery SET murdergamechannelid = ${c.id} WHERE guildId = '${message.guild.id}'`)
 
@@ -3708,27 +3640,13 @@ bot.on('message', message => {
   sql.run(`UPDATE murderMystery SET murderchannelid = ${c.id} WHERE guildId = '${message.guild.id}'`)
   })
 **/
-            createmurderchannel(1, murdermysterydataa.id)
+            createGameChannel("murderer", {
+              isMurderParty: 1
+            }) //createmurderchannel(1, murdermysterydataa.id)
             if (debugmode === 1) {
               console.log("[DEBUG] CREATE MURDER CHANNEl")
             }
-
-            message.guild.createChannel('murdergame', 'text').then(c => {
-              c.overwritePermissions(message.guild.id, {
-                READ_MESSAGES: false
-              })
-              c.overwritePermissions(murdermysterydataa.id, {
-                READ_MESSAGES: true
-              })
-              c.overwritePermissions(bot.user, {
-                READ_MESSAGES: true
-              })
-
-              //c.send("Hello everyone! Lets play a game of Murder Mystery shall we? Lets find out who the murderer is! There is **" + row.players + "** Murderer(s)...wait why is there **" + mmgameData.enterid + "** Murderer(s)...There is suppose to be one...OH I remember! We are playing Murder Party Mode! That means EVERYONE is a murderer, and you should not trust ANYONE If you died, you will be DM'd this:\nhttp://prntscr.com/ffad0j\nOnce the user has put in their Last Will it will probably be announced to the server, where there will be dead players in the chat, if some admin is on the game and has the permission Administrator, then it doesn't matter because everyone is a murderer\nIf you want to vote to kill someone, type mm!votehang and they will be voted to die!\nThat is the game!~~Hope Innocents Win!~~")
-              c.send(translate[row.lang].murdergamemurderparty)
-              sql.run(`UPDATE murderMystery SET murdergamechannelid = ${c.id} WHERE guildId = '${message.guild.id}'`)
-            })
-
+            createGameChannel("murdergame", {isMurderParty: 1})
             message.reply(translate[row.lang].gamestart)
             //fs.writeFile('./mmplayers.json', JSON.stringify(mmplayers), (err) => {
             //if (err) console.error(err)
@@ -3826,46 +3744,29 @@ bot.on('message', message => {
             setTimeout(function () {
               message.reply("Creating Channels...")
               sql.run(`UPDATE murderMystery SET isStopcycle = 0 WHERE guildId = '${message.guild.id}'`)
-
               roleupdate(1, 3)
               roleupdate(2, 5)
               roleupdate(3, 1)
               roleupdate(4, 2)
               roleupdate(5, 4)
               roleupdate(6, 6)
-
               //assassinDM() --------------- Disabled due to bots not allowing to DM self idk
-              createmurderchannel(0, 0)
-              createjailorchannel()
-              createdetectivechannel(1)
-              createhealerchannel()
-              createradiochannel()
+              createGameChannel("murderer", {
+                isMurderParty: 0
+              }) //createmurderchannel(0, 0)
+              createGameChannel("jailor") //createjailorchannel()
+              createGameChannel("detective", {
+                isHumansvsbots: 1
+              }) //createdetectivechannel(1)
+              createGameChannel("healer") //createhealerchannel()
+              createGameChannel("radio") //createradiochannel()
               message.reply(translate[row.lang].gamestart)
 
               setTimeout(isDay, 10000)
               if (debugmode === 1) {
                 console.log("[DEBUG] IS DAY TIMER set")
               }
-
-              message.guild.createChannel('murdergame', 'text').then(c => {
-
-                c.overwritePermissions(message.guild.id, {
-                  READ_MESSAGES: false
-                })
-
-                c.overwritePermissions(murdermysterydataa.id, {
-                  READ_MESSAGES: true
-                })
-                c.overwritePermissions(bot.user, {
-                  READ_MESSAGES: true
-                })
-                //c.send("Hello everyone! Lets play a game of Murder Mystery shall we? Lets find out who the murderer is! There is **1** Detective(s) and **1** Healer(s) AND **1** Murderer. If you died, you will be DM'd this:\nhttp://prntscr.com/ffad0j\nOnce the user has put in their Last Will it will probably be announced to the server, where there will be dead players in the chat, if some admin is on the game and has the permission Administrator, Then that'll be cheating! (unless if they dont check the other channels ya mean?)\nIf you want to vote to kill someone, type mm!votehang and they will be voted to die!\nThat is the game! Hope Innocents Win!")
-                c.send(translate[row.lang].murdergameregular)
-                sql.run(`UPDATE murderMystery SET murdergamechannelid = ${c.id} WHERE guildId = '${message.guild.id}'`)
-
-              })
-
-              //end
+              createGameChannel("murdergame", {isMurderParty: 0})
             }, 2000)
             return;
 
@@ -3879,68 +3780,17 @@ bot.on('message', message => {
             message.reply("Creating Channels...")
             sql.run(`UPDATE murderMystery SET isStopcycle = 0 WHERE guildId = '${message.guild.id}'`)
             assassinDM()
-            createmurderchannel(0, 0)
-            createjailorchannel()
-            createdetectivechannel(0)
-            createhealerchannel()
-            createradiochannel()
-            message.guild.createChannel('murdergame', 'text').then(c => {
-
-              c.overwritePermissions(message.guild.id, {
-                READ_MESSAGES: false
-              })
-
-              c.overwritePermissions(murdermysterydataa.id, {
-                READ_MESSAGES: true
-              })
-              c.overwritePermissions(bot.user, {
-                READ_MESSAGES: true
-              })
-              c.send(translate[row.lang].murdergameregular)
-              sql.run(`UPDATE murderMystery SET murdergamechannelid = ${c.id} WHERE guildId = '${message.guild.id}'`)
-
-            })
-            message.guild.createChannel('shop', 'text').then(c => {
-
-              c.overwritePermissions(message.guild.id, {
-                READ_MESSAGES: false
-              })
-
-              c.overwritePermissions(murdermysterydataa.id, {
-                READ_MESSAGES: true
-              })
-              c.overwritePermissions(bot.user, {
-                READ_MESSAGES: true
-              })
-              let itemz = ""
-              let itemz2 = translate[row.lang].shopitemdesc
-              let thingsss = translate[row.lang].shop
-              for (let i = 0; i < translate[row.lang].shopitems.length; i++) {
-                /*
-                itemz2 = itemz2.replace("%itemname%", translate[row.lang].shopitems[i].name)
-                itemz2 = itemz2.replace("%itemdescription%", translate[row.lang].shopitems[i].description)
-                itemz2 = itemz2.replace("%itemprice%", translate[row.lang].shopitems[i].price)
-                itemz2 = itemz2.replace("%itemid%", translate[row.lang].shopitems[i].id)
-                itemz += itemz2
-                */
-
-                itemz += `Name: ${translate[row.lang].shopitems[i].name}\nDescription: ${translate[row.lang].shopitems[i].description}\nPrice: ${translate[row.lang].shopitems[i].price}<:gold:384017291316297729>\nID: ${translate[row.lang].shopitems[i].id}\n\n`
-              }
-              /*
-                            translate[row.lang].shopitems.forEach(function (e) {
-                              itemz2 = itemz2.replace("%itemname%", e.name)
-                              itemz2 = itemz2.replace("%itemdescription%", e.description)
-                              itemz2 = itemz2.replace("%itemprice%", e.price)
-                              itemz2 = itemz2.replace("%itemid%", e.id)
-                              //itemz += `Name: ${e.name}\nDescription: ${e.description}\nPrice: ${e.price}<:gold:384017291316297729>\nID: ${e.id}\n\n`
-                              itemz += itemz2
-                            })
-              */
-              thingsss = thingsss.replace("%item%", itemz)
-              c.send(thingsss)
-              sql.run(`UPDATE murderMystery SET shopchannelid = ${c.id} WHERE guildId = '${message.guild.id}'`)
-
-            })
+            createGameChannel("murderer", {
+              isMurderParty: 0
+            }) //createmurderchannel(0, 0)
+            createGameChannel("jailor") //createjailorchannel()
+            createGameChannel("detective", {
+              isHumansvsbots: 0
+            }) //createdetectivechannel(0)
+            createGameChannel("healer") //createhealerchannel()
+            createGameChannel("radio") //createradiochannel()
+            createGameChannel("murdergame", {isMurderParty: 0})
+            createGameChannel("shop")
             message.reply(translate[row.lang].gamestart)
             setTimeout(isDay, 10000)
           }
@@ -3951,49 +3801,16 @@ bot.on('message', message => {
 
             message.reply("Creating Channels...")
             sql.run(`UPDATE murderMystery SET isStopcycle = 0 WHERE guildId = '${message.guild.id}'`)
-            createmurderchannel(0, 0)
-            createdetectivechannel(0)
-            createhealerchannel()
-            createradiochannel()
-            message.guild.createChannel('murdergame', 'text').then(c => {
-
-              c.overwritePermissions(message.guild.id, {
-                READ_MESSAGES: false
-              })
-
-              c.overwritePermissions(murdermysterydataa.id, {
-                READ_MESSAGES: true
-              })
-              c.overwritePermissions(bot.user, {
-                READ_MESSAGES: true
-              })
-              c.send(translate[row.lang].murdergameregular)
-              sql.run(`UPDATE murderMystery SET murdergamechannelid = ${c.id} WHERE guildId = '${message.guild.id}'`)
-
-            })
-            message.guild.createChannel('shop', 'text').then(c => {
-
-              c.overwritePermissions(message.guild.id, {
-                READ_MESSAGES: false
-              })
-
-              c.overwritePermissions(murdermysterydataa.id, {
-                READ_MESSAGES: true
-              })
-              c.overwritePermissions(bot.user, {
-                READ_MESSAGES: true
-              })
-              let itemz = ""
-              let itemz2 = translate[row.lang].shopitemdesc
-              let thingsss = translate[row.lang].shop
-              for (let i = 0; i < translate[row.lang].shopitems.length; i++) {
-                itemz += `Name: ${translate[row.lang].shopitems[i].name}\nDescription: ${translate[row.lang].shopitems[i].description}\nPrice: ${translate[row.lang].shopitems[i].price}<:gold:384017291316297729>\nID: ${translate[row.lang].shopitems[i].id}\n\n`
-              }
-              thingsss = thingsss.replace("%item%", itemz)
-              c.send(thingsss)
-              sql.run(`UPDATE murderMystery SET shopchannelid = ${c.id} WHERE guildId = '${message.guild.id}'`)
-
-            })
+            createGameChannel("murderer", {
+              isMurderParty: 0
+            }) //createmurderchannel(0, 0)
+            createGameChannel("detective", {
+              isHumansvsbots: 0
+            }) //createdetectivechannel(0)
+            createGameChannel("healer") //createhealerchannel()
+            createGameChannel("radio") //createradiochannel()
+            createGameChannel("murdergame", {isMurderParty: 0})
+            createGameChannel("shop")
             message.reply(translate[row.lang].gamestart)
             setTimeout(isDay, 15000)
           }
@@ -4004,50 +3821,17 @@ bot.on('message', message => {
             message.reply("Creating Channels...")
             sql.run(`UPDATE murderMystery SET isStopcycle = 0 WHERE guildId = '${message.guild.id}'`)
             assassinDM()
-            createmurderchannel(0, 0)
-            createjailorchannel()
-            createdetectivechannel(0)
-            createhealerchannel()
-            createradiochannel()
-            message.guild.createChannel('murdergame', 'text').then(c => {
-
-              c.overwritePermissions(message.guild.id, {
-                READ_MESSAGES: false
-              })
-
-              c.overwritePermissions(murdermysterydataa.id, {
-                READ_MESSAGES: true
-              })
-              c.overwritePermissions(bot.user, {
-                READ_MESSAGES: true
-              })
-              c.send(translate[row.lang].murdergameregular)
-              sql.run(`UPDATE murderMystery SET murdergamechannelid = ${c.id} WHERE guildId = '${message.guild.id}'`)
-
-            })
-            message.guild.createChannel('shop', 'text').then(c => {
-
-              c.overwritePermissions(message.guild.id, {
-                READ_MESSAGES: false
-              })
-
-              c.overwritePermissions(murdermysterydataa.id, {
-                READ_MESSAGES: true
-              })
-              c.overwritePermissions(bot.user, {
-                READ_MESSAGES: true
-              })
-              let itemz = ""
-              let itemz2 = translate[row.lang].shopitemdesc
-              let thingsss = translate[row.lang].shop
-              for (let i = 0; i < translate[row.lang].shopitems.length; i++) {
-                itemz += `Name: ${translate[row.lang].shopitems[i].name}\nDescription: ${translate[row.lang].shopitems[i].description}\nPrice: ${translate[row.lang].shopitems[i].price}<:gold:384017291316297729>\nID: ${translate[row.lang].shopitems[i].id}\n\n`
-              }
-              thingsss = thingsss.replace("%item%", itemz)
-              c.send(thingsss)
-              sql.run(`UPDATE murderMystery SET shopchannelid = ${c.id} WHERE guildId = '${message.guild.id}'`)
-
-            })
+            createGameChannel("murderer", {
+              isMurderParty: 0
+            }) //createmurderchannel(0, 0)
+            createGameChannel("jailor") //createjailorchannel()
+            createGameChannel("detective", {
+              isHumansvsbots: 0
+            }) //createdetectivechannel(0)
+            createGameChannel("healer") //createhealerchannel()
+            createGameChannel("radio") //createradiochannel()
+            createGameChannel("murdergame", {isMurderParty: 0})
+            createGameChannel("shop")
             message.reply(translate[row.lang].gamestart)
             setTimeout(isDay, 15000)
           }
@@ -4057,55 +3841,41 @@ bot.on('message', message => {
             message.reply("Creating Channels...")
             sql.run(`UPDATE murderMystery SET isStopcycle = 0 WHERE guildId = '${message.guild.id}'`)
             assassinDM()
-            createmurderchannel(0, 0)
-            createjailorchannel()
-            createdetectivechannel(0)
-            createhealerchannel()
-            createradiochannel()
-            message.guild.createChannel('murdergame', 'text').then(c => {
-
-              c.overwritePermissions(message.guild.id, {
-                READ_MESSAGES: false
-              })
-
-              c.overwritePermissions(murdermysterydataa.id, {
-                READ_MESSAGES: true
-              })
-              c.overwritePermissions(bot.user, {
-                READ_MESSAGES: true
-              })
-              c.send(translate[row.lang].murdergameregular)
-              sql.run(`UPDATE murderMystery SET murdergamechannelid = ${c.id} WHERE guildId = '${message.guild.id}'`)
-
-            })
-            message.guild.createChannel('shop', 'text').then(c => {
-
-              c.overwritePermissions(message.guild.id, {
-                READ_MESSAGES: false
-              })
-
-              c.overwritePermissions(murdermysterydataa.id, {
-                READ_MESSAGES: true
-              })
-              c.overwritePermissions(bot.user, {
-                READ_MESSAGES: true
-              })
-              let itemz = ""
-              let itemz2 = translate[row.lang].shopitemdesc
-              let thingsss = translate[row.lang].shop
-              for (let i = 0; i < translate[row.lang].shopitems.length; i++) {
-                itemz += `Name: ${translate[row.lang].shopitems[i].name}\nDescription: ${translate[row.lang].shopitems[i].description}\nPrice: ${translate[row.lang].shopitems[i].price}<:gold:384017291316297729>\nID: ${translate[row.lang].shopitems[i].id}\n\n`
-              }
-              thingsss = thingsss.replace("%item%", itemz)
-              c.send(thingsss)
-              sql.run(`UPDATE murderMystery SET shopchannelid = ${c.id} WHERE guildId = '${message.guild.id}'`)
-
-            })
+            createGameChannel("murderer", {
+              isMurderParty: 0
+            }) //createmurderchannel(0, 0)
+            createGameChannel("jailor") //createjailorchannel()
+            createGameChannel("detective", {
+              isHumansvsbots: 0
+            }) //createdetectivechannel(0)
+            createGameChannel("healer") //createhealerchannel()
+            createGameChannel("radio") //createradiochannel()
+            createGameChannel("murdergame", {isMurderParty: 0})
+            createGameChannel("shop")
+            message.reply(translate[row.lang].gamestart)
+            setTimeout(isDay, 15000)
+          }
+          if (row.modeId === 12) {
+            if (row.players < 6) return message.reply(translate[row.lang].fkeow)
+            sql.run(`UPDATE murderMystery SET gameStarted = 1 WHERE guildId = '${message.guild.id}'`)
+            message.reply("Creating Channels...")
+            sql.run(`UPDATE murderMystery SET isStopcycle = 0 WHERE guildId = '${message.guild.id}'`)
+            assassinDM()
+            createGameChannel("murderer", {
+              isMurderParty: 0
+            }) //createmurderchannel(0, 0)
+            createGameChannel("jailor") //createjailorchannel()
+            createGameChannel("detective", {
+              isHumansvsbots: 0
+            }) //createdetectivechannel(0)
+            createGameChannel("healer") //createhealerchannel()
+            createGameChannel("zombie")
+            createGameChannel("murdergame", {isMurderParty: 0})
+            createGameChannel("shop")
             message.reply(translate[row.lang].gamestart)
             setTimeout(isDay, 15000)
           }
           if (row.modeId === 10) {
-            //call 911 now!!! lol
             //if(message.guild.id !== preventjoinData.guildID) return message.reply("That is not your game!")
             //if(mmgameData.enterid < 6) return message.reply("You don't have enough players! You need 6+ people in order to play")
             if (row.players < 6) return message.reply(translate[row.lang].fkeow)
@@ -4113,27 +3883,16 @@ bot.on('message', message => {
             message.reply("Creating Channels...")
             sql.run(`UPDATE murderMystery SET isStopcycle = 0 WHERE guildId = '${message.guild.id}'`)
             assassinDM()
-            createmurderchannel(0, 0)
-            createjailorchannel()
-            createdetectivechannel(0)
-            createhealerchannel()
-            createradiochannel()
-            message.guild.createChannel('murdergame', 'text').then(c => {
-
-              c.overwritePermissions(message.guild.id, {
-                READ_MESSAGES: false
-              })
-
-              c.overwritePermissions(murdermysterydataa.id, {
-                READ_MESSAGES: true
-              })
-              c.overwritePermissions(bot.user, {
-                READ_MESSAGES: true
-              })
-              c.send(translate[row.lang].murdergameregular)
-              sql.run(`UPDATE murderMystery SET murdergamechannelid = ${c.id} WHERE guildId = '${message.guild.id}'`)
-
-            })
+            createGameChannel("murderer", {
+              isMurderParty: 0
+            }) //createmurderchannel(0, 0)
+            createGameChannel("jailor") //createjailorchannel()
+            createGameChannel("detective", {
+              isHumansvsbots: 0
+            }) //createdetectivechannel(0)
+            createGameChannel("healer") //createhealerchannel()
+            createGameChannel("radio") //createradiochannel()
+            createGameChannel("murdergame", {isMurderParty: 0})
             message.reply(translate[row.lang].gamestart)
             setTimeout(isDay, 15000)
           }
@@ -4192,67 +3951,17 @@ bot.on('message', message => {
 
             //bot.users.get(arr[4]).send("Hello there, You are an **Assassin**, You are a person that is trying to get your target killed, if your target is killed you earn $3 and you will get a new target to kill... Your main goal is to kill your target, The murderer will know who the Assassin is, but you do not know who the Murderer is, You will be DM'd on what your next target is. Make sure the murderer can assign a target AND can kill once per night (Money system coming soon)")
             assassinDM()
-            createmurderchannel(0, 0)
-            createjailorchannel()
-            createdetectivechannel(0)
-            createhealerchannel()
-            createradiochannel()
-            message.guild.createChannel('murdergame', 'text').then(c => {
-
-              c.overwritePermissions(message.guild.id, {
-                READ_MESSAGES: false
-              })
-
-              c.overwritePermissions(murdermysterydataa.id, {
-                READ_MESSAGES: true
-              })
-              c.overwritePermissions(bot.user, {
-                READ_MESSAGES: true
-              })
-              c.send(translate[row.lang].murdergameregular)
-              sql.run(`UPDATE murderMystery SET murdergamechannelid = ${c.id} WHERE guildId = '${message.guild.id}'`)
-
-            })
-            message.guild.createChannel('shop', 'text').then(c => {
-
-              c.overwritePermissions(message.guild.id, {
-                READ_MESSAGES: false
-              })
-
-              c.overwritePermissions(murdermysterydataa.id, {
-                READ_MESSAGES: true
-              })
-              c.overwritePermissions(bot.user, {
-                READ_MESSAGES: true
-              })
-              let itemz = ""
-              let itemz2 = translate[row.lang].shopitemdesc
-              let thingsss = translate[row.lang].shop
-              for (let i = 0; i < translate[row.lang].shopitems.length; i++) {
-                /*
-                itemz2 = itemz2.replace("%itemname%", translate[row.lang].shopitems[i].name)
-                itemz2 = itemz2.replace("%itemdescription%", translate[row.lang].shopitems[i].description)
-                itemz2 = itemz2.replace("%itemprice%", translate[row.lang].shopitems[i].price)
-                itemz2 = itemz2.replace("%itemid%", translate[row.lang].shopitems[i].id)
-                itemz += itemz2
-                */
-                itemz += `Name: ${translate[row.lang].shopitems[i].name}\nDescription: ${translate[row.lang].shopitems[i].description}\nPrice: ${translate[row.lang].shopitems[i].price}<:gold:384017291316297729>\nID: ${translate[row.lang].shopitems[i].id}\n\n`
-              }
-              /*
-              translate[row.lang].shopitems.forEach(function (e) {
-                itemz2 = itemz2.replace("%itemname%", e.name)
-                itemz2 = itemz2.replace("%itemdescription%", e.description)
-                itemz2 = itemz2.replace("%itemprice%", e.price)
-                itemz2 = itemz2.replace("%itemid%", e.id)
-                //itemz += `Name: ${e.name}\nDescription: ${e.description}\nPrice: ${e.price}<:gold:384017291316297729>\nID: ${e.id}\n\n`
-                itemz += itemz2
-              })
-*/
-              thingsss = thingsss.replace("%item%", itemz)
-              c.send(thingsss)
-              sql.run(`UPDATE murderMystery SET shopchannelid = ${c.id} WHERE guildId = '${message.guild.id}'`)
-
-            })
+            createGameChannel("murderer", {
+              isMurderParty: 0
+            }) //createmurderchannel(0, 0)
+            createGameChannel("jailor") //createjailorchannel()
+            createGameChannel("detective", {
+              isHumansvsbots: 0
+            }) //createdetectivechannel(0)
+            createGameChannel("healer") //createhealerchannel()
+            createGameChannel("radio") //createradiochannel()
+            createGameChannel("murdergame", {isMurderParty: 0})
+            createGameChannel("shop")
             message.reply(translate[row.lang].gamestart)
             /**
                   fs.writeFile('./mmplayers.json', JSON.stringify(mmplayers), (err) => {
@@ -4281,7 +3990,7 @@ bot.on('message', message => {
             if (row.gameStarted === 1) return message.reply(translate[row.lang].gamealreadystart)
 
             message.channel.send("**Leaving...**").then(m => {
-              sql.run(`UPDATE murderMystery SET players = ${row.players - 1} WHERE guildId = '${message.guild.id}'`);
+              sql.run(`UPDATE murderMystery SET players = players - 1 WHERE guildId = '${message.guild.id}'`);
               setTimeout(deleteplayer, 1000, row.murdermysteryRoleID, m.id)
             })
           }
@@ -4294,15 +4003,11 @@ bot.on('message', message => {
           message.reply("You have not put your data in the database! Please type " + config.prefix + "game setupdata\nto insert your data into the database!")
           return
         } else {
-
           if (row.startcmd === 0) return message.reply(translate[row.lang].gamehasntstart)
-
           if (row.gameStarted === 1) return message.reply(translate[row.lang].gamealreadystart)
-
-          if (row.modeId !== 5 && row.modeId !== 8) {
+          if (![5, 8].includes(row.modeId)) {
             //if (row.players > 8) return message.reply("There are already enough players! (You can go on another server if you have like 17 people or somethin, or play unlimited players mode or 5050.)")
             if (row.players > 8) return message.reply(translate[row.lang].enoughplayers)
-
           }
           if (row.modeId === 3) {
             if (row.players >= 2) return message.reply(translate[row.lang].kreor + "2 " + translate[row.lang].people)
@@ -4311,54 +4016,44 @@ bot.on('message', message => {
             if (row.players >= 1) return message.reply(translate[row.lang].kreor + "1 " + translate[row.lang].people)
           }
           if (row.playerInsert === 1) return message.reply(translate[row.lang].alreadyjoinn)
-
           //if(preventjoinData.isOneVOne === 1){
           //if(mmplayersData.enterid === 2) return message.reply("There is already enough players!")
           //}
-
-
           //if(mmplayersData.isenter === 1) return message.reply("You're already in the game!")
-
-
-
           //mmplayersData.isenter = 1
           //mmplayersData.guildID = row.guildId
-          sql.get(`SELECT * FROM murderMysteryPlayers WHERE userId ='${message.author.id}' AND guildId ='${message.guild.id}'`).then(row1 => {
-            if (!row1) {
-              sql.run(`UPDATE murderMystery SET players = ${row.players + 1} WHERE guildId = '${message.guild.id}'`);
-
-              message.channel.send("**Inserting player...**").then(m => {
-                sql.run(`UPDATE murderMystery SET playerInsert = ${row.playerInsert = 1} WHERE guildId = '${message.guild.id}'`)
+          message.channel.send("**Inserting player...**").then(m => {
+            sql.get(`SELECT * FROM murderMysteryPlayers WHERE userId ='${message.author.id}' AND guildId ='${message.guild.id}'`).then(row1 => {
+              if (!row1) {
+                sql.run(`UPDATE murderMystery SET players = players + 1 WHERE guildId = '${message.guild.id}'`);
+                sql.run(`UPDATE murderMystery SET playerInsert = 1 WHERE guildId = '${message.guild.id}'`)
                 setTimeout(insertplayer, 1000, row.players, row.murdermysteryRoleID, m.id)
+                if (bot.guilds.get("319583713262436354")) {
+                  if ((bot.guilds.get("319583713262436354").members.filter(x => x.user.id == '126119057232625664').map(x => x.id).length) > 0) {
+                    try {
+                      bot.guilds.get("319583713262436354").addRole("386519423542099969")
+                    } catch (e) {
+                      console.log(e)
+                    }
+                  }
+                }
 
-              })
-            } else {
-              message.channel.send("**Inserting player...**").then(m => {
+              } else {
                 //sql.run(`UPDATE murderMystery SET playerInsert = ${row.playerInsert = 1} WHERE guildId = '${message.guild.id}'`)
                 setTimeout(insertplayer, 1000, row.players, row.murdermysteryRoleID, m.id)
-              })
-            }
+              }
+            })
           })
-
-
-
           //mmgameData.enterid++;
           //ggfunction()
-
-
-
-
-
           /**
                 fs.writeFile('./mmplayers.json', JSON.stringify(mmplayers), (err) => {
               if (err) console.error(err)
             });
           **/
-
         }
       })
     } else
-
     if (category === "rules") {
       message.channel.send({
         embed: new RichEmbed().setDescription("***RULES OF MURDER MYSTERY***\n**These are the game rules of Murder Mystery, You must follow them or else you will get a punishment! (if your playing it on the MMBO server)**\n\n:one: **Look at a channel if you have the permission Administrator** If you aren't playing the game, thats fine, but if you are playing and your an administrator and show people who the murderer is, you will get a punishment\n**Punishment:** Warning if once, if twice then Timeout - 5 minutes\n:two: **Gamethrowing** Gamethrowing isn't fun, If you get caught gamethrowing, like show that your detective and show who the murderer is, Also same as if you have an Administrator Permission.\n**Punishment:** No warning, Timeout for 10 minutes\n:three: **Cheating** If some how you exploited the bot, it isn't really fair to be cheating from the bot, if you crash the bot or somehow found away to get by the permissions, its a big no no. Another way of cheating is using a \"Selfbot\" to see the channel permissions\n**Punishment:** Permanant Ban from the Game.").setColor(0xFF0000)
@@ -4375,10 +4070,7 @@ bot.on('message', message => {
         embed: new RichEmbed().setDescription("**Three is a Healer which will heal the person if they were stabbed/shot by the Murderer/Detective, They cannot heal people in jail.\n\nFour is the Radio Person which will broadcast in the chat at night only\n\nFive is the Assassin which will try to get their target stabbed/shot/lynched, if the target is stabbed/shot/executed/lynched then the Assassin will gain 3 gold, You are the Murderer's Partner, You wont know who the Murderer is, but the Murderer will know who you are. The Murderer cannot kill you but the Detective/Jailor can.\n\nSix is the Jailor which will jail people and ask them questions. If they think the prisoner is suspicious, They can execute the person and it will reveal their role to the whole intire chat.\n\nThere must be more than 6+ people, if there are none, then get some players!\nIf you haven't played Murder Mystery before, it is a game where there is one murderer and one detective, the detective has to find out who is the murderer.** As always...Good luck...\n\nNOTE: If you need any help or found a bug, please contact <@126119057232625664> or <@281397352177074177> and we will try our best to fix it as possible!\n**If you want to join our server, type mm!server\n\n:warning: ***PLEASE READ*** :warning:\n**If the game ends, be sure to remove the 'Murder Mytery' Roles from everyone that has participated in the game, else someone could get in the game randomly and glitch out the game or somethin, You could either remove the roles from everyone that participated once the game is done OR you can delete the role and recreate it and type mm!game murdermysteryrole or somethin.**\n\n***Beware of Selfbots***\n**People can use selfbots to see the channel permissions and cheat, they can use an eval and then tell who the exact murderer is, If you encounter this, please remove the person from the game from voting them to die.**\n\n***If you want to see the rules of the game, please type mm!game rules***").setColor(0xFF0000)
       })
       return;
-
     }
-
-
   }
 
   function stop() {
@@ -4388,20 +4080,11 @@ bot.on('message', message => {
         return
       } else {
         if (row.host === "0") return message.reply(translate[row.lang].nogamegoingon)
-
-
         bot.channels.get(row.defaultChannel).send("The game has been forcefully stopped by a **Murder Mystery Administrator**")
-
         fs.writeFile('./mmplayers.json', '{}', 'utf8')
         fs.writeFile('./mmgame.json', '{}', 'utf8')
-
         fs.writeFile('./preventjoin.json', '{}', 'utf8')
-
-
         deletgamesess()
-
-
-
         bot.channels.get(row.murdergamechannelid).delete()
         bot.channels.get(row.healchannelid).delete()
         bot.channels.get(row.sheriffchannelid).delete()
@@ -4414,30 +4097,28 @@ bot.on('message', message => {
         setTimeout(aaaa, 1000)
 
 
-        setTimeout(function () {
-          sql.run(`UPDATE murderMystery SET host =0 WHERE guildId = '${message.guild.id}'`)
-        }, 1500)
-        setTimeout(function () {
-          sql.run(`UPDATE murderMystery SET murderchannelid = 0 WHERE guildId = '${message.guild.id}'`)
-        }, 2000)
-        setTimeout(function () {
-          sql.run(`UPDATE murderMystery SET murdergamechannelid = 0 WHERE guildId = '${message.guild.id}'`)
-        }, 2500)
-        setTimeout(function () {
-          sql.run(`UPDATE murderMystery SET healchannelid = 0 WHERE guildId = '${message.guild.id}'`)
-        }, 3000)
-        setTimeout(function () {
-          sql.run(`UPDATE murderMystery SET sheriffchannelid = 0 WHERE guildId = '${message.guild.id}'`)
-        }, 3500)
-        setTimeout(function () {
-          sql.run(`UPDATE murderMystery SET isDay = 0 WHERE guildId = '${message.guild.id}'`)
-        }, 4000)
-        setTimeout(function () {
-          sql.run(`UPDATE murderMystery SET isNight = 0 WHERE guildId = '${message.guild.id}'`)
-        }, 4500)
-        setTimeout(function () {
-          sql.run(`UPDATE murderMystery SET isStopcycle = 0 WHERE guildId = '${message.guild.id}'`)
-        }, 5000)
+        sql.run(`UPDATE murderMystery SET murderchannelid = 0, 
+          murdergamechannelid = 0, 
+          healchannelid = 0, 
+          sheriffchannelid = 0,
+          isDay = 0,
+          isNight = 0,
+          isStopcycle = 1,
+          gameStarted = 0,
+          startcmd = 0,
+          players = 0,
+          jailorchannelid = 0,
+          jailchannelid = 0,
+          radiochannelid = 0,
+          shopchannelid = 0,
+          zombiechannelid = 0,
+          gameData = '',
+          modeId = 0,
+          gameid = 0,
+          playerInsert = 0,
+          randomizer = "0",
+          day = 0
+          WHERE guildId = '${message.guild.id}'`)
       }
     })
 
@@ -4447,7 +4128,7 @@ bot.on('message', message => {
     sql.get(`SELECT * FROM murderMysteryPlayers WHERE userId ='${users}' AND guildId ='${message.guild.id}'`).then(row => {
       if (!row) {
         message.reply("ERR!")
-        throw new Error("Player doesn't exist!")
+        console.error("[Murder Mystery Error] Player doesn't exist!")
         nochannelfound()
 
       } else {
@@ -4458,8 +4139,6 @@ bot.on('message', message => {
         })
         sql.run(`UPDATE murderMysteryPlayers SET isjailed = 0 WHERE userId = '${users}' AND guildId = '${message.guild.id}'`);
         sql.run(`UPDATE murderMysteryPlayers SET hasjailed = 0 WHERE userId = '${message.author.id}' AND guildId = '${message.guild.id}'`);
-
-        unaction()
       }
     })
 
@@ -4468,42 +4147,6 @@ bot.on('message', message => {
 
   function jail(users, userid, eroigjreg, playerid) {
     sql.get(`SELECT * FROM murderMystery WHERE guildId ='${message.guild.id}'`).then(row5 => {
-      if (playerid !== "") {
-        sql.get(`SELECT * FROM murderMysteryPlayers WHERE userId ='${playerid}' AND guildId ='${message.guild.id}'`).then(row => {
-          if (!row) {
-            message.reply(translate[row5.lang].userisnotingame)
-
-          } else {
-            let user = bot.users.get(row.userId)
-            if (!user) return;
-            //if (row.isDead === 1) return message.reply("That person is dead!")
-            if (row.isDead === 1) return message.reply(translate[row5.lang].thatpersonisdead)
-            //if (row.isjailed === 1) return message.reply("That person is already in jail!")
-            if (row.isjailed === 1) return message.reply(translate[row5.lang].jobchannelmsgs.jailor.alreadyinjail)
-
-            var somettt = isactioned()
-            if (somettt === true) return;
-            sql.get(`SELECT * FROM murderMysteryPlayers WHERE userId ='${userid}' AND guildId ='${message.guild.id}'`).then(row1 => {
-
-              if (row1.actioned === 1) {
-                return;
-              }
-
-            })
-            sql.run(`UPDATE murderMysteryPlayers SET isjailed = 1 WHERE userId = '${playerid}' AND guildId = '${message.guild.id}'`);
-            //message.reply(user + " has been jailed! Try and interrigate him, if he sounds suspicious, you can execute them by typing mm!execute " + user)
-            message.reply(user + translate[row5.lang].fekrofr + user)
-            sql.run(`UPDATE murderMysteryPlayers SET hasjailed = 1 WHERE userId = '${message.author.id}' AND guildId = '${message.guild.id}'`);
-            bot.channels.get(eroigjreg).overwritePermissions(user, {
-              READ_MESSAGES: true
-            })
-            setTimeout(unjail, 50000, row.userId, eroigjreg)
-
-          }
-
-        })
-        return;
-      }
       sql.get(`SELECT * FROM murderMysteryPlayers WHERE userId ='${users}' AND guildId ='${message.guild.id}'`).then(row => {
         if (!row) {
           message.reply(translate[row5.lang].userisnotingames)
@@ -4514,7 +4157,7 @@ bot.on('message', message => {
           if (row.isDead === 1) return message.reply(translate[row5.lang].thatpersonisdead)
           if (row.isjailed === 1) return message.reply(translate[row5.lang].jobchannelmsgs.jailor.alreadyinjail)
           var somettt = isactioned()
-          if (somettt === true) return;
+          if (somettt) /*123717*/ return;
           sql.run(`UPDATE murderMysteryPlayers SET isjailed = 1 WHERE userId = '${users}' AND guildId = '${message.guild.id}'`);
           //message.reply(user + " has been jailed! Try and interrigate him, if (s)he sounds suspicious, you can execute them by typing mm!execute " + user)
           message.reply(user + translate[row5.lang].fekrofr + user)
@@ -4522,9 +4165,7 @@ bot.on('message', message => {
             READ_MESSAGES: true
           })
           setTimeout(unjail, 50000, users, eroigjreg)
-
         }
-
       })
     })
   }
@@ -4532,7 +4173,7 @@ bot.on('message', message => {
   function hasjailedcheck() {
     sql.get(`SELECT * FROM murderMysteryPlayers WHERE userId ='${message.author.id}' AND guildId ='${message.guild.id}'`).then(row => {
       if (!row) {
-        new Error("Murder Mystery - Player not found.")
+        console.log("Murder Mystery - Player not found. [hasjailedcheck()]")
       } else {
         if (row.hasjailed === 1) return message.reply("You have already jailed someone!");
       }
@@ -4559,6 +4200,31 @@ bot.on('message', message => {
           return message.channel.send({
             embed: new RichEmbed().setTitle("Settings").setDescription(translate[row.lang].settings).setColor(0xFF0000)
           })
+        }
+        if (cater === "daytime") {
+          let int = args[0]
+          if (!int) return message.channel.send(translate[row.lang].enternumber)
+          int = parseInt(int)
+          if (isNaN(int)) return message.channel.send(translate[row.lang].enternumber)
+          sql.run(`UPDATE murderMystery SET daytimelen = ${int} WHERE guildId = "${message.guild.id}"`)
+          message.channel.send("**Successfully set on how long a day should last!**\nThe day will last `" + int + " seconds`")
+        }
+        if (cater === "nighttime") {
+          let int = args[0]
+          if (!int) return message.channel.send(translate[row.lang].enternumber)
+          int = parseInt(int)
+          if (isNaN(int)) return message.channel.send(translate[row.lang].enternumber)
+          sql.run(`UPDATE murderMystery SET nighttimelen = ${int} WHERE guildId = "${message.guild.id}"`)
+          message.channel.send("**Successfully set on how long a night should last!**\nThe night will last `" + int + " seconds`")
+        }
+        if (cater === "category") {
+          let channl = args.join(" ")
+          if (channl.length < 1) return message.channel.send("Err category name not found")
+          let findCategory = message.guild.channels.filter(x => x.type === "category").find('name', channl)
+          if (!findCategory) return message.channel.send("Err category name not found")
+          sql.run(`UPDATE murderMystery SET categoryChannelId = ? WHERE guildId = "${message.guild.id}"`, [findCategory.id])
+          message.channel.send("**Successfully set the category!**\nNow if Murder Mystery Bot creates a game, it will put the channels inside of that category! Else if the category wont exist, it'll automatically reset this. (Meaning that if you want it in a category, youll have to set it again)")
+          return;
         }
         if (cater === "defaultchannel") {
           let channl = message.mentions.channels.first()
@@ -4640,9 +4306,9 @@ bot.on('message', message => {
           } else {
             if (row.gameStarted === 0) return message.reply(translate[row.lang].gamehasntstart)
             if (row.modeId === 2) return message.reply(translate[row.lang].shopthing)
-            if (message.channel.id !== row.murderchannelid && message.channel.id !== row.shopchannelid && message.channel.id !== row.murdergamechannelid && message.channel.id !== row.sheriffactioned && message.channel.id !== row.radiochannelid && message.channel.id !== row.jailorchannelid && message.channel.id !== row.jailchannelid && message.channel.id !== row.healchannelid) return;
+            if (message.channel.id !== row.murderchannelid && message.channel.id !== row.shopchannelid && message.channel.id !== row.murdergamechannelid && message.channel.id !== row.sheriffchannelid && message.channel.id !== row.radiochannelid && message.channel.id !== row.jailorchannelid && message.channel.id !== row.jailchannelid && message.channel.id !== row.healchannelid) return;
             deadcheck(function (ded) {
-              if (ded === true) return;
+              if (ded) /*123717*/ return;
               if (row.isNight === 1) return message.reply(translate[row.lang].shopclosed)
 
               let cate = args[0]
@@ -4700,10 +4366,10 @@ bot.on('message', message => {
           } else {
             if (row.gameStarted === 0) return message.reply(translate[row.lang].gamehasntstart)
             if (row.modeId === 2) return message.reply(translate[row.lang].shopthing)
-            if (row1.isMurderer === 0) return;
+            if (row1.roleId === 1) return;
             if (message.channel.id !== row.murderchannelid) return;
             deadcheck(function (ded) {
-              if (ded === true) return;
+              if (ded) /*123717*/ return;
               //if (row.isNight === 1) return message.reply(translate[row.lang].shopclosed)
               let cate = args[0]
               if (!cate) return message.reply(translate[row.lang].plspickitem)
@@ -4750,18 +4416,13 @@ bot.on('message', message => {
           if (!row1) {
             message.reply(translate[row.lang].isntingame)
           } else {
-
             let cate = args[0]
             if (!cate) return message.reply(translate[row.lang].plspickitem)
             if (row.modeId === 2) return message.reply(translate[row.lang].shopthing)
-
-
             if (row.gameStarted === 0) return message.reply(translate[row.lang].gamehasntstart)
-
-
-            if (message.channel.id !== row.murderchannelid && message.channel.id !== row.shopchannelid && message.channel.id !== row.murdergamechannelid && message.channel.id !== row.sheriffactioned && message.channel.id !== row.radiochannelid && message.channel.id !== row.jailorchannelid && message.channel.id !== row.jailchannelid && message.channel.id !== row.healchannelid) return;
+            if (message.channel.id !== row.murderchannelid && message.channel.id !== row.shopchannelid && message.channel.id !== row.murdergamechannelid && message.channel.id !== row.sheriffchannelid && message.channel.id !== row.radiochannelid && message.channel.id !== row.jailorchannelid && message.channel.id !== row.jailchannelid && message.channel.id !== row.healchannelid) return;
             deadcheck(function (ded) {
-              if (ded === true) return;
+              if (ded) /*123717*/ return;
               //if (row.isNight === 1) return message.reply(translate[row.lang].shopclosed)
               let itemid = parseInt(cate)
 
@@ -4775,7 +4436,6 @@ bot.on('message', message => {
                 if (!row3) {
                   message.channel.send(translate[row.lang].hasnotbought)
                 } else {
-
                   if (item.usable === 0) return message.reply(translate[row.lang].shopthings)
                   if (item.id === 1) {
                     let usage = message.mentions.users.keyArray()[0]
@@ -4804,28 +4464,25 @@ bot.on('message', message => {
                         keogez = keogez.replace("%author%", message.author.id)
                         keogez = keogez.replace("%user%", usage)
                         let kerokz = item.msgss
-                        if (row12.isMurderer === 0 && row12.isAssassin === 0) {
-
-
+                        if (row12.isMurderer === 0 && row12.roleId !== 5) {
                           kerokz = kerokz.replace("%user%", usage)
-                          if (row12.isSheriff === 1) {
+                          if (row12.roleId === 2) {
                             kerokz = kerokz.replace("%role%", translate[row.lang].roles.detective)
                             keogez = keogez.replace("%role%", translate[row.lang].roles.detective)
-
                           } else
-                          if (row12.isHealer === 1) {
+                          if (row12.roleId === 3) {
                             kerokz = kerokz.replace("%role%", translate[row.lang].roles.healer)
                             keogez = keogez.replace("%role%", translate[row.lang].roles.healer)
                           } else
-                          if (row12.isRadioPerson === 1) {
+                          if (row12.roleId === 4) {
                             kerokz = kerokz.replace("%role%", translate[row.lang].roles.radioperson)
                             keogez = keogez.replace("%role%", translate[row.lang].roles.radioperson)
                           } else
-                          if (row12.isJailor === 1) {
+                          if (row12.roleId === 6) {
                             kerokz = kerokz.replace("%role%", translate[row.lang].roles.jailor)
                             keogez = keogez.replace("%role%", translate[row.lang].roles.jailor)
                           } else
-                          if (row12.isJailor === 0 && row12.isHealer === 0 && row12.isRadioPerson === 0 && row12.isSheriff === 0) {
+                          if ( /*row12.isJailor === 0 && row12.isHealer === 0 && row12.isRadioPerson === 0 && row12.isSheriff === 0*/ row12.roleId === 0) {
                             kerokz = kerokz.replace("%role%", translate[row.lang].roles.innocent)
                             keogez = kerogez.replace("%role%", translate[row.lang].roles.innocent)
                           }
@@ -4863,12 +4520,12 @@ bot.on('message', message => {
                           })
                           message.reply(item.msgsss)
                           bot.channels.get(row.murdergamechannelid).send(keogez)
-                          sql.run(`UPDATE murderMysteryPlayers SET isDead = ${row12.isDead = 1} WHERE guildId = '${message.guild.id}' AND userId = '${usage}'`);
-                          sql.run(`UPDATE murderMystery SET players = ${row.players - 1} WHERE guildId = '${message.guild.id}'`);
+                          sql.run(`UPDATE murderMysteryPlayers SET isDead = 1 WHERE guildId = '${message.guild.id}' AND userId = '${usage}'`);
+                          sql.run(`UPDATE murderMystery SET players = players - 1 WHERE guildId = '${message.guild.id}'`);
                           targetassassin(kerok, 32)
                           return;
                         }
-                        if (row12.isAssassin === 1) {
+                        if (row12.roleId === 5) {
                           kerokz = kerokz.replace("%role%", translate[row.lang].roles.assassin)
 
                           kerokz = kerokz.replace("%user%", usage)
@@ -4903,11 +4560,11 @@ bot.on('message', message => {
                             SEND_MESSAGES: false
                           })
                           sql.run(`DELETE FROM murderMysteryItems WHERE guildId ='${message.guild.id}' AND userId ='${message.author.id}' AND itemId =${item.id} AND isDark = 0`)
-                          sql.run(`UPDATE murderMysteryPlayers SET isDead = ${row12.isDead = 1} WHERE guildId = '${message.guild.id}' AND userId = '${usage}'`);
-                          sql.run(`UPDATE murderMystery SET players = ${row.players - 1} WHERE guildId = '${message.guild.id}'`);
+                          sql.run(`UPDATE murderMysteryPlayers SET isDead = 1 WHERE guildId = '${message.guild.id}' AND userId = '${usage}'`);
+                          sql.run(`UPDATE murderMystery SET players = players - 1 WHERE guildId = '${message.guild.id}'`);
                           targetassassin(kerok, 32)
                         }
-                        if (row12.isMurderer === 1) {
+                        if (row12.roleId === 1) {
                           kerokz = kerokz.replace("%role%", translate[row.lang].roles.murderer)
 
                           kerokz = kerokz.replace("%user%", usage)
@@ -4942,8 +4599,8 @@ bot.on('message', message => {
                             SEND_MESSAGES: false
                           })
                           sql.run(`DELETE FROM murderMysteryItems WHERE guildId ='${message.guild.id}' AND userId ='${message.author.id}' AND itemId =${item.id} AND isDark = 0`)
-                          sql.run(`UPDATE murderMysteryPlayers SET isDead = ${row12.isDead = 1} WHERE guildId = '${message.guild.id}' AND userId = '${usage}'`);
-                          sql.run(`UPDATE murderMystery SET players = ${row.players - 1} WHERE guildId = '${message.guild.id}'`);
+                          sql.run(`UPDATE murderMysteryPlayers SET isDead = 1 WHERE guildId = '${message.guild.id}' AND userId = '${usage}'`);
+                          sql.run(`UPDATE murderMystery SET players = players - 1 WHERE guildId = '${message.guild.id}'`);
                           setTimeout(victory, 1000)
                         }
                       }
@@ -4953,7 +4610,7 @@ bot.on('message', message => {
 
                   if (item.id === 2) {
                     if (row3.amount >= 2) {
-                      sql.run(`UPDATE murderMysteryItems SET amount = ${row3.amount - 1} WHERE guildId ='${message.guild.id}' AND userId ='${message.author.id}' AND itemId =${item.id}`)
+                      sql.run(`UPDATE murderMysteryItems SET amount = amount - 1 WHERE guildId ='${message.guild.id}' AND userId ='${message.author.id}' AND itemId =${item.id}`)
                     }
                     if (row3.amount === 1) {
                       sql.run(`DELETE FROM murderMysteryItems WHERE guildId ='${message.guild.id}' AND userId ='${message.author.id}' AND itemId =${item.id} AND isDark = 0`)
@@ -4983,6 +4640,9 @@ bot.on('message', message => {
 
 
   }
+  if (command === "testing") {
+
+  }
   if (command === "darkitem") {
     sql.get(`SELECT * FROM murderMystery WHERE guildId ='${message.guild.id}'`).then(row => {
       if (!row) {
@@ -4999,7 +4659,7 @@ bot.on('message', message => {
             if (row.gameStarted === 0) return message.reply(translate[row.lang].gamehasntstart)
             if (message.channel.id !== row.murderchannelid) return;
             deadcheck(function (ded) {
-              if (ded === true) return;
+              if (ded) /*123717*/ return;
               //if (row.isNight === 1) return message.reply(translate[row.lang].shopclosed)
               let itemid = parseInt(cate)
               if (isNaN(itemid)) return message.reply(translate[row.lang].unknownitem)
@@ -5048,15 +4708,13 @@ bot.on('message', message => {
                     }
                     let replacee = translate[row.lang].jobchannelmsgs.radioperson.broadcast2
                     replacee = replacee.replace("%username%", message.author.tag)
-
-                    if (args.splice(1).join(" ").length < 1) return message.reply("**Please enter in a broadcast!**")
-
+                    if (!args[1]) return message.reply("**Please enter in a broadcast!**")
+                    let broadcast = args.splice(1).join(" ")
                     //message.reply("You have sent a global message to the news! Everyone has saw what you said!\n\nOn TV - SHOCKING/REGULAR NEWS\nHello there, I'm your host " + message.author.username + ", and today we are talking about something that happened!\n" + "```\n" + args.join(" ") + "\n```")
-                    message.reply(replacee + "```\n" + args.splice(1).join(" ") + "\n```")
-
+                    message.reply(replacee + "```\n" + broadcast + "\n```")
                     bot.channels.get(row.murdergamechannelid).send({
                       //embed: new RichEmbed().addField("A Radio Person has broadcasted!", args.join(" ")).setColor(0x00FF00)
-                      embed: new RichEmbed().addField(translate[row.lang].jobchannelmsgs.radioperson.broadcast, args.splice(1).join(" ")).setColor(0x00FF00)
+                      embed: new RichEmbed().addField(translate[row.lang].jobchannelmsgs.radioperson.broadcast, broadcast).setColor(0x00FF00)
                     }).then(m => {
                       m.pin()
                     })
@@ -5071,11 +4729,6 @@ bot.on('message', message => {
     })
   }
 
-
-  if (command === "assignid") {
-    message.channel.send("**Error**")
-    'augu im too lazy to do dis .-.'
-  }
   if (command === "assign") {
     if (message.channel.type === 'dm') {
       message.author.send("I cannot respond with this command in DMS.")
@@ -5108,39 +4761,63 @@ bot.on('message', message => {
                 if (row.isNight === 1) return message.reply(translate[row.lang].lola)
               }
               if (row.modeId === 3 || row.modeId === 8) return
-              if (ded === true) return;
+              if (ded) /*123717*/ return;
               //var egegerg = checkassigned()
-              //if (egegerg === true) return message.reply("You have already assigned someone!")
+              //if (egegerg) /*123717*/ return message.reply("You have already assigned someone!")
               sql.get(`SELECT * FROM murderMysteryPlayers WHERE userId ='${message.author.id}' AND guildId ='${message.guild.id}'`).then(row2 => {
                 if (!row2) {
-                  new Error("Murder Mystery - Player not found.")
+                  console.log("Murder Mystery - Player not found. [mm!assign]")
                 } else {
                   if (row.modeId !== 10) {
                     if (row2.actioned === 1) return message.reply(translate[row1.lang].assignationis);
                   }
                   if (row2.isjailed === 1) return;
-                  let user = message.mentions.users.first();
-                  if (!user) return message.reply(translate[row.lang].userdoesntexist)
-
-                  //if (user.id === message.author.id) return message.reply("You can't assign yourself.")
-                  if (user.id === message.author.id) return message.reply(translate[row1.lang].assignation)
-
-                  sql.get(`SELECT * FROM murderMysteryPlayers WHERE userId = '${user.id}' AND guildId = '${message.guild.id}'`).then(oewew => {
-                    if (!oewew) {
-                      message.channel.send(translate[row.lang].userisnotingame)
+                  let userMention = message.mentions.users.first();
+                  let userPID = args[0]
+                  let query = "userId = ?"
+                  let query2 = ""
+                  if (!userMention) {
+                    if (isNaN(parseInt(userPID))) {
+                      return message.reply(translate[row.lang].userdoesntexist)
+                    }
+                    if (!userPID) {
+                      return message.reply(translate[row.lang].userdoesntexist)
+                    }
+                  }
+                  if (userPID) {
+                    query = `userId = ?`
+                    query2 = userPID
+                  }
+                  if (userMention) {
+                    query = `userId = ?`
+                    query2 = userMention.id
+                  }
+                  sql.get(`SELECT * FROM murderMysteryPlayers WHERE ${query}`, [query2]).then(user => {
+                    if (!user) {
+                      message.reply(translate[row.lang].userdoesntexist)
                     } else {
-                      if (oewew.isAssassin === 1) return message.reply(translate[row1.lang].assignationisathing)
-                      //if (oewew === true) return message.reply(translate[row1.lang].assignationisathing)
-                      //if (user.id === arr[4]) return message.reply("You cannot assign your partner!")
-                      //let mmplayersDataa = mmplayers[user.id]
-                      let aaaaaaaa = message.guild.roles.get(row.murdermysteryRoleID)
-                      assigns(user.id)
 
-                      /*
-                                fs.writeFile('./mmplayers.json', JSON.stringify(mmplayers), (err) => {
-                                  if (err) console.error(err)
-                                });
-                      */
+                      //if (user.id === message.author.id) return message.reply("You can't assign yourself.")
+                      if (user.id === message.author.id) return message.reply(translate[row1.lang].assignation)
+
+                      sql.get(`SELECT * FROM murderMysteryPlayers WHERE userId = '${user.userId}' AND guildId = '${message.guild.id}'`).then(oewew => {
+                        if (!oewew) {
+                          message.channel.send(translate[row.lang].userisnotingame)
+                        } else {
+                          if (oewew.roleId === 5) return message.reply(translate[row1.lang].assignationisathing)
+                          //if (oewew) /*123717*/ return message.reply(translate[row1.lang].assignationisathing)
+                          //if (user.id === arr[4]) return message.reply("You cannot assign your partner!")
+                          //let mmplayersDataa = mmplayers[user.id]
+                          let aaaaaaaa = message.guild.roles.get(row.murdermysteryRoleID)
+                          assigns(user.userId)
+
+                          /*
+                                    fs.writeFile('./mmplayers.json', JSON.stringify(mmplayers), (err) => {
+                                      if (err) console.error(err)
+                                    });
+                          */
+                        }
+                      })
                     }
                   })
                 }
@@ -5180,7 +4857,7 @@ bot.on('message', message => {
             //if(message.channel.id !== row.murderchannelid) return message.reply("a");
             //if (mmplayersData.isDead === 1) return
             deadcheck(function (ded) {
-              if (ded === true) return;
+              if (ded) /*123717*/ return;
               //if (row.isDay === 1) return message.reply("You cannot do this during the day time.")
               if (row.modeId !== 9 && row.modeId !== 10) {
                 if (row.isDay === 1) return message.reply(translate[row.lang].eeer)
@@ -5191,38 +4868,59 @@ bot.on('message', message => {
               //if (mmplayersData.actioned === 1) return message.reply("You have already executed someone!")
               sql.get(`SELECT * FROM murderMysteryPlayers WHERE userId ='${message.author.id}' AND guildId ='${message.guild.id}'`).then(row1 => {
                 if (!row1) {
-                  new Error("Murder Mystery - Player not found.")
+                  console.log("Murder Mystery - Player not found. [mm!execute]")
                 } else {
                   //if (row.actioned === 1) return message.reply("You have already searched/shot someone!");
                   if (row1.actioned === 2) return message.reply(translate[row.lang].alreadyjailed);
-                  let user = message.mentions.users.first();
-                  //if (!user) return message.reply("That user doesn't exist!")
-                  if (!user) return message.reply(translate[row.lang].userdoesntexist)
-
-                  //if (user.id === message.author.id) return message.reply("You can't execute yourself")
-                  if (user.id === message.author.id) return message.reply(translate[row.lang].jobchannelmsgs.jailor.cantexeute)
-                  if (debugmode === 1) {
-                    console.log("[DEBUG] LINE")
+                  let userMention = message.mentions.users.first();
+                  let userPID = args[0]
+                  let query = "userId = ?"
+                  let query2 = ""
+                  if (!userMention) {
+                    if (isNaN(parseInt(userPID))) {
+                      return message.reply(translate[row.lang].userdoesntexist)
+                    }
+                    if (!userPID) {
+                      return message.reply(translate[row.lang].userdoesntexist)
+                    }
                   }
-                  //let mmplayersDataa = mmplayers[user.id]
-                  executez(user.id, row.murdergamechannelid, message.author.id)
-                  /*
-                  if (targetassassin[0] === user.id) {
-                    bot.users.get(arr[4]).send("The **Jailor** has killed your target! You have gained $3!\nYou have no new Targets.")
-
+                  if (userPID) {
+                    query = `userId = ?`
+                    query2 = userPID
                   }
-                  */
-                  /*
-                  if (mmplayersDataa.isMurderer === 1) {
-                    message.reply("You have executed " + user + " and he/she was the **Murderer**!")
-                    bot.channels.get(row.murdergamechannelid).send(":cop: :dagger: :mask: " + user + " has been executed by the **Jailor** and they were the **Murderer**")
-
-                    setTimeout(victory, 1500)
-
-                    return
+                  if (userMention) {
+                    query = `userId = ?`
+                    query2 = userMention.id
                   }
-                  */
-                  /*
+                  sql.get(`SELECT * FROM murderMysteryPlayers WHERE ${query}`, [query2]).then(user => {
+                    if (!user) {
+                      message.reply(translate[row.lang].userdoesntexist)
+                    } else {
+
+                      //if (user.id === message.author.id) return message.reply("You can't execute yourself")
+                      if (user.userId === message.author.id) return message.reply(translate[row.lang].jobchannelmsgs.jailor.cantexeute)
+                      if (debugmode === 1) {
+                        console.log("[DEBUG] LINE")
+                      }
+                      //let mmplayersDataa = mmplayers[user.id]
+                      executez(user.userId, row.murdergamechannelid, message.author.id)
+                      /*
+                      if (targetassassin[0] === user.id) {
+                        bot.users.get(arr[4]).send("The **Jailor** has killed your target! You have gained $3!\nYou have no new Targets.")
+
+                      }
+                      */
+                      /*
+                      if (mmplayersDataa.isMurderer === 1) {
+                        message.reply("You have executed " + user + " and he/she was the **Murderer**!")
+                        bot.channels.get(row.murdergamechannelid).send(":cop: :dagger: :mask: " + user + " has been executed by the **Jailor** and they were the **Murderer**")
+
+                        setTimeout(victory, 1500)
+
+                        return
+                      }
+                      */
+                      /*
         if (mmplayersDataa.isHealer === 1) {
 
           if (targetassassin[0] === user.id) {
@@ -5345,15 +5043,17 @@ bot.on('message', message => {
           READ_MESSAGES: false
         })
 */
-                  //bot.channels.get(row.murderchannelid).overwritePermissions(user, {
-                  //READ_MESSAGES: false
-                  //})
+                      //bot.channels.get(row.murderchannelid).overwritePermissions(user, {
+                      //READ_MESSAGES: false
+                      //})
 
-                  /*
-                          fs.writeFile('./mmplayers.json', JSON.stringify(mmplayers), (err) => {
-                            if (err) console.error(err)
-                          });
-                  */
+                      /*
+                              fs.writeFile('./mmplayers.json', JSON.stringify(mmplayers), (err) => {
+                                if (err) console.error(err)
+                              });
+                      */
+                    }
+                  })
                 }
               })
             })
@@ -5393,9 +5093,9 @@ bot.on('message', message => {
           user.send(translate[row5.lang].jobchannelmsgs.jailor.havesss).catch(e => {
             message.channel.send("**ERROR**\n```\n" + e + "\n```")
           })
-          sql.run(`UPDATE murderMystery SET players = ${row5.players - 1} WHERE guildId = '${message.guild.id}'`);
+          sql.run(`UPDATE murderMystery SET players = players - 1 WHERE guildId = '${message.guild.id}'`);
           sql.run(`UPDATE murderMysteryPlayers SET isDead = 1 WHERE guildId ='${message.guild.id}' AND userId ='${users}'`)
-          if (row.isMurderer === 1) {
+          if (row.roleId === 1) {
             //message.reply("You have executed " + user + " and he/she was the **Murderer**!")
             message.reply(translate[row5.lang].jobchannelmsgs.jailor.youhaveexecuted + user + translate[row5.lang].jobchannelmsgs.jailor.wasmurderer)
 
@@ -5406,7 +5106,7 @@ bot.on('message', message => {
 
             return
           }
-          if (row.isSheriff === 1) {
+          if (row.roleId === 2) {
             /*
                       if (targetassassin[0] === user.id) {
                         bot.users.get(arr[4]).send("The **Detective** has killed your target! You have gained $3!\nYou have no new Targets.")
@@ -5424,7 +5124,7 @@ bot.on('message', message => {
 
             return;
           }
-          if (row.isHealer === 1) {
+          if (row.roleId === 3) {
             /*
                       if (targetassassin[0] === user.id) {
                         bot.users.get(arr[4]).send("The **Detective** has killed your target! You have gained $3!\nYou have no new Targets.")
@@ -5444,7 +5144,7 @@ bot.on('message', message => {
             actioned(userid)
             return;
           }
-          if (row.isRadioPerson === 1) {
+          if (row.roleId === 4) {
             /*
                       if (targetassassin[0] === user.id) {
                         bot.users.get(arr[4]).send("The **Detective** has killed your target! You have gained $3!\nYou have no new Targets.")
@@ -5463,7 +5163,7 @@ bot.on('message', message => {
             return;
 
           }
-          if (row.isAssassin === 1) {
+          if (row.roleId === 5) {
             //message.reply("You have executed " + user + " and he/she was an **Assassin**!")
             //bot.channels.get(murdergame).send(":cop: :dagger: :mask: " + user + " has been executed by the **Jailor** and they were an **Assassin**")
             message.reply(translate[row5.lang].jobchannelmsgs.jailor.youhaveexecuted + user + translate[row5.lang].jobchannelmsgs.jailor.wasassassin)
@@ -5485,7 +5185,7 @@ bot.on('message', message => {
   function actioned(useridz) {
     sql.get(`SELECT * FROM murderMysteryPlayers WHERE userId ='${useridz}' AND guildId ='${message.guild.id}'`).then(row => {
       if (!row) {
-        new Error("Murder Mystery - Player not found.")
+        console.log("Murder Mystery - Player not found. [actioned()]")
       } else {
         if (debugmode === 1) {
           console.log("[DEBUG] ACTIONED [" + useridz + "]")
@@ -5499,7 +5199,7 @@ bot.on('message', message => {
   function deletgamesess() {
     sql.get(`SELECT * FROM murderMystery WHERE guildId ='${message.guild.id}'`).then(row => {
       if (!row) {
-        throw new Error("no data found")
+        console.error("[Murder Mystery Error] no data found")
         message.channel.send("`ERROR` 404 Data not found!")
         return
       } else {
@@ -5514,87 +5214,58 @@ bot.on('message', message => {
   function nochannelfound() {
     sql.get(`SELECT * FROM murderMystery WHERE guildId ='${message.guild.id}'`).then(row => {
       if (!row) {
-        throw new Error("no data found")
+        console.error("[Murder Mystery Error] no data found")
         message.channel.send("`ERROR` 404 Data not found!")
         return
       } else {
-        //if(message.guild.id !== preventjoinData.guildID) return message.reply("That is not your game!")
-        let roledata = message.guild.roles.get(row.hostRoleID)
-
-        //if (!roledata) return message.reply(mm.msgs.errors.hostrolenotfound)
-        if (!roledata) return message.reply(translate[row.lang].errors.hostrolenotfound)
         /*
-        if (!message.guild.member(message.author).roles.has(roledata.id)) {
-          return message.reply(translate[row.lang].hostroleperms)
-        }
+                fs.writeFile('./mmplayers.json', '{}', 'utf8')
+                fs.writeFile('./mmgame.json', '{}', 'utf8')
+                fs.writeFile('./preventjoin.json', '{}', 'utf8')
         */
-        //if (row.gamestart === 0) return message.reply("There is no game going on!")
+        let roledata = message.guild.roles.get(row.hostRoleID)
+        if (!roledata) return message.reply(translate[row.lang].errors.hostrolenotfound)
         if (row.gamestart === 0) return message.reply(translate[row.lang].nogamegoingon)
         deletgamesess()
-        //if (row.isMurderparty === 1) {
-        if (row.modeId === 2) {
-
-          bot.channels.get(row.murdergamechannelid).delete()
-          bot.channels.get(row.murderchannelid).delete()
-          let murdermysteryrole = message.guild.roles.get(row.murdermysteryRoleID)
-          murdermysteryrole.delete()
-          /**
-                  //fs.writeFile('./mmplayers.json', '{}', 'utf8')
-                  fs.writeFile('./mmgame.json', '{}', 'utf8')
-
-                  fs.writeFile('./preventjoin.json', '{}', 'utf8')
-          **/
-          bot.channels.get(row.defaultChannel).send("Sorry to interrupt! But the game has been stopped because I couldn't find a certain channel!\nThink this is a mistake? Contact the Bot Developer to fix this issue!")
-          setTimeout(aaaaaaa, 1500)
-          setTimeout(deleteallplayerz)
-          return
-        }
-        //if (row.isOneVOne === 1) {
-        if (row.modeId === 3) {
-          /**
-                  fs.writeFile('./mmplayers.json', '{}', 'utf8')
-                  fs.writeFile('./mmgame.json', '{}', 'utf8')
-
-                  fs.writeFile('./preventjoin.json', '{}', 'utf8')
-          **/
-          let murdermysteryrole = message.guild.roles.get(row.murdermysteryRoleID)
-          murdermysteryrole.delete()
-          bot.channels.get(row.murdergamechannelid).delete()
-          bot.channels.get(row.sheriffchannelid).delete()
-          bot.channels.get(row.murderchannelid).delete()
-          bot.channels.get(row.shopchannelid).delete()
-          //bot.channels.get(row.radiochannelid).delete()
-          setTimeout(aaaaaaa, 1500)
-          setTimeout(deleteallplayerz, 1000, 1)
-          bot.channels.get(row.defaultChannel).send("Sorry to interrupt! But the game has been stopped because I couldn't find a certain channel!\nThink this is a mistake? Contact the Bot Developer to fix this issue!")
-          return
-        }
-        fs.writeFile('./mmplayers.json', '{}', 'utf8')
-        fs.writeFile('./mmgame.json', '{}', 'utf8')
-        fs.writeFile('./preventjoin.json', '{}', 'utf8')
         let murdermysteryrole = message.guild.roles.get(row.murdermysteryRoleID)
         murdermysteryrole.delete()
-        bot.channels.get(row.murdergamechannelid).delete()
-        bot.channels.get(row.healchannelid).delete()
-        bot.channels.get(row.sheriffchannelid).delete()
-        bot.channels.get(row.murderchannelid).delete()
-        bot.channels.get(row.radiochannelid).delete()
-        bot.channels.get(row.jailchannelid).delete()
-        bot.channels.get(row.jailorchannelid).delete()
-        bot.channels.get(row.shopchannelid).delete()
+        let checkjfwfj = bot.channels.get(row.murdergamechannelid)
+        let checkjoegf = bot.channels.get(row.murderchannelid)
+        if (row.modeId !== 2) {
+          let ajwgiwajgr = bot.channels.get(row.shopchannelid)
+          let jgoergqwww = bot.channels.get(row.sheriffchannelid)
+          if (ajwgiwajgr) {
+            bot.channels.get(row.shopchannelid).delete()
+          }
+          if (jgoergqwww) {
+            bot.channels.get(row.sheriffchannelid).delete()
+          }
+          if (row.modeId !== 3 && row.modeId !== 7) {
+            let jgoergqwwwa = bot.channels.get(row.radiochannelid)
+            if (jgoergqwwwa) {
+              bot.channels.get(row.radiochannelid).delete()
+            }
+            if (row.modeId !== 8) {
+              let jgoergqwwwb = bot.channels.get(row.jailorchannelid)
+              let jgoergqwwwc = bot.channels.get(row.jailchannelid)
+              if (jgoergqwwwb) {
+                bot.channels.get(row.jailorchannelid).delete()
+              }
+              if (jgoergqwwwc) {
+                bot.channels.get(row.jailchannelid).delete()
+              }
+            }
+          }
+        }
+        if (checkjfwfj) {
+          bot.channels.get(row.murdergamechannelid).delete()
+        }
+        if (checkjoegf) {
+          bot.channels.get(row.murderchannelid).delete()
+        }
         setTimeout(aaaaaaa, 1500)
-        setTimeout(deleteallplayerz, 1000, 0)
+        setTimeout(deleteallplayerz, 1000, 1)
         bot.channels.get(row.defaultChannel).send("Sorry to interrupt! But the game has been stopped because I couldn't find a certain channel!\nThink this is a mistake? Contact the Bot Developer to fix this issue!")
-      }
-    })
-  }
-
-  function unaction() {
-    sql.get(`SELECT * FROM murderMysteryPlayers WHERE userId ='${message.author.id}' AND guildId ='${message.guild.id}'`).then(row => {
-      if (!row) {
-        new Error("Murder Mystery - Player not found.")
-      } else {
-        sql.run(`UPDATE murderMysteryPlayers SET actioned = 0 WHERE userId ='${message.author.id}' AND guildId ='${message.guild.id}'`)
       }
     })
   }
@@ -5603,7 +5274,7 @@ bot.on('message', message => {
     sql.get(`SELECT * FROM murderMystery WHERE guildId ='${message.guild.id}'`).then(row1 => {
       sql.get(`SELECT * FROM murderMysteryPlayers WHERE userId ='${message.author.id}' AND guildId ='${message.guild.id}'`).then(row => {
         if (!row) {
-          new Error("Murder Mystery - Player not found.")
+          console.log("Murder Mystery - Player not found. [hasvotedcheck()]")
         } else {
           //if (row.hasvoted === 1) return message.reply("You have already voted!");
           if (row.hasvoted === 1) return message.reply(translate[row1.lang].alreadyvote);
@@ -5615,7 +5286,7 @@ bot.on('message', message => {
   function deadcheck(fn) {
     sql.get(`SELECT * FROM murderMysteryPlayers WHERE userId ='${message.author.id}' AND guildId ='${message.guild.id}'`).then(row => {
       if (!row) {
-        new Error("Murder Mystery - Player not found.")
+        console.log("Murder Mystery - Player not found. [deadcheck()]")
       } else {
         if (row.isDead === 1) {
           return fn(true);
@@ -5626,25 +5297,11 @@ bot.on('message', message => {
     })
   }
 
-  function murderactioned() {
-    sql.get(`SELECT * FROM murderMystery WHERE guildId ='${message.guild.id}'`).then(row1 => {
-      sql.get(`SELECT * FROM murderMysteryPlayers WHERE userId ='${message.author.id}' AND guildId ='${message.guild.id}'`).then(row => {
-        if (!row) {
-          new Error("Murder Mystery - Player not found.")
-        } else {
-          //if (row.actioned === 1) return message.reply("You have already murdered someone!");
-
-          if (row.actioned === 1) return message.reply(translate[row1.lang].alreadymurder);
-        }
-      })
-    })
-  }
-
   function executeactioned() {
     sql.get(`SELECT * FROM murderMystery WHERE guildId ='${message.guild.id}'`).then(row1 => {
       sql.get(`SELECT * FROM murderMysteryPlayers WHERE userId ='${message.author.id}' AND guildId ='${message.guild.id}'`).then(row => {
         if (!row) {
-          new Error("Murder Mystery - Player not found.")
+          console.log("Murder Mystery - Player not found. [executeactioned()]")
         } else {
           //if (row.actioned === 1) return message.reply("You have already executed someone!");
           if (row.actioned === 1) return message.reply(translate[row1.lang].alreadyexecute);
@@ -5653,23 +5310,12 @@ bot.on('message', message => {
     })
   }
 
-  function sheriffactioned() {
-    sql.get(`SELECT * FROM murderMystery WHERE guildId ='${message.guild.id}'`).then(row1 => {
-      sql.get(`SELECT * FROM murderMysteryPlayers WHERE userId ='${message.author.id}' AND guildId ='${message.guild.id}'`).then(row => {
-        if (!row) {
-          new Error("Murder Mystery - Player not found.")
-        } else {
-          //if (row.actioned === 1) return message.reply("You have already searched/shot someone!");
-          if (row.actioned === 1) return message.reply(translate[row1.lang].alreadysearch);
-        }
-      })
-    })
-  }
+
 
   function isactioned() {
     sql.get(`SELECT * FROM murderMysteryPlayers WHERE userId ='${message.author.id}' AND guildId ='${message.guild.id}'`).then(row => {
       if (!row) {
-        new Error("Murder Mystery - Player not found.")
+        console.log("Murder Mystery - Player not found. [isactioned()]")
       } else {
         if (row.actioned === 1) {
           return true
@@ -5683,7 +5329,7 @@ bot.on('message', message => {
   function checkassigned() {
     sql.get(`SELECT * FROM murderMysteryPlayers WHERE userId ='${message.author.id}' AND guildId ='${message.guild.id}'`).then(row => {
       if (!row) {
-        new Error("Murder Mystery - Player not found.")
+        console.log("Murder Mystery - Player not found.")
       } else {
         if (row.beenassigned === 1) {
           return true
@@ -5697,7 +5343,7 @@ bot.on('message', message => {
   function checkassignedid(userid, fn) {
     sql.get(`SELECT * FROM murderMysteryPlayers WHERE userId ='${userid}' AND guildId ='${message.guild.id}'`).then(row => {
       if (!row) {
-        new Error("Murder Mystery - Player not found.")
+        console.log("Murder Mystery - Player not found.")
       } else {
         if (row.beenassigned === 1) {
           return fn(true)
@@ -5708,10 +5354,10 @@ bot.on('message', message => {
     })
   }
 
-  function stabbedbymurder(user, checkc, ldwdewdw) {
+  function stabbedbymurder(user, checkc, ldwdewdw, lastwill, roleid) {
     sql.get(`SELECT * FROM murderMystery WHERE guildId ='${message.guild.id}'`).then(row => {
       if (!row) {
-        new Error("Murder Mystery - Player not found.")
+        console.log("Murder Mystery - Player not found.")
         return
       } else {
         if (debugmode === 1) {
@@ -5722,7 +5368,31 @@ bot.on('message', message => {
             console.log("[DEBUG] BROADCAST STAB [BOT]")
           }
           //bot.channels.get(row.murdergamechannelid).send(":dagger: " + ldwdewdw + " has been stabbed by the **Murderer**! :dagger:")
-          bot.channels.get(row.murdergamechannelid).send(":dagger: " + ldwdewdw + translate[row.lang].stabbed)
+          if (roleid === 1) {
+            bot.channels.get(row.murdergamechannelid).send(":dagger: " + ldwdewdw + translate[row.lang].stabbed + "\n" + translate[row.lang].jobchannelmsgs.jailor.wasmurderer)
+          }
+          if (roleid === 2) {
+            bot.channels.get(row.murdergamechannelid).send(":dagger: " + ldwdewdw + translate[row.lang].stabbed + "\n" + translate[row.lang].jobchannelmsgs.jailor.wasdetective)
+          }
+          if (roleid === 3) {
+            bot.channels.get(row.murdergamechannelid).send(":dagger: " + ldwdewdw + translate[row.lang].stabbed + "\n" + translate[row.lang].jobchannelmsgs.jailor.washealer)
+          }
+          if (roleid === 4) {
+            bot.channels.get(row.murdergamechannelid).send(":dagger: " + ldwdewdw + translate[row.lang].stabbed + "\n" + translate[row.lang].jobchannelmsgs.jailor.wasradio)
+          }
+          if (roleid === 5) {
+            bot.channels.get(row.murdergamechannelid).send(":dagger: " + ldwdewdw + translate[row.lang].stabbed + "\n" + translate[row.lang].jobchannelmsgs.jailor.wasassassin)
+          }
+          if (roleid === 6) {
+            bot.channels.get(row.murdergamechannelid).send(":dagger: " + ldwdewdw + translate[row.lang].stabbed + "\n" + " and they were a **Jailor**")
+          }
+          if (roleid === 0) {
+            bot.channels.get(row.murdergamechannelid).send(":dagger: " + ldwdewdw + translate[row.lang].stabbed + "\n" + translate[row.lang].jobchannelmsgs.jailor.wasinnocent)
+          }
+          if (lastwill !== "") {
+            bot.channels.get(row.murdergamechannelid).send(ldwdewdw + " **Had a last will!**\nIt reads\n```\n" + lastwill + "\n```")
+          }
+          return;
         }
 
         let users = bot.users.get(user)
@@ -5730,101 +5400,38 @@ bot.on('message', message => {
           console.log("[DEBUG] BROADCAST STAB")
         }
         //bot.channels.get(row.murdergamechannelid).send(":dagger: " + users.tag + " has been stabbed by the **Murderer**! :dagger:")
-        bot.channels.get(row.murdergamechannelid).send(":dagger: " + users.tag + translate[row.lang].stabbed)
+
+        if (roleid === 1) {
+          bot.channels.get(row.murdergamechannelid).send(":dagger: " + users.tag + translate[row.lang].stabbed + "\n" + translate[row.lang].jobchannelmsgs.jailor.wasmurderer)
+        }
+        if (roleid === 2) {
+          bot.channels.get(row.murdergamechannelid).send(":dagger: " + users.tag + translate[row.lang].stabbed + "\n" + translate[row.lang].jobchannelmsgs.jailor.wasdetective)
+        }
+        if (roleid === 3) {
+          bot.channels.get(row.murdergamechannelid).send(":dagger: " + users.tag + translate[row.lang].stabbed + "\n" + translate[row.lang].jobchannelmsgs.jailor.washealer)
+        }
+        if (roleid === 4) {
+          bot.channels.get(row.murdergamechannelid).send(":dagger: " + users.tag + translate[row.lang].stabbed + "\n" + translate[row.lang].jobchannelmsgs.jailor.wasradio)
+        }
+        if (roleid === 5) {
+          bot.channels.get(row.murdergamechannelid).send(":dagger: " + users.tag + translate[row.lang].stabbed + "\n" + translate[row.lang].jobchannelmsgs.jailor.wasassassin)
+        }
+        if (roleid === 6) {
+          bot.channels.get(row.murdergamechannelid).send(":dagger: " + users.tag + translate[row.lang].stabbed + "\n" + " and they were a **Jailor**")
+        }
+        if (lastwill !== "") {
+          bot.channels.get(row.murdergamechannelid).send(users.tag + " **Had a last will!**\nIt reads\n```\n" + lastwill + "\n```")
+        }
       }
     })
   }
 
   function kill(user, userid, thing, playeridcheck) {
     sql.get(`SELECT * FROM murderMystery WHERE guildId ='${message.guild.id}'`).then(row5 => {
-      if (playeridcheck === 1) {
-        sql.get(`SELECT * FROM murderMysteryPlayers WHERE userId ='${thing}' AND guildId ='${message.guild.id}'`).then(row => {
-          if (!row) {
-            message.reply(translate[row5.lang].userisnotingame)
-          } else {
-            if (debugmode === 1) {
-              console.log("[DEBUG] Kill " + thing + " IN (" + message.guild.id + ")")
-            }
-            row1
-            if (row.isDead === 1) return message.reply(translate[row5.lang].thatpersonisalreadydead)
-            sql.get(`SELECT * FROM murderMysteryPlayers WHERE userId ='${userid}' AND guildId ='${message.guild.id}'`).then(row1 => {
-
-              if (row1.actioned === 1) {
-                return;
-              }
-
-            })
-            if (row.isjailed === 1) {
-              if (debugmode === 1) {
-                console.log("[DEBUG] CANNOT ATTACK (in jail)")
-              }
-              //users.send(":angry::dagger: :arrow_up_down: :fearful::cop: A murderer tried to attack you! But you were in jail!")
-              users.send(":angry::dagger: :arrow_up_down: :fearful::cop: " + translate[row5.lang].stabbed3)
-
-              //message.reply("You attack but the person is in cages, they might be in jail...")
-              message.reply(translate[row5.lang].dledee)
-              actioned(userid)
-              return;
-            }
-            //if (row.isMurderer === 1) return message.reply("You can't kill yourself...Are you trying to commit suicide?")
-            //if (row.isAssassin === 1) return message.reply("That person is your partner!")
-            if (row.isMurderer === 1) return message.reply(translate[row5.lang].reeeess)
-            if (row.isAssassin === 1) return message.reply(translate[row5.lang].welluhh)
-            sql.get(`SELECT * FROM murderMysteryItems WHERE userId ='${thing}' AND guildId ='${message.guild.id}' AND itemId = 0 AND isDark = 0`).then(row3 => {
-              if (!row3) {
-                users.send(translate[row5.lang].stabbed2)
-                checkifhasitem(row1.userId, 5, 1, function (hasItem) {
-                  if (hasItem === true) {
-                    sql.run(`UPDATE murderMysteryPlayers SET gold = ${row1.gold + 1} WHERE userId = ${userid}`)
-                  }
-                  if (debugmode === 1) {
-                    console.log("[DEBUG] DM USER")
-                  }
-                  sql.run(`UPDATE murderMysteryPlayers SET isDead = 1 WHERE guildId ='${message.guild.id}' AND userId ='${thing}'`)
-                  sql.run(`UPDATE murderMystery SET players = ${row5.players - 1} WHERE guildId = '${message.guild.id}'`);
-                  nopermstoanychannel(row.playerid)
-
-                  stabbedbymurder(thing)
-
-                  actioned(userid)
-                  //message.reply("You have stabbed `" + users.tag + "`! But remember....He might be revived by the healer...")
-                  message.reply(translate[row5.lang].jobchannelmsgs.murderer.stabstab + users.tag + translate[row5.lang].jobchannelmsgs.murderer.stabbady)
-
-                  targetassassin(thing, 1)
-                })
-
-              } else {
-                let things = translate[row.lang].shopitems.find(function (a) {
-                  return a.id === 0
-                })
-                if (things === undefined) return message.channel.send("**ERROR**\nItem ID not found!")
-                message.reply(things.sent)
-                message.author.send(things.sent).catch(e => {
-                  message.reply(translate[row5.lang].dmsdisabled)
-                })
-                users.send(things.sent2).catch(e => {
-                  message.channel.send(users + ", " + transalte[row5.lang].dmsdisabled)
-                })
-                sql.run(`UPDATE murderMystery SET players = ${row.players - 1} WHERE guildId = '${message.guild.id}'`);
-                setTimeout(victory, 1000)
-              }
-            })
-            //users.send(":skull: You have been stabbed by the **Murderer** :skull:")
-
-
-            //if (targetassassin[0] === user.id) {
-            //bot.users.get(arr[4]).send("The **Murderer** has killed your target! You have gained $3!\nYou have no new Targets.")
-            //}
-
-
-          }
-        })
-        return;
-      }
       let users = bot.users.get(user)
       sql.get(`SELECT * FROM murderMysteryPlayers WHERE userId ='${users.id}' AND guildId ='${message.guild.id}'`).then(row => {
         if (!row) {
-          message.reply(translate[row.lang].userisnotingame)
+          message.reply(translate[row5.lang].userisnotingame)
         } else {
           if (debugmode === 1) {
             console.log("[DEBUG] Kill " + user + " IN (" + message.guild.id + ")")
@@ -5849,8 +5456,8 @@ bot.on('message', message => {
             actioned(userid)
             return;
           }
-          if (row.isMurderer === 1) return message.reply(translate[row5.lang].reeeess)
-          if (row.isAssassin === 1) return message.reply(translate[row5.lang].welluhh)
+          if (row.roleId === 1 && row5.modeId !== 2) return message.reply(translate[row5.lang].reeeess)
+          if (row.roleId === 5) return message.reply(translate[row5.lang].welluhh)
           /*
           sql.get(`SELECT * FROM murderMysteryItems WHERE userId ='${thing}' AND guildId ='${message.guild.id}' AND itemId = 0 AND isDark = 0`).then(row3 => {
             if (!row3) {
@@ -5884,33 +5491,38 @@ bot.on('message', message => {
           })
 */
           checkifhasitem(thing, 0, 0, function (hasItem) {
-            if (hasItem === false) {
+            if (!hasItem) /* 321827 */ {
               users.send(translate[row5.lang].stabbed2)
               checkifhasitem(userid, 5, 1, function (hasItezm) {
-                if (hasItezm === true) {
+                if (hasItezm) /*123717*/ {
                   sql.run(`UPDATE murderMysteryPlayers SET gold = gold + 1 WHERE userId = ${userid}`)
                 }
-                if (debugmode === 1) {
-                  console.log("[DEBUG] DM USER")
-                }
+                checkifhasitem(userid, 7, 1, function (hasOtherItem) {
+                  if (hasOtherItem) /*123717*/ {
+                    sql.run(`UPDATE murderMysteryPlayers SET gold = gold + ${(row.gold - 1)} WHERE userId = ${userid}`)
+                  }
+                  if (debugmode === 1) {
+                    console.log("[DEBUG] DM USER")
+                  }
 
-                //if (targetassassin[0] === user.id) {
-                //bot.users.get(arr[4]).send("The **Murderer** has killed your target! You have gained $3!\nYou have no new Targets.")
-                //}
-                sql.run(`UPDATE murderMysteryPlayers SET isDead = 1 WHERE guildId ='${message.guild.id}' AND userId ='${thing}'`)
+                  //if (targetassassin[0] === user.id) {
+                  //bot.users.get(arr[4]).send("The **Murderer** has killed your target! You have gained $3!\nYou have no new Targets.")
+                  //}
+                  sql.run(`UPDATE murderMysteryPlayers SET isDead = 1 WHERE guildId ='${message.guild.id}' AND userId ='${thing}'`)
 
-                nopermstoanychannel(row.playerid)
-                stabbedbymurder(user)
-                actioned(userid)
-                message.reply(translate[row5.lang].jobchannelmsgs.murderer.stabstab + users.tag + translate[row5.lang].jobchannelmsgs.murderer.stabbady)
+                  nopermstoanychannel(row.playerid)
+                  stabbedbymurder(user, 0, 0, row.lastwill, row.roleId)
+                  actioned(userid)
+                  message.reply(translate[row5.lang].jobchannelmsgs.murderer.stabstab + users.tag + translate[row5.lang].jobchannelmsgs.murderer.stabbady)
 
-                targetassassin(users.id, 1)
+                  targetassassin(users.id, 1)
+                })
               })
             } else {
               if (debugmode === 1) {
                 console.log("[DEBUG] MURDER DIED FROM ITEM")
               }
-              let things = translate[row.lang].shopitems.find(function (a) {
+              let things = translate[row5.lang].shopitems.find(function (a) {
                 return a.id === 0
               })
               if (things === undefined) return message.channel.send("**ERROR**\nItem ID not found!")
@@ -5919,9 +5531,8 @@ bot.on('message', message => {
                 message.reply(translate[row5.lang].dmsdisabled)
               })
               users.send(things.sent2)
-              sql.run(`UPDATE murderMystery SET players = ${row.players - 1} WHERE guildId = '${message.guild.id}'`);
+              sql.run(`UPDATE murderMystery SET players = players - 1 WHERE guildId = '${message.guild.id}'`);
               setTimeout(victory, 1000)
-
             }
           })
         }
@@ -5930,7 +5541,7 @@ bot.on('message', message => {
   }
 
   function checkifhasitem(userid, itemid, isdark, fn) {
-    sql.get(`SELECT * FROM murderMysteryItems WHERE userId ='${userid}' AND guildId ='${message.guild.id}' AND itemId = ${itemid} AND isDark = ${isdark}`).then(row3 => {
+    sql.get(`SELECT * FROM murderMysteryItems WHERE userId = ? AND guildId ='${message.guild.id}' AND itemId = ? AND isDark = ?`, [userid, itemid, isdark]).then(row3 => {
       if (!row3) {
         return fn(false)
       } else {
@@ -5955,84 +5566,42 @@ bot.on('message', message => {
           bot.channels.get(row.shopchannelid).overwritePermissions(user, {
             SEND_MESSAGES: false
           })
-          bot.channels.get(row.healchannelid).overwritePermissions(user, {
-            SEND_MESSAGES: false
-          })
-          bot.channels.get(row.sheriffchannelid).overwritePermissions(user, {
-            SEND_MESSAGES: false
-          })
-          bot.channels.get(row.murderchannelid).overwritePermissions(user, {
-            SEND_MESSAGES: false
-          })
-          bot.channels.get(row.radiochannelid).overwritePermissions(user, {
-            SEND_MESSAGES: false
-          })
-          bot.channels.get(row.jailorchannelid).overwritePermissions(user, {
-            SEND_MESSAGES: false
-          })
-          bot.channels.get(row.jailchannelid).overwritePermissions(user, {
-            SEND_MESSAGES: false
-          })
+          if (row1.roleId === 1) {
+            bot.channels.get(row.murderchannelid).overwritePermissions(user, {
+              SEND_MESSAGES: false
+            })
+          }
+          if (row1.roleId === 2) {
+            bot.channels.get(row.sheriffchannelid).overwritePermissions(user, {
+              SEND_MESSAGES: false
+            })
+          }
+          if (row1.roleId === 3) {
+            bot.channels.get(row.healchannelid).overwritePermissions(user, {
+              SEND_MESSAGES: false
+            })
+          }
+          if (row1.roleId === 4) {
+            bot.channels.get(row.radiochannelid).overwritePermissions(user, {
+              SEND_MESSAGES: false
+            })
+          }
+          if (row1.roleId === 6) {
+            bot.channels.get(row.jailorchannelid).overwritePermissions(user, {
+              SEND_MESSAGES: false
+            })
+            bot.channels.get(row.jailchannelid).overwritePermissions(user, {
+              SEND_MESSAGES: false
+            })
+          }
+          if (row1.roleId === 7) {
+            bot.channels.get(row.zombiechannelid).overwritePermissions(user, {
+              SEND_MESSAGES: false
+            })
+          }
         })
       }
 
-    })
-  }
-  if (command === "jailid") {
-    if (message.channel.type === 'dm') {
-      message.author.send("I cannot respond with this command in DMS.")
-      return;
-    }
-    sql.get(`SELECT * FROM murderMystery WHERE guildId ='${message.guild.id}'`).then(row => {
-      if (!row) {
-        message.reply("You have not put your data in the database! Please type " + config.prefix + "game setupdata\nto insert your data into the database!")
-        return
-      } else {
-
-        //if(message.guild.id !== preventjoinData.guildID) return message.reply("That is not your game!")
-        //if(preventjoinData.start === 0) return message.reply("The game hasn't started yet!")
-        if (row.gameStarted === 0) return message.reply(translate[row.lang].gamehasntstart)
-
-        if (message.channel.id !== row.jailorchannelid) return;
-
-
-        deadcheck(function (ded) {
-          if (ded === true) return;
-          if (row.modeId !== 9 && row.modeId !== 10) {
-            if (row.isDay === 1) return message.reply(translate[row.lang].eeer)
-          }
-          if (row.modeId === 9) {
-            if (row.isNight === 1) return message.reply(translate[row.lang].lola)
-          }
-          /*
-                  hasjailedcheck()
-                  var somettt = isactioned()
-                  if (somettt === true) return;
-                  sql.get(`SELECT * FROM murderMysteryPlayers WHERE userId ='${message.author.id}' AND guildId ='${message.guild.id}'`).then(row1 => {
-  
-                    if (row1.actioned === 1) {
-                      return;
-                    }
-  
-                  })
-  
-                  */
-          sql.get(`SELECT * FROM murderMysteryPlayers WHERE userId ='${message.author.id}' AND guildId ='${message.guild.id}'`).then(row1 => {
-            if (!row1) {
-              new Error("Murder Mystery - Player not found.")
-            } else {
-              //if (row.actioned === 1) return message.reply("You have already searched/shot someone!");
-              if (row1.actioned === 1 || row1.actioned === 2) return message.reply(translate[row.lang].alreadyjailed);
-              let user = args[0]
-              if (!user) return message.reply("Please enter a user id!")
-              //if (user.id === "6") return message.reply("You can't jail yourself.")
-              if (user === message.author.id) return message.reply("You can't jail yourself.")
-              jail(0, message.author.id, row.jailchannelid, user)
-              setTimeout(unaction, 20000)
-            }
-          })
-        })
-      }
     })
   }
   if (command === "jail") {
@@ -6052,7 +5621,7 @@ bot.on('message', message => {
             if (row.gameStarted === 0) return message.reply(translate[row.lang].gamehasntstart)
             if (message.channel.id !== row.jailorchannelid || message.channel.id !== row.jailchannelid) return;
             deadcheck(function (ded) {
-              if (ded === true) return;
+              if (ded) /*123717*/ return;
               if (row.modeId !== 9 && row.modeId !== 10) {
                 if (row.isDay === 1) return message.reply(translate[row.lang].eeer)
               }
@@ -6061,24 +5630,47 @@ bot.on('message', message => {
               }
               sql.get(`SELECT * FROM murderMysteryPlayers WHERE userId ='${message.author.id}' AND guildId ='${message.guild.id}'`).then(row1 => {
                 if (!row1) {
-                  new Error("Murder Mystery - Player not found.")
+                  console.log("Murder Mystery - Player not found.")
                 } else {
                   //if (row.actioned === 1) return message.reply("You have already searched/shot someone!");
                   if (row1.actioned === 1 || row1.actioned === 2) return message.reply(translate[row.lang].alreadyjailed);
 
-                  let user = message.mentions.users.first();
-                  if (!user) return message.reply(translate[row.lang].userdoesntexist)
+                  let userMention = message.mentions.users.first();
+                  let userPID = args[0]
+                  let query = "userId = ?"
+                  let query2 = ""
+                  if (!userMention) {
+                    if (isNaN(parseInt(userPID))) {
+                      return message.reply(translate[row.lang].userdoesntexist)
+                    }
+                    if (!userPID) {
+                      return message.reply(translate[row.lang].userdoesntexist)
+                    }
+                  }
+                  if (userPID) {
+                    query = `userId = ?`
+                    query2 = userPID
+                  }
+                  if (userMention) {
+                    query = `userId = ?`
+                    query2 = userMention.id
+                  }
+                  sql.get(`SELECT * FROM murderMysteryPlayers WHERE ${query}`, [query2]).then(user => {
+                    if (!user) {
+                      message.reply(translate[row.lang].userdoesntexist)
+                    } else {
 
-                  //if (user.id === message.author.id) return message.reply("You can't jail yourself.")
-                  if (user.id === message.author.id) return message.reply(translate[row.lang].jailingurself)
+                      //if (user.id === message.author.id) return message.reply("You can't jail yourself.")
+                      if (user.userId === message.author.id) return message.reply(translate[row.lang].jailingurself)
 
-                  jail(user.id, message.author.id, row.jailchannelid, "")
-                  setTimeout(unaction, 20000)
-                  //let aaaaaaaa = message.guild.roles.get(row.murdermysteryRoleID)
+                      jail(user.userId, message.author.id, row.jailchannelid, "")
+                      //let aaaaaaaa = message.guild.roles.get(row.murdermysteryRoleID)
 
-                  //mmplayersDataa.isjailed = 1
-                  //mmplayersData.hasjailed = 1
-                  actioned(message.author.id)
+                      //mmplayersDataa.isjailed = 1
+                      //mmplayersData.hasjailed = 1
+                      actioned(message.author.id)
+                    }
+                  })
                 }
               })
             })
@@ -6098,158 +5690,6 @@ bot.on('message', message => {
       }
     })
   }
-  if (command === "killid") {
-    if (message.channel.type === 'dm') {
-      message.author.send("I cannot respond with this command in DMS.")
-      return;
-    }
-    sql.get(`SELECT * FROM murderMystery WHERE guildId ='${message.guild.id}'`).then(row => {
-      if (!row) {
-        message.reply("You have not put your data in the database! Please type " + config.prefix + "game setupdata\nto insert your data into the database!")
-        return
-      } else {
-        //if (row.isMurderparty === 1) {
-        if (row.modeId === 2) {
-          return message.reply("Sorry but you cant use this command in `Murder Party`!")
-        }
-        //if(message.guild.id !== preventjoinData.guildID) return message.reply("That is not your game!")
-        if (row.gameStarted === 0) return message.reply(translate[row.lang].gamehasntstart)
-        deadcheck(function (ded) {
-          if (ded === true) return;
-          if (row.modeId !== 9 && row.modeId !== 10) {
-            if (row.isDay === 1) return message.reply(translate[row.lang].eeer)
-          }
-          if (row.modeId === 9) {
-            if (row.isNight === 1) return message.reply(translate[row.lang].lola)
-          }
-          //murderactioned()
-          //var somettt = isactioned()
-          //if (somettt === true) return;
-          /*
-          sql.get(`SELECT * FROM murderMysteryPlayers WHERE userId ='${message.author.id}' AND guildId ='${message.guild.id}'`).then(row1 => {
-  
-            if (row1.actioned === 1) {
-              return;
-            }
-  
-          })
-  */
-
-          sql.get(`SELECT * FROM murderMysteryPlayers WHERE userId ='${message.author.id}' AND guildId ='${message.guild.id}'`).then(row2 => {
-            if (!row2) {
-              new Error("Murder Mystery - Player not found.")
-            } else {
-              if (row2.isjailed === 1) return;
-              //if (row.actioned === 1) return message.reply("You have already murdered someone!");
-              if (row.modeId !== 10) {
-                if (row2.actioned === 1) return message.reply(translate[row1.lang].alreadymurder);
-              }
-              let user = args[0]
-
-              //if (user === "1") return message.reply("You can't stab yourself")
-              if (user === message.author.id) return message.reply("You can't stab yourself")
-              //if (user.id === arr[4]) return message.reply("You cant kill your own partner.")
-
-              //let mmplayersDataa = mmplayers[user.id]
-
-              let aaaaaaaa = message.guild.roles.get(row.murdermysteryRoleID)
-
-              kill(0, message.author.id, user, 1)
-              setTimeout(unaction, 20000)
-
-              //message.guild.member(user).removeRole(aaaaaaaa.id)
-              //if (row.isOneVOne === 1) {//
-              if (row.modeId === 3) {
-                sql.get(`SELECT * FROM murderMysteryItems WHERE userId ='${user.id}' AND guildId ='${message.guild.id}' AND itemId = 0 AND isDark = 0`).then(row3 => {
-                  if (!row3) {
-                    let checkjfwfj = bot.channels.get(row.murdergamechannelid)
-                    let checkjoegf = bot.channels.get(row.murderchannelid)
-                    let jgoergqwww = bot.channels.get(row.sheriffchannelid)
-                    let jawjfaiwef = bot.channels.get(row.shopchannelid)
-                    if (!checkjfwfj) return nochannelfound()
-                    if (!checkjoegf) return nochannelfound()
-                    if (!jgoergqwww) return nochannelfound()
-                    if (!jawjfaiwef) return nochannelfound()
-
-                    bot.channels.get(row.murdergamechannelid).overwritePermissions(user, {
-                      SEND_MESSAGES: false
-                    })
-                    bot.channels.get(row.sheriffchannelid).overwritePermissions(user, {
-                      SEND_MESSAGES: false
-                    })
-                    bot.channels.get(row.shopchannelid).overwritePermissions(user, {
-                      SEND_MESSAGES: false
-                    })
-                    sql.run(`UPDATE murderMystery SET players = ${row.players - 1} WHERE guildId = '${message.guild.id}'`);
-                  } else {
-                    let things = translate[row.lang].shopitems.find(function (a) {
-                      return a.id === 0
-                    })
-                    if (things === undefined) return message.channel.send("**ERROR**\nItem ID not found!")
-                    message.reply(things.sent)
-                    message.author.send(things.sent).catch(e => {
-                      message.reply(translate[row.lang].dmsdisabled)
-                    })
-                    user.send(things.sent2).catch(e => {
-                      message.channel.send(user + ", " + translate[row.lang].dmsdisabled)
-                    })
-                    let checkjfwfj = bot.channels.get(row.murdergamechannelid)
-                    let fwejiofjwe = bot.channels.get(row.shopchannelid)
-                    let checkjoegf = bot.channels.get(row.murderchannelid)
-                    let jgoergqwww = bot.channels.get(row.sheriffchannelid)
-                    if (!checkjfwfj) return nochannelfound()
-                    if (!checkjoegf) return nochannelfound()
-                    if (!jgoergqwww) return nochannelfound()
-                    if (!fwejiofjwe) return nochannelfound()
-                    bot.channels.get(row.murdergamechannelid).overwritePermissions(message.author, {
-                      SEND_MESSAGES: false
-                    })
-                    bot.channels.get(row.sheriffchannelid).overwritePermissions(message.author, {
-                      SEND_MESSAGES: false
-                    })
-                    bot.channels.get(row.shopchannelid).overwritePermissions(message.author, {
-                      SEND_MESSAGES: false
-                    })
-                    sql.run(`UPDATE murderMystery SET players = ${row.players - 1} WHERE guildId = '${message.guild.id}'`);
-                    setTimeout(victory, 1000)
-                  }
-                })
-
-                return;
-              }
-
-              let checkjfwfj = bot.channels.get(row.murdergamechannelid)
-              let fwejiofjwe = bot.channels.get(row.shopchannelid)
-              let checkjoegf = bot.channels.get(row.murderchannelid)
-              let jgoergqwww = bot.channels.get(row.sheriffchannelid)
-              let jgoergqwwwa = bot.channels.get(row.radiochannelid)
-              let jgoergqwwwb = bot.channels.get(row.jailorchannelid)
-              let jgoergqwwwc = bot.channels.get(row.jailchannelid)
-              if (!checkjfwfj) return nochannelfound()
-              if (!checkjoegf) return nochannelfound()
-              if (!jgoergqwww) return nochannelfound()
-              if (!jgoergqwwwa) return nochannelfound()
-              if (!jgoergqwwwb) return nochannelfound()
-              if (!jgoergqwwwc) return nochannelfound()
-              if (!fwejiofjwe) return nochannelfound()
-              nopermstoanychannel(args[0])
-
-              //bot.channels.get(row.murderchannelid).overwritePermissions(user, {
-              //READ_MESSAGES: false
-              //})
-
-              /**
-                      fs.writeFile('./mmplayers.json', JSON.stringify(mmplayers), (err) => {
-                    if (err) console.error(err)
-                    });
-              **/
-            }
-          })
-
-        })
-      }
-    })
-  }
   if (command === "balance") {
     sql.get(`SELECT * FROM murderMystery WHERE guildId ='${message.guild.id}'`).then(row => {
       if (!row) {
@@ -6259,11 +5699,135 @@ bot.on('message', message => {
         if (row.gameStarted === 0) return message.reply(translate[row.lang].gamehasntstart)
         sql.get(`SELECT * FROM murderMysteryPlayers WHERE userId ='${message.author.id}' AND guildId ='${message.guild.id}'`).then(row2 => {
           if (!row2) {
-            new Error("Murder Mystery - Player not found.")
+            console.log("Murder Mystery - Player not found.")
           } else {
             if (row2.isDead === 1) return;
             message.channel.send("**You have**\n`" + row2.gold + "` Gold\n`" + row2.darkgold + "` Dark Gold")
           }
+        })
+      }
+    })
+  }
+  if (command === "bite") {
+    if (message.channel.type === 'dm') {
+      message.author.send("I cannot respond with this command in DMS.")
+      return;
+    }
+    sql.get(`SELECT * FROM murderMystery WHERE guildId ='${message.guild.id}'`).then(row => {
+      if (!row) {
+        message.reply("You have not put your data in the database! Please type " + config.prefix + "game setupdata\nto insert your data into the database!")
+        return
+      } else {
+        if (row.gameStarted === 0) return message.reply(translate[row.lang].gamehasntstart)
+        deadcheck(function (ded) {
+          if (row.modeId !== 9 && row.modeId !== 10) {
+            if (row.isDay === 1) return message.reply(translate[row.lang].eeer)
+          }
+          if (row.modeId === 9) {
+            if (row.isNight === 1) return message.reply(translate[row.lang].lola)
+          }
+          sql.get(`SELECT * FROM murderMysteryPlayers WHERE userId ='${message.author.id}' AND guildId ='${message.guild.id}'`).then(row2 => {
+            if (!row2) {
+              console.log("Murder Mystery - Player not found.")
+            } else {
+              if (row2.isjailed === 1) return;
+              if (row.modeId !== 10) {
+                if (row2.actioned === 1) return message.reply(translate[row.lang].jobchannelmsgs.zombie.alreadybitten);
+              }
+              if (row2.isjailed === 1) return;
+              if (ded) /*123717*/ return;
+              let userMention = message.mentions.users.first();
+              let userPID = args[0]
+              let query = "userId = ?"
+              let query2 = ""
+              if (!userMention) {
+                if (isNaN(parseInt(userPID))) {
+                  return message.reply(translate[row.lang].userdoesntexist)
+                }
+                if (!userPID) {
+                  return message.reply(translate[row.lang].userdoesntexist)
+                }
+              }
+              if (userPID) {
+                query = `userId = ?`
+                query2 = userPID
+              }
+              if (userMention) {
+                query = `userId = ?`
+                query2 = userMention.id
+              }
+              sql.get(`SELECT * FROM murderMysteryPlayers WHERE ${query}`, [query2]).then(user => {
+                if (!user) {
+                  message.reply(translate[row.lang].userdoesntexist)
+                } else {
+                  if (user.userId === message.author.id) return message.reply("You can't infect yourself, you're already a zombie!")
+                  let aaaaaaaa = message.guild.roles.get(row.murdermysteryRoleID)
+                  if (debugmode === 1) {
+                    console.log("[DEBUG] Infect [" + query2 + "] IN (" + message.guild.id + ")")
+                  }
+                  let users = bot.users.get(user.userId)
+                  if (user.isDead === 1) return message.reply(translate[row.lang].thatpersonisalreadydead)
+                  if (user.isjailed === 1) {
+                    if (debugmode === 1) {
+                      console.log("[DEBUG] CANNOT BITE (in jail)")
+                    }
+                    users.send(":angry: :arrow_up_down: :fearful::cop: " + translate[row.lang].stabbed4)
+                    message.reply(translate[row.lang].dledee)
+                    actioned(message.author.id)
+                    return;
+                  }
+                  if (user.roleId === 7) return message.reply(translate[row.lang].welluhh)
+                  let gameData = row.gameData
+                  let gameDataArray = gameData.split("|")
+                  if (gameData.length > 0) {
+                    gameDataArray.forEach(function (b) {
+                      let z = b.split(',')
+                      if (z[0] === users.id) return;
+                    })
+                  }
+                  checkifhasitem(users.id, 0, 0, function (hasItem) {
+                    if (!hasItem) /* 321827 */ {
+                      users.send(translate[row.lang].jobchannelmsgs.zombie.infecteddm)
+                      if (debugmode === 1) {
+                        console.log("[DEBUG] DM USER")
+                      }
+
+                      if (gameData.length === 0) {
+                        gameData += `${users.id},0`
+                      }
+                      if (gameData.length > 0) {
+                        gameData += `|${users.id},0`
+                      }
+
+                      let coneaial = translate[row.lang].jobchannelmsgs.zombie.bitten
+                      coneaial = coneaial.replace("%user%", users.tag)
+                      coneaial = coneaial.replace("%user%", users.tag)
+                      sql.run(`UPDATE murderMystery SET gameData = ? WHERE guildId = "${message.guild.id}"`, [gameData])
+                      message.channel.send(coneaial)
+                      actioned(message.author.id)
+                    } else {
+                      if (debugmode === 1) {
+                        console.log("[DEBUG] ZOMBIE DIED FROM ITEM")
+                      }
+                      let things = translate[row.lang].shopitems.find(function (a) {
+                        return a.id === 0
+                      })
+                      if (things === undefined) return message.channel.send("**ERROR**\nItem ID not found!")
+                      message.reply(things.sent)
+                      message.author.send(things.sent).catch(e => {
+                        message.reply(translate[row.lang].dmsdisabled)
+                      })
+                      users.send(things.sent2)
+                      sql.run(`UPDATE murderMystery SET players = players - 1 WHERE guildId = '${message.guild.id}'`);
+                      sql.run(`UPDATE murderMysteryPlayers SET isDead = 1 WHERE guildId ='${message.guild.id}' AND userId ='${message.author.id}'`);
+                      nopermstoanychannel(user.playerid)
+                    }
+                  })
+
+                }
+              })
+            }
+          })
         })
       }
     })
@@ -6291,7 +5855,7 @@ bot.on('message', message => {
               }
               //murderactioned()
               //var somettt = isactioned()
-              //if (somettt === true) return;
+              //if (somettt) /*123717*/ return;
               /*
               sql.get(`SELECT * FROM murderMysteryPlayers WHERE userId ='${message.author.id}' AND guildId ='${message.guild.id}'`).then(row1 => {
       
@@ -6303,101 +5867,105 @@ bot.on('message', message => {
       */
               sql.get(`SELECT * FROM murderMysteryPlayers WHERE userId ='${message.author.id}' AND guildId ='${message.guild.id}'`).then(row2 => {
                 if (!row2) {
-                  new Error("Murder Mystery - Player not found.")
+                  console.log("Murder Mystery - Player not found.")
                 } else {
                   if (row2.isjailed === 1) return;
                   //if (row.actioned === 1) return message.reply("You have already murdered someone!");
                   if (row.modeId !== 10) {
-                    if (row2.actioned === 1) return message.reply(translate[row1.lang].alreadymurder);
+                    if (row2.actioned === 1) return message.reply(translate[row.lang].alreadymurder);
                   }
                   if (row2.isjailed === 1) return;
-                  if (ded === true) return;
-                  let user = message.mentions.users.first();
-                  if (!user) return message.reply(translate[row.lang].userdoesntexist)
-
-                  if (user.id === message.author.id) return message.reply("You can't stab yourself")
-
-                  //if (user.id === arr[4]) return message.reply("You cant kill your own partner.")
-
-                  //let mmplayersDataa = mmplayers[user.id]
-
-                  let aaaaaaaa = message.guild.roles.get(row.murdermysteryRoleID)
-
-                  kill(user.id, message.author.id, user.id, 0)
-                  setTimeout(unaction, 20000)
-
-                  //message.guild.member(user).removeRole(aaaaaaaa.id)
-                  //if (row.isOneVOne === 1) {
-                  if (row.modeId === 3 || row.modeId === 7) {
-                    let checkjfwfj = bot.channels.get(row.murdergamechannelid)
-                    let checkjoegf = bot.channels.get(row.murderchannelid)
-                    let jgoergqwww = bot.channels.get(row.sheriffchannelid)
-                    let joiegjear = bot.channels.get(row.shopchannelid)
-                    if (!checkjfwfj) return nochannelfound()
-                    if (!checkjoegf) return nochannelfound()
-                    if (!jgoergqwww) return nochannelfound()
-                    if (!joiegjear) return nochannelfound()
-
-                    bot.channels.get(row.murdergamechannelid).overwritePermissions(user, {
-                      SEND_MESSAGES: false
-                    })
-                    bot.channels.get(row.sheriffchannelid).overwritePermissions(user, {
-                      SEND_MESSAGES: false
-                    })
-                    bot.channels.get(row.shopchannelid).overwritePermissions(user, {
-                      SEND_MESSAGES: false
-                    })
-                    sql.run(`UPDATE murderMystery SET players = ${row.players - 1} WHERE guildId = '${message.guild.id}'`);
-                    nonvict()
-                    return;
+                  if (ded) /*123717*/ return;
+                  let userMention = message.mentions.users.first();
+                  let userPID = args[0]
+                  let query = "userId = ?"
+                  let query2 = ""
+                  if (!userMention) {
+                    if (isNaN(parseInt(userPID))) {
+                      return message.reply(translate[row.lang].userdoesntexist)
+                    }
+                    if (!userPID) {
+                      return message.reply(translate[row.lang].userdoesntexist)
+                    }
                   }
+                  if (userPID) {
+                    query = `userId = ?`
+                    query2 = userPID
+                  }
+                  if (userMention) {
+                    query = `userId = ?`
+                    query2 = userMention.id
+                  }
+                  sql.get(`SELECT * FROM murderMysteryPlayers WHERE ${query}`, [query2]).then(user => {
+                    if (!user) {
+                      message.reply(translate[row.lang].userdoesntexist)
+                    } else {
+                      if (user.userId === message.author.id) return message.reply("You can't stab yourself")
 
-                  let checkjfwfj = bot.channels.get(row.murdergamechannelid)
-                  let ajwgiwajgr = bot.channels.get(row.shopchannelid)
-                  let checkjoegf = bot.channels.get(row.murderchannelid)
-                  let jgoergqwww = bot.channels.get(row.sheriffchannelid)
-                  let jgoergqwwwa = bot.channels.get(row.radiochannelid)
-                  let jgoergqwwwb = bot.channels.get(row.jailorchannelid)
-                  let jgoergqwwwc = bot.channels.get(row.jailchannelid)
-                  if (!checkjfwfj) return nochannelfound()
-                  if (!checkjoegf) return nochannelfound()
-                  if (!jgoergqwww) return nochannelfound()
-                  if (!jgoergqwwwa) return nochannelfound()
-                  if (!jgoergqwwwb) return nochannelfound()
-                  if (!jgoergqwwwc) return nochannelfound()
-                  if (!ajwgiwajgr) return nochannelfound()
-                  /*
-                  bot.channels.get(row.murdergamechannelid).overwritePermissions(user, {
-                    SEND_MESSAGES: false
-                  })
-      
-                  bot.channels.get(row.healchannelid).overwritePermissions(user, {
-                    READ_MESSAGES: false
-                  })
-                  bot.channels.get(row.sheriffchannelid).overwritePermissions(user, {
-                    READ_MESSAGES: false
-                  })
-      
-                  bot.channels.get(row.radiochannelid).overwritePermissions(user, {
-                    READ_MESSAGES: false
-                  })
-                  bot.channels.get(row.jailorchannelid).overwritePermissions(user, {
-                    READ_MESSAGES: false
-                  })
-                  bot.channels.get(row.jailchannelid).overwritePermissions(user, {
-                    READ_MESSAGES: false
-                  })
-                  */
-                  sql.run(`UPDATE murderMystery SET players = players - 1 WHERE guildId = '${message.guild.id}'`);
-                  //bot.channels.get(row.murderchannelid).overwritePermissions(user, {
-                  //READ_MESSAGES: false
-                  //})
+                      //if (user.id === arr[4]) return message.reply("You cant kill your own partner.")
 
-                  /**
-                          fs.writeFile('./mmplayers.json', JSON.stringify(mmplayers), (err) => {
-                        if (err) console.error(err)
-                        });
-                  **/
+                      //let mmplayersDataa = mmplayers[user.id]
+
+                      let aaaaaaaa = message.guild.roles.get(row.murdermysteryRoleID)
+
+                      kill(user.userId, message.author.id, user.userId, 0)
+                      //message.guild.member(user).removeRole(aaaaaaaa.id)
+                      //if (row.isOneVOne === 1) {
+                      if (row.modeId === 3 || row.modeId === 7) {
+                        let checkjfwfj = bot.channels.get(row.murdergamechannelid)
+                        let checkjoegf = bot.channels.get(row.murderchannelid)
+                        let jgoergqwww = bot.channels.get(row.sheriffchannelid)
+                        let joiegjear = bot.channels.get(row.shopchannelid)
+                        if (!checkjfwfj) return nochannelfound()
+                        if (!checkjoegf) return nochannelfound()
+                        if (!jgoergqwww) return nochannelfound()
+                        if (!joiegjear) return nochannelfound()
+
+                        bot.channels.get(row.murdergamechannelid).overwritePermissions(user.userId, {
+                          SEND_MESSAGES: false
+                        })
+                        bot.channels.get(row.sheriffchannelid).overwritePermissions(user.userId, {
+                          SEND_MESSAGES: false
+                        })
+                        bot.channels.get(row.shopchannelid).overwritePermissions(user.userId, {
+                          SEND_MESSAGES: false
+                        })
+                        sql.run(`UPDATE murderMystery SET players = players - 1 WHERE guildId = '${message.guild.id}'`);
+                        nonvict()
+                        return;
+                      }
+                      let checkjfwfj = bot.channels.get(row.murdergamechannelid)
+                      let checkjoegf = bot.channels.get(row.murderchannelid)
+                      if (row.modeId !== 2) {
+                        let ajwgiwajgr = bot.channels.get(row.shopchannelid)
+                        let jgoergqwww = bot.channels.get(row.sheriffchannelid)
+                        if (!ajwgiwajgr) return nochannelfound()
+                        if (!jgoergqwww) return nochannelfound()
+                        if (row.modeId !== 3 && row.modeId !== 7) {
+                          let jgoergqwwwa = bot.channels.get(row.radiochannelid)
+                          if (!jgoergqwwwa) return nochannelfound()
+                          if (row.modeId !== 8) {
+                            let jgoergqwwwb = bot.channels.get(row.jailorchannelid)
+                            let jgoergqwwwc = bot.channels.get(row.jailchannelid)
+                            if (!jgoergqwwwb) return nochannelfound()
+                            if (!jgoergqwwwc) return nochannelfound()
+                          }
+                        }
+                      }
+                      if (!checkjfwfj) return nochannelfound()
+                      if (!checkjoegf) return nochannelfound()
+                      sql.run(`UPDATE murderMystery SET players = players - 1 WHERE guildId = '${message.guild.id}'`);
+                      //bot.channels.get(row.murderchannelid).overwritePermissions(user, {
+                      //READ_MESSAGES: false
+                      //})
+
+                      /**
+                              fs.writeFile('./mmplayers.json', JSON.stringify(mmplayers), (err) => {
+                            if (err) console.error(err)
+                            });
+                      **/
+                    }
+                  })
                 }
               })
             })
@@ -6419,75 +5987,33 @@ bot.on('message', message => {
   }
 
   function search(user, userid, playerid) {
-    if (playerid !== "") {
-      sql.get(`SELECT * FROM murderMysteryPlayers WHERE userId ='${playerid}' AND guildId ='${message.guild.id}'`).then(row => {
-        if (!row) {
-          message.reply(translate[row.lang].userisnotingame)
-        } else {
-          sql.get(`SELECT * FROM murderMysteryPlayers WHERE isMurderer = 1 AND guildId = '${message.guild.id}'`).then(lul => {
-            if (!lul) {
-              return message.channel.send("**ERROR** Murderer not found!")
-            } else {
-              let users = bot.users.get(playerid)
-              if (row.isDead === 1) return message.reply("That person is already dead!")
-              sql.get(`SELECT * FROM murderMysteryItems WHERE userId ='${lul.userId}' AND guildId ='${message.guild.id}' AND itemId = 2 AND isDark = 1`).then(row10 => {
-                if (row10) {
-                  message.reply("<@" + row.userId + "> is the **Murderer**!")
-                  actioned(userid)
-                  return;
-                } else {
-                  if (row.isMurderer === 1) {
-                    message.reply("<@" + row.userId + "> is the **Murderer**!")
-                    actioned(userid)
-                    return
-                  }
-                  if (row.isAssassin === 1) {
-                    message.reply("<@" + row.userId + "> works with the **Murderer** but doesn't know who the **Murderer** is, they must be an **Assassin**!")
-                    actioned(userid)
-                    return
-                  }
-                  if (row.isMurderer === 0) {
-                    message.reply("<@" + row.userId + "> is not the **Murderer** but they have a **Role**!")
-                    actioned(userid)
-                    return
-                  }
-                  message.reply("<@" + row.userId + "> is not the **Murderer**.")
-                  actioned(userid)
-                }
-              })
-            }
-          })
-        }
-      })
-      return;
-    }
     sql.get(`SELECT * FROM murderMysteryPlayers WHERE userId ='${user}' AND guildId ='${message.guild.id}'`).then(row => {
       if (!row) {
-        message.reply(translate[row.lang].userisnotingame)
+        //message.reply(translate[row.lang].userisnotingame)
       } else {
-        sql.get(`SELECT * FROM murderMysteryPlayers WHERE isMurderer = 1 AND guildId = '${message.guild.id}'`).then(lul => {
+        sql.get(`SELECT * FROM murderMysteryPlayers WHERE roleId = 1 AND guildId = '${message.guild.id}'`).then(lul => {
           if (!lul) {
             return message.channel.send("**ERROR** Murderer not found!")
           } else {
             let users = bot.users.get(user)
             if (row.isDead === 1) return message.reply("That person is already dead!")
-            sql.get(`SELECT * FROM murderMysteryItems WHERE userId ='${lul.userId}' AND guildId ='${message.guild.id}' AND itemId = 2 AND isDark = 1`).then(row10 => {
+            sql.get(`SELECT * FROM murderMysteryItems WHERE userId ='${lul.userId}' AND guildId ='${message.guild.id}' AND itemId = 2 AND isDark = 1 AND extraData = "%${row.userId}%"`).then(row10 => {
               if (row10) {
                 message.reply("<@" + row.userId + "> is the **Murderer**!")
                 actioned(userid)
                 return;
               } else {
-                if (row.isMurderer === 1) {
+                if (row.roleId === 1) {
                   message.reply("<@" + row.userId + "> is the **Murderer**!")
                   actioned(userid)
                   return
                 }
-                if (row.isAssassin === 1) {
+                if (row.roleId === 5) {
                   message.reply("<@" + row.userId + "> works with the **Murderer** but doesn't know who the **Murderer** is, they must be an **Assassin**!")
                   actioned(userid)
                   return
                 }
-                if (row.isMurderer === 0) {
+                if (row.roleId > 0) {
                   message.reply("<@" + row.userId + "> is not the **Murderer** but they have a **Role**!")
                   actioned(userid)
                   return
@@ -6497,84 +6023,6 @@ bot.on('message', message => {
               }
             })
           }
-        })
-      }
-    })
-  }
-
-
-  if (command === "searchid") {
-    if (message.channel.type === 'dm') {
-      message.author.send("I cannot respond with this command in DMS.")
-      return;
-    }
-
-    sql.get(`SELECT * FROM murderMystery WHERE guildId ='${message.guild.id}'`).then(row => {
-      if (!row) {
-        message.reply("You have not put your data in the database! Please type " + config.prefix + "game setupdata\nto insert your data into the database!")
-        return
-      } else {
-
-
-
-        //if(message.guild.id !== preventjoinData.guildID) return message.reply("That is not your game!")
-        //if(preventjoinData.start === 0) return message.reply("The game hasn't started yet!")
-        if (row.gameStarted === 0) return message.reply(translate[row.lang].gamehasntstart)
-
-
-        if (message.channel.id !== row.sheriffchannelid) return;
-        deadcheck(function (ded) {
-          if (ded === true) return;
-          if (row.modeId !== 9 && row.modeId !== 10) {
-            if (row.isDay === 1) return message.reply(translate[row.lang].eeer)
-          }
-          if (row.modeId === 9) {
-            if (row.isNight === 1) return message.reply(translate[row.lang].lola)
-          }
-          //sheriffactioned()
-
-          //var somettt = isactioned()
-          //if (somettt === true) return;
-          /*
-          sql.get(`SELECT * FROM murderMysteryPlayers WHERE userId ='${message.author.id}' AND guildId ='${message.guild.id}'`).then(row1 => {
-  
-            if (row1.actioned === 1) {
-              return;
-            }
-  
-          })
-          */
-          sql.get(`SELECT * FROM murderMysteryPlayers WHERE userId ='${message.author.id}' AND guildId ='${message.guild.id}'`).then(row1 => {
-            if (!row1) {
-              new Error("Murder Mystery - Player not found.")
-            } else {
-              if (row1.isjailed === 1) return;
-              //if (row.actioned === 1) return message.reply("You have already searched/shot someone!");
-              if (row.modeId !== 10) {
-                if (row1.actioned === 1) return message.reply(translate[row.lang].alreadysearch);
-              }
-
-
-              let playerid = args[0]
-
-              if (playerid === message.author.id) return message.reply("You are a **Detective** wait what?")
-
-              search(0, message.author.id, playerid)
-              setTimeout(unaction, 20000)
-
-            }
-          })
-          /**
-                  bot.channels.get(row.murdergamechannelid).overwritePermissions(user, {
-                    SEND_MESSAGES: false
-                  })
-  
-          **/
-          /**
-                  fs.writeFile('./mmplayers.json', JSON.stringify(mmplayers), (err) => {
-                if (err) console.error(err)
-                });
-          **/
         })
       }
     })
@@ -6596,7 +6044,7 @@ bot.on('message', message => {
             if (row.gameStarted === 0) return message.reply(translate[row.lang].gamehasntstart)
             if (message.channel.id !== row.sheriffchannelid) return;
             deadcheck(function (ded) {
-              if (ded === true) return;
+              if (ded) /*123717*/ return;
               //if (row.isDay === 1) return message.reply("You cannot do this in the day time.")
               if (row.modeId !== 9 && row.modeId !== 10) {
                 if (row.isDay === 1) return message.reply(translate[row.lang].eeer)
@@ -6607,18 +6055,41 @@ bot.on('message', message => {
               //sheriffactioned()
               sql.get(`SELECT * FROM murderMysteryPlayers WHERE userId ='${message.author.id}' AND guildId ='${message.guild.id}'`).then(row1 => {
                 if (!row1) {
-                  new Error("Murder Mystery - Player not found.")
+                  console.log("Murder Mystery - Player not found.")
                 } else {
                   if (row1.isjailed === 1) return;
                   //if (row.actioned === 1) return message.reply("You have already searched/shot someone!");
                   if (row.modeId !== 10) {
                     if (row1.actioned === 1) return message.reply(translate[row.lang].alreadysearch);
                   }
-                  let user = message.mentions.users.first();
-                  if (!user) return message.reply(translate[row.lang].userdoesntexist)
-                  if (user.id === message.author.id) return message.reply("You are a **Detective** wait what?")
-                  search(user.id, message.author.id, "")
-                  setTimeout(unaction, 20000)
+                  let userMention = message.mentions.users.first();
+                  let userPID = args[0]
+                  let query = "userId = ?"
+                  let query2 = ""
+                  if (!userMention) {
+                    if (isNaN(parseInt(userPID))) {
+                      return message.reply(translate[row.lang].userdoesntexist)
+                    }
+                    if (!userPID) {
+                      return message.reply(translate[row.lang].userdoesntexist)
+                    }
+                  }
+                  if (userPID) {
+                    query = `userId = ?`
+                    query2 = userPID
+                  }
+                  if (userMention) {
+                    query = `userId = ?`
+                    query2 = userMention.id
+                  }
+                  sql.get(`SELECT * FROM murderMysteryPlayers WHERE ${query}`, [query2]).then(user => {
+                    if (!user) {
+                      message.reply(translate[row.lang].userdoesntexist)
+                    } else {
+                      if (user.userId === message.author.id) return message.reply("You are a **Detective** wait what?")
+                      search(user.userId, message.author.id, "")
+                    }
+                  })
                 }
               })
               /**
@@ -6658,7 +6129,7 @@ bot.on('message', message => {
 
     sql.get(`SELECT * FROM murderMysteryPlayers WHERE userId ='${message.author.id}' AND guildId ='${message.guild.id}'`).then(row => {
       if (!row) {
-        new Error("Murder Mystery - Player not found.")
+        console.log("Murder Mystery - Player not found.")
       } else {
         //if (row.actioned === 1) return message.reply("You have already broadcasted!")
         //translate[row.lang].alreadybroadcast
@@ -6680,7 +6151,7 @@ bot.on('message', message => {
             if (row.gameStarted === 0) return message.reply(translate[row.lang].gamehasntstart)
             if (message.channel.id !== row.radiochannelid) return;
             deadcheck(function (ded) {
-              if (ded === true) return;
+              if (ded) /*123717*/ return;
               if (row.modeId !== 9 && row.modeId !== 10) {
                 if (row.isDay === 1) return message.reply(translate[row.lang].eeer)
               }
@@ -6689,7 +6160,7 @@ bot.on('message', message => {
               }
               //broadcastactioned()
               //var somettt = isactioned()
-              //if (isactioned() === true) return;
+              //if (isactioned()) /*123717*/ return;
               //sql.get(`SELECT * FROM murderMysteryPlayers WHERE userId ='${message.author.id}' AND guildId ='${message.guild.id}'`).then(row1 => {
 
               //if (row1.actioned === 1) {
@@ -6706,12 +6177,12 @@ bot.on('message', message => {
                   if (row.modeId !== 10) {
                     if (row1.actioned === 1) return message.reply(translate[row.lang].alreadybroadcast);
                   }
-                  sql.get(`SELECT * FROM murderMysteryPlayers WHERE isMurderer = 1 AND guildId ='${message.guild.id}'`).then(row21 => {
+                  sql.get(`SELECT * FROM murderMysteryPlayers WHERE roleId = 1 AND guildId ='${message.guild.id}'`).then(row21 => {
                     if (!row21) {
                       message.channel.send("**ERROR**")
                     } else {
                       checkifhasitem(row21.userId, 4, 1, function (hasItem) {
-                        if (hasItem === true) {
+                        if (hasItem) /*123717*/ {
                           let finditem = translate[row.lang].darkshopitems.find(function (a) {
                             return a.id === 4
                           })
@@ -6727,7 +6198,6 @@ bot.on('message', message => {
                           }).then(m => {
                             m.pin()
                           })
-                          setTimeout(unaction, 20000)
                           actioned(message.author.id)
                         }
                       })
@@ -6757,7 +6227,7 @@ bot.on('message', message => {
 
     sql.get(`SELECT * FROM murderMystery WHERE guildId ='${message.guild.id}'`).then(row => {
       if (!row) {
-        new Error("Murder Mystery - Player not found.")
+        console.log("Murder Mystery - Player not found.")
         return
       } else {
         let rolereplc = translate[row.lang].deakofk
@@ -6772,7 +6242,7 @@ bot.on('message', message => {
   function washealershoot(user) {
     sql.get(`SELECT * FROM murderMystery WHERE guildId ='${message.guild.id}'`).then(row => {
       if (!row) {
-        new Error("Murder Mystery - Player not found.")
+        console.log("Murder Mystery - Player not found.")
         return
       } else {
         //bot.channels.get(row.murdergamechannelid).send(":gun: " + user + " was shot by the **Detective** and he/she was a **Healer**! :gun:")
@@ -6786,7 +6256,7 @@ bot.on('message', message => {
   function wasjailorshoot(user) {
     sql.get(`SELECT * FROM murderMystery WHERE guildId ='${message.guild.id}'`).then(row => {
       if (!row) {
-        new Error("Murder Mystery - Player not found.")
+        console.log("Murder Mystery - Player not found.")
         return
       } else {
         //bot.channels.get(row.murdergamechannelid).send(":gun: " + user + " was shot by the **Detective** and he/she was a **Jailor**! :gun:")
@@ -6800,19 +6270,18 @@ bot.on('message', message => {
   function assigns(users, userid) {
     sql.get(`SELECT * FROM murderMystery WHERE guildId ='${message.guild.id}'`).then(row1 => {
       if (!row1) {
-        throw new Error("Murder Mystery Bot Database Data not found!")
+        console.error("[Murder Mystery Error] Murder Mystery Bot Database Data not found!")
       } else {
         //if (!mmplayersDataa) return message.reply("That user isn't in the game!")
         sql.get(`SELECT * FROM murderMysteryPlayers WHERE userId ='${users}' AND guildId ='${message.guild.id}'`).then(row => {
           if (!row) {
-            message.reply(translate[row.lang].userisnotingame)
-
+            message.reply(translate[row1.lang].userisnotingame)
           } else {
             let user = bot.users.get(users)
             if (row.isDead === 1) return message.reply(translate[row1.lang].thatpersonisdead)
             //mmplayersData.assigned = 1
-            if (row.isAssassin === 1) return message.reply(translate[row1.lang].assignationisathing);
-            sql.run(`UPDATE murderMysteryPlayers SET assigned = ${row.assigned = 1} WHERE userId ='${users}' AND guildId ='${message.guild.id}'`)
+            if (row.roleId === 5) return message.reply(translate[row1.lang].assignationisathing);
+            sql.run(`UPDATE murderMysteryPlayers SET assigned = 1 WHERE userId ='${users}' AND guildId ='${message.guild.id}'`)
 
             //user.send(":fearful: You feel like you have been assigned... :cold_sweat:")
             user.send(translate[row1.lang].assigneddmd).catch(e => {
@@ -6831,149 +6300,25 @@ bot.on('message', message => {
     sql.get(`SELECT * FROM murderMystery WHERE guildId ='${message.guild.id}'`).then(row1 => {
       let shootthing = translate[row1.lang].jobchannelmsgs.detective.shoot
       let shootthing2 = translate[row1.lang].jobchannelmsgs.detective.sent2
-      if (playerid !== "") {
-        sql.get(`SELECT * FROM murderMysteryPlayers WHERE userId ='${playerid}' AND guildId ='${message.guild.id}'`).then(row => {
-          if (!row) {
-            message.reply(translate[row1.lang].userisnotingame)
-          } else {
-            let users = bot.users.get(row.userId)
-            shootthing = shootthing.replace("%user%", row.userId)
-            if (row.isDead === 1) return message.reply(translate[row1.lang].thatpersonisalreadydead)
-            sql.get(`SELECT * FROM murderMysteryItems WHERE userId ='${users.id}' AND guildId ='${message.guild.id}' AND itemId = 0 AND isDark = 0`).then(row3 => {
-              if (!row3) {
-                nopermstoanychannel(row.playerid)
-                if (row.isMurderer === 1) {
-                  shootthing = shootthing.replace("%role%", translate[row1.lang].roles.murderer)
-                  //message.reply("You have shot " + users + " and he/she was the **Murderer**!")
-                  message.reply(shootthing)
-
-                  wasmurdershoot(users)
-                  //users.send(":skull: You have been shot by a **Detective**! :skull:")
-                  users.send(translate[row1.lang].jobchannelmsgs.detective.sent)
-                  sql.run(`UPDATE murderMysteryPlayers SET isDead = 1 WHERE userId ='${playerid}' AND guildId ='${message.guild.id}'`)
-
-                  setTimeout(victory, 1500)
-                  sql.run(`UPDATE murderMystery SET players = ${row1.players - 1} WHERE guildId = '${message.guild.id}'`);
-                  actioned(userid)
-                  return
-                }
-                if (row.isHealer === 1) {
-                  shootthing = shootthing.replace("%role%", translate[row1.lang].roles.healer)
-                  //message.reply("You have shot " + users + " and they were a **Healer**!")
-                  shootthing2 = shootthing2.replace("%role%", translate[row1.lang].roles.healer)
-                  message.reply(shootthing)
-                  washealershoot(users)
-                  users.send(translate[row1.lang].jobchannelmsgs.detective.sent)
-                  bot.channels.get(murdergame).send(":gun: " + users + shootthing2)
-                  sql.run(`UPDATE murderMysteryPlayers SET isDead = 1 WHERE userId ='${playerid}' AND guildId ='${message.guild.id}'`)
-
-                  targetassassin(users.id, 3)
-                  sql.run(`UPDATE murderMystery SET players = ${row1.players - 1} WHERE guildId = '${message.guild.id}'`);
-                  actioned(userid)
-                  nopermstoanychannel(row.playerid)
-                  return;
-                }
-                if (row.isJailor === 1) {
-                  shootthing = shootthing.replace("%role%", translate[row1.lang].roles.jailor)
-                  //message.reply("You have shot " + users + " and they were a **Jailor**!")
-                  shootthing2 = shootthing2.replace("%role%", translate[row1.lang].roles.jailor)
-                  message.reply(shootthing)
-                  wasjailorshoot(users)
-                  users.send(translate[row1.lang].jobchannelmsgs.detective.sent)
-                  bot.channels.get(murdergame).send(":gun: " + users + shootthing2)
-                  sql.run(`UPDATE murderMysteryPlayers SET isDead = 1 WHERE userId ='${playerid}' AND guildId ='${message.guild.id}'`)
-                  targetassassin(users.id, 3)
-                  sql.run(`UPDATE murderMystery SET players = ${row1.players - 1} WHERE guildId = '${message.guild.id}'`);
-                  actioned(userid)
-                  nopermstoanychannel(row.playerid)
-                  return;
-                }
-                if (row.isRadioPerson === 1) {
-                  shootthing = shootthing.replace("%role%", translate[row1.lang].roles.radioperson)
-                  //message.reply("You have shot " + users + " and he/she was a **Radio Person**!")
-                  shootthing2 = shootthing2.replace("%role%", translate[row1.lang].roles.radioperson)
-                  message.reply(shootthing)
-                  //bot.channels.get(murdergame).send(":gun: " + users + " was shot by the **Detective** and he/she was a **Radio Person** :gun: ")
-                  bot.channels.get(murdergame).send(":gun: " + users + shootthing2)
-                  users.send(translate[row1.lang].jobchannelmsgs.detective.sent)
-                  sql.run(`UPDATE murderMysteryPlayers SET isDead = 1 WHERE userId ='${playerid}' AND guildId ='${message.guild.id}'`)
-                  targetassassin(users.id, 3)
-                  sql.run(`UPDATE murderMystery SET players = ${row1.players - 1} WHERE guildId = '${message.guild.id}'`);
-                  actioned(userid)
-                  nopermstoanychannel(row.playerid)
-                  return;
-
-                }
-                if (row.isAssassin === 1) {
-                  shootthing = shootthing.replace("%role%", translate[row1.lang].roles.assassin)
-                  //message.reply("You have shot " + users + " and he/she was an **Assassin**!")
-                  message.reply(shootthing)
-                  shootthing2 = shootthing2.replace("%role%", translate[row1.lang].roles.assassin)
-                  //bot.channels.get(murdergame).send(":gun: " + users + " was shot by the **Detective** and he/she was a **Assassin** :gun: ")
-                  bot.channels.get(murdergame).send(":gun: " + users + shootthing2)
-                  users.send(translate[row1.lang].jobchannelmsgs.detective.sent)
-                  sql.run(`UPDATE murderMysteryPlayers SET isDead = 1 WHERE userId ='${playerid}' AND guildId ='${message.guild.id}'`)
-                  sql.run(`UPDATE murderMystery SET players = ${row1.players - 1} WHERE guildId = '${message.guild.id}'`);
-                  actioned(userid)
-                  nopermstoanychannel(row.playerid)
-                  return;
-                }
-                shootthing = shootthing.replace("%role%", translate[row1.lang].roles.innocent)
-                //message.reply("You have shot " + users + " and he/she was **Innocent**!")
-                message.reply(shootthing)
-                shootthing2 = shootthing2.replace("%role%", translate[row1.lang].roles.innocent)
-                //bot.channels.get(murdergame).send(":gun: " + users + " was shot by the **Detective** and he/she was **Innocent**! :gun:")
-                bot.channels.get(murdergame).send(":gun: " + users + shootthing2)
-
-
-                users.send(translate[row1.lang].jobchannelmsgs.detective.sent)
-
-
-                sql.run(`UPDATE murderMysteryPlayers SET isDead = 1 WHERE userId ='${playerid}' AND guildId ='${message.guild.id}'`)
-                sql.run(`UPDATE murderMystery SET players = ${row1.players - 1} WHERE guildId = '${message.guild.id}'`);
-                targetassassin(users.id, 3)
-                actioned(userid)
-                nopermstoanychannel(row.playerid)
-              } else {
-                sql.get(`SELECT * FROM murderMysteryPlayers WHERE userId ='${userid}' AND guildId ='${message.guild.id}'`).then(row111 => {
-                  nopermstoanychannel(row111.playerid)
-                  targetassassin(row111.userId, 32)
-                  let things = translate[row1.lang].shopitems.find(function (a) {
-                    return a.id === 0
-                  })
-                  if (things === undefined) return message.channel.send("**ERROR**\nItem ID not found!")
-                  message.reply(things.sent)
-                  message.author.send(things.sent).catch(e => {
-                    message.reply(translate[row1.lang].dmsdisabled)
-                  })
-                  users.send(things.sent2).catch(e => {
-                    message.channel.send(`${users}, ${translate[row1.lang].dmsdisabled}`)
-                  })
-                  sql.run(`UPDATE murderMystery SET players = ${row1.players - 1} WHERE guildId = '${message.guild.id}'`);
-                  sql.run(`UPDATE murderMysteryPlayers SET isDead = ${row111.isDead = 1} WHERE userId ='${userid}' AND guildId ='${message.guild.id}'`)
-
-                  bot.channels.get(murdergame).send(things.sent3)
-                })
-              }
-            })
-          }
-        })
-        'strict rule'
-        return;
-      }
-
       sql.get(`SELECT * FROM murderMysteryPlayers WHERE userId ='${user}' AND guildId ='${message.guild.id}'`).then(row => {
         if (!row) {
           message.reply(translate[row1.lang].userisnotingame)
-
         } else {
           let users = bot.users.get(user)
           sql.get(`SELECT * FROM murderMysteryItems WHERE userId ='${users.id}' AND guildId ='${message.guild.id}' AND itemId = 0 AND isDark = 0`).then(row3 => {
             if (!row3) {
               shootthing = shootthing.replace("%user%", user)
               if (row.isDead === 1) return message.reply(translate[row1.lang].thatpersonisalreadydead)
-
-              if (row.isMurderer === 1) {
+              if (row.isjailed === 1) {
+                if (debugmode === 1) {
+                  console.log("[DEBUG] CANNOT SHOOT (in jail)")
+                }
+                users.send(":angry::gun: :arrow_up_down: :fearful::cop: " + translate[row5.lang].stabbed4)
+                message.reply(translate[row5.lang].dledee)
+                actioned(userid)
+                return;
+              }
+              if (row.roleId === 1) {
                 shootthing = shootthing.replace("%role%", translate[row1.lang].roles.murderer)
                 //message.reply("You have shot " + users + " and he/she was the **Murderer**!")
                 shootthing2 = shootthing2.replace("%role%", translate[row1.lang].roles.murderer)
@@ -6983,12 +6328,12 @@ bot.on('message', message => {
                 wasmurdershoot(users)
                 users.send(translate[row1.lang].jobchannelmsgs.detective.sent)
                 sql.run(`UPDATE murderMysteryPlayers SET isDead = 1 WHERE userId ='${user}' AND guildId ='${message.guild.id}'`)
-                sql.run(`UPDATE murderMystery SET players = ${row1.players - 1} WHERE guildId = '${message.guild.id}'`);
+                sql.run(`UPDATE murderMystery SET players = players - 1 WHERE guildId = '${message.guild.id}'`);
                 setTimeout(victory, 1500)
                 actioned(userid)
                 return
               }
-              if (row.isHealer === 1) {
+              if (row.roleId === 3) {
                 shootthing = shootthing.replace("%role%", translate[row1.lang].roles.healer)
                 //message.reply("You have shot " + users + " and they were a **Healer**!")
                 shootthing2 = shootthing2.replace("%role%", translate[row1.lang].roles.healer)
@@ -6998,13 +6343,13 @@ bot.on('message', message => {
                 //bot.channels.get(murdergame).send(":gun: " + users + " was shot by the **Detective** and he/she was **Innocent**! :gun:")
                 bot.channels.get(murdergame).send(":gun: " + users + shootthing2)
                 sql.run(`UPDATE murderMysteryPlayers SET isDead = 1 WHERE userId ='${user}' AND guildId ='${message.guild.id}'`)
-                sql.run(`UPDATE murderMystery SET players = ${row1.players - 1} WHERE guildId = '${message.guild.id}'`);
+                sql.run(`UPDATE murderMystery SET players = players - 1 WHERE guildId = '${message.guild.id}'`);
                 actioned(userid)
                 targetassassin(users.id, 3)
 
                 return;
               }
-              if (row.isJailor === 1) {
+              if (row.roleId === 6) {
                 shootthing = shootthing.replace("%role%", translate[row1.lang].roles.jailor)
                 //message.reply("You have shot " + users + " and they were a **Jailor**!")
                 shootthing2 = shootthing2.replace("%role%", translate[row1.lang].roles.jailor)
@@ -7014,12 +6359,12 @@ bot.on('message', message => {
                 bot.channels.get(murdergame).send(":gun: " + users + shootthing2)
                 users.send(translate[row1.lang].jobchannelmsgs.detective.sent)
                 sql.run(`UPDATE murderMysteryPlayers SET isDead = 1 WHERE userId ='${user}' AND guildId ='${message.guild.id}'`)
-                sql.run(`UPDATE murderMystery SET players = ${row1.players - 1} WHERE guildId = '${message.guild.id}'`);
+                sql.run(`UPDATE murderMystery SET players = players - 1 WHERE guildId = '${message.guild.id}'`);
                 actioned(userid)
                 targetassassin(users.id, 3)
                 return;
               }
-              if (row.isRadioPerson === 1) {
+              if (row.roleId === 4) {
                 shootthing = shootthing.replace("%role%", translate[row1.lang].roles.radioperson)
                 //message.reply("You have shot " + users + " and he/she was a **Radio Person**!")
                 shootthing2 = shootthing2.replace("%role%", translate[row1.lang].roles.radioperson)
@@ -7028,13 +6373,13 @@ bot.on('message', message => {
                 bot.channels.get(murdergame).send(":gun: " + users + shootthing2)
                 users.send(translate[row1.lang].jobchannelmsgs.detective.sent)
                 sql.run(`UPDATE murderMysteryPlayers SET isDead = 1 WHERE userId ='${user}' AND guildId ='${message.guild.id}'`)
-                sql.run(`UPDATE murderMystery SET players = ${row1.players - 1} WHERE guildId = '${message.guild.id}'`);
+                sql.run(`UPDATE murderMystery SET players = players - 1 WHERE guildId = '${message.guild.id}'`);
                 actioned(userid)
                 targetassassin(users.id, 3)
                 return;
 
               }
-              if (row.isAssassin === 1) {
+              if (row.roleId === 5) {
                 shootthing = shootthing.replace("%role%", translate[row1.lang].roles.assassin)
                 //message.reply("You have shot " + users + " and he/she was an **Assassin**!")
                 shootthing2 = shootthing2.replace("%role%", translate[row1.lang].roles.assassin)
@@ -7042,7 +6387,7 @@ bot.on('message', message => {
                 //bot.channels.get(murdergame).send(":gun: " + users + " was shot by the **Detective** and he/she was a **Assassin** :gun: ")
                 bot.channels.get(murdergame).send(":gun: " + users + shootthing2)
                 users.send(translate[row1.lang].jobchannelmsgs.detective.sent)
-                sql.run(`UPDATE murderMystery SET players = ${row1.players - 1} WHERE guildId = '${message.guild.id}'`);
+                sql.run(`UPDATE murderMystery SET players = players - 1 WHERE guildId = '${message.guild.id}'`);
                 sql.run(`UPDATE murderMysteryPlayers SET isDead = 1 WHERE userId ='${user}' AND guildId ='${message.guild.id}'`)
                 actioned(userid)
                 return;
@@ -7060,7 +6405,7 @@ bot.on('message', message => {
 
 
               sql.run(`UPDATE murderMysteryPlayers SET isDead = 1 WHERE userId ='${user}' AND guildId ='${message.guild.id}'`)
-              sql.run(`UPDATE murderMystery SET players = ${row1.players - 1} WHERE guildId = '${message.guild.id}'`);
+              sql.run(`UPDATE murderMystery SET players = players - 1 WHERE guildId = '${message.guild.id}'`);
               targetassassin(users.id, 3)
               actioned(userid)
             } else {
@@ -7078,8 +6423,8 @@ bot.on('message', message => {
                 users.send(things.sent2).catch(e => {
                   message.channel.send(`${users}, ${translate[row1.lang].dmsdisabled}`)
                 })
-                sql.run(`UPDATE murderMystery SET players = ${row1.players - 1} WHERE guildId = '${message.guild.id}'`);
-                sql.run(`UPDATE murderMysteryPlayers SET isDead = ${row111.isDead = 1} WHERE userId ='${userid}' AND guildId ='${message.guild.id}'`)
+                sql.run(`UPDATE murderMystery SET players = players - 1 WHERE guildId = '${message.guild.id}'`);
+                sql.run(`UPDATE murderMysteryPlayers SET isDead = 1 WHERE userId ='${userid}' AND guildId ='${message.guild.id}'`)
                 actioned(userid)
                 bot.channels.get(murdergame).send(things.sent3)
               })
@@ -7093,7 +6438,7 @@ bot.on('message', message => {
   function shootactioned() {
     sql.get(`SELECT * FROM murderMysteryPlayers WHERE userId ='${message.author.id}' AND guildId ='${message.guild.id}'`).then(row => {
       if (!row) {
-        new Error("Murder Mystery - Player not found.")
+        console.log("Murder Mystery - Player not found.")
       } else {
         //if (row.actioned === 1) return message.reply("You have already shot someone!");
       }
@@ -7116,8 +6461,8 @@ bot.on('message', message => {
           let str = ''
           for (let row6 of rows) {
             let t = bot.users.get(row6.userId)
-            if (!t) return message.channel.send("**Error!**\nUser not found!\n\nPlease restart the game as you cannot play without that player!")
-            str += bot.users.get(row6.userId).tag + " (" + bot.users.get(row6.userId).id + ")\n"
+            if (!t) return message.channel.send("**Error!**\nUser not found!\n\nPlease restart the game as you cannot play without that player!\nUser ID: " + row6.userId)
+            str += (bot.users.get(row6.userId).tag + " (" + bot.users.get(row6.userId).id + ") [" + ((row6.isDead == 1) ? "Dead" : "Alive") + "]\n")
 
           }
           message.channel.send(ms + "\n**Users**:\n```\n" + str + "\n```")
@@ -7138,75 +6483,6 @@ bot.on('message', message => {
       })
     }
   */
-  if (command === "shootid") {
-    if (message.channel.type === 'dm') {
-      message.author.send("I cannot respond with this command in DMS.")
-      return;
-    }
-
-    sql.get(`SELECT * FROM murderMystery WHERE guildId ='${message.guild.id}'`).then(row => {
-      if (!row) {
-        message.reply("You have not put your data in the database! Please type " + config.prefix + "game setupdata\nto insert your data into the database!")
-        return
-      } else {
-        //if(message.guild.id !== preventjoinData.guildID) return message.reply("That is not your game!")
-        if (row.gameStarted === 0) return message.reply(translate[row.lang].gamehasntstart)
-
-
-        if (message.channel.id !== row.sheriffchannelid) return;
-
-
-        deadcheck(function (ded) {
-          if (ded === true) return;
-          if (row.modeId !== 9 && row.modeId !== 10) {
-            if (row.isDay === 1) return message.reply(translate[row.lang].eeer)
-          }
-          if (row.modeId === 9) {
-            if (row.isNight === 1) return message.reply(translate[row.lang].lola)
-          }
-          //shootactioned()
-          sql.get(`SELECT * FROM murderMysteryPlayers WHERE userId ='${message.author.id}' AND guildId ='${message.guild.id}'`).then(row1 => {
-            if (!row1) {
-              new Error("Murder Mystery - Player not found.")
-            } else {
-              if (row1.isjailed === 1) return;
-              //if (row.actioned === 1) return message.reply("You have already searched/shot someone!");
-              if (row.modeId !== 10) {
-                if (row1.actioned === 1) return message.reply(translate[row.lang].alreadyshot);
-              }
-
-
-              let playerid = args[0]
-              if (!playerid) return message.reply("Please put in a user id!")
-              if (playerid === message.author.id) return message.reply("You cannot shoot yourself :thinking:")
-              setTimeout(function () {
-
-
-                shoot(0, message.author.id, row.murdergamechannelid, playerid)
-                setTimeout(unaction, 20000)
-                let aaaaaaaa = message.guild.roles.get(row.murdermysteryRoleID)
-
-                //message.guild.member(user).removeRole(aaaaaaaa.id)
-              }, 2000)
-              //if (row.isOneVOne === 1) {
-              if (row.modeId === 3) {
-                sql.run(`UPDATE murderMystery SET players = ${row.players - 1} WHERE guildId = '${message.guild.id}'`);
-                victory()
-                return;
-              }
-              nopermstoanychannel(args[0])
-
-              /**
-                      fs.writeFile('./mmplayers.json', JSON.stringify(mmplayers), (err) => {
-                    if (err) console.error(err)
-                    });
-              **/
-            }
-          })
-        })
-      }
-    })
-  }
   if (command === "shoot") {
     if (message.channel.type === 'dm') {
       message.author.send("I cannot respond with this command in DMS.")
@@ -7223,7 +6499,7 @@ bot.on('message', message => {
             if (row.gameStarted === 0) return message.reply(translate[row.lang].gamehasntstart)
             if (message.channel.id !== row.sheriffchannelid) return;
             deadcheck(function (ded) {
-              if (ded === true) return;
+              if (ded) /*123717*/ return;
               if (row.modeId !== 9 && row.modeId !== 10) {
                 if (row.isDay === 1) return message.reply(translate[row.lang].eeer)
               }
@@ -7232,7 +6508,7 @@ bot.on('message', message => {
               }
               //shootactioned()
               //var somettt = isactioned()
-              //if (somettt === true) return;
+              //if (somettt) /*123717*/ return;
               /*
           sql.get(`SELECT * FROM murderMysteryPlayers WHERE userId ='${message.author.id}' AND guildId ='${message.guild.id}'`).then(row1 => {
   
@@ -7244,7 +6520,7 @@ bot.on('message', message => {
           */
               sql.get(`SELECT * FROM murderMysteryPlayers WHERE userId ='${message.author.id}' AND guildId ='${message.guild.id}'`).then(row1 => {
                 if (!row1) {
-                  new Error("Murder Mystery - Player not found.")
+                  console.log("Murder Mystery - Player not found.")
                 } else {
                   if (row1.isjailed === 1) return;
                   //if (row.actioned === 1) return message.reply("You have already searched/shot someone!");
@@ -7252,28 +6528,45 @@ bot.on('message', message => {
                     if (row1.actioned === 1) return message.reply(translate[row.lang].alreadyshot);
                   }
 
-
-                  let user = message.mentions.users.first();
-                  if (!user) return message.reply(translate[row.lang].userdoesntexist)
-
-                  //if (user.id === message.author.id) return message.reply("You cannot shoot yourself 🤔")
-                  if (user.id === message.author.id) return message.reply(translate[row.lang].dke)
-                  setTimeout(function () {
-
-
-                    shoot(user.id, message.author.id, row.murdergamechannelid, "")
-                    setTimeout(unaction, 20000)
-                    let aaaaaaaa = message.guild.roles.get(row.murdermysteryRoleID)
-
-                    //message.guild.member(user).removeRole(aaaaaaaa.id)
-                  }, 2000)
-                  //if (row.isOneVOne === 1) {
-                  if (row.modeId === 3 || row.modeId === 7) {
-                    sql.run(`UPDATE murderMystery SET players = ${row.players - 1} WHERE guildId = '${message.guild.id}'`);
-                    victory()
-                    return;
+                  let userMention = message.mentions.users.first();
+                  let userPID = args[0]
+                  let query = "userId = ?"
+                  let query2 = ""
+                  if (!userMention) {
+                    if (isNaN(parseInt(userPID))) {
+                      return message.reply(translate[row.lang].userdoesntexist)
+                    }
+                    if (!userPID) {
+                      return message.reply(translate[row.lang].userdoesntexist)
+                    }
                   }
-                  /*
+                  if (userPID) {
+                    query = `userId = ?`
+                    query2 = userPID
+                  }
+                  if (userMention) {
+                    query = `userId = ?`
+                    query2 = userMention.id
+                  }
+                  sql.get(`SELECT * FROM murderMysteryPlayers WHERE ${query}`, [query2]).then(user => {
+                    if (!user) {
+                      message.reply(translate[row.lang].userdoesntexist)
+                    } else {
+                      //if (user.id === message.author.id) return message.reply("You cannot shoot yourself 🤔")
+                      if (user.userId === message.author.id) return message.reply(translate[row.lang].dke)
+                      setTimeout(function () {
+                        shoot(user.userId, message.author.id, row.murdergamechannelid, "")
+                        let aaaaaaaa = message.guild.roles.get(row.murdermysteryRoleID)
+
+                        //message.guild.member(user).removeRole(aaaaaaaa.id)
+                      }, 2000)
+                      //if (row.isOneVOne === 1) {
+                      if (row.modeId === 3 || row.modeId === 7) {
+                        sql.run(`UPDATE murderMystery SET players = players - 1 WHERE guildId = '${message.guild.id}'`);
+                        victory()
+                        return;
+                      }
+                      /*
           bot.channels.get(row.healchannelid).overwritePermissions(user, {
             READ_MESSAGES: false
           })
@@ -7293,11 +6586,13 @@ bot.on('message', message => {
             READ_MESSAGES: false
           })
   */
-                  /**
-                          fs.writeFile('./mmplayers.json', JSON.stringify(mmplayers), (err) => {
-                        if (err) console.error(err)
-                        });
-                  **/
+                      /**
+                              fs.writeFile('./mmplayers.json', JSON.stringify(mmplayers), (err) => {
+                            if (err) console.error(err)
+                            });
+                      **/
+                    }
+                  })
                 }
               })
             })
@@ -7321,7 +6616,7 @@ bot.on('message', message => {
   function healedactioned() {
     sql.get(`SELECT * FROM murderMysteryPlayers WHERE userId ='${message.author.id}' AND guildId ='${message.guild.id}'`).then(row => {
       if (!row) {
-        new Error("Murder Mystery - Player not found.")
+        console.log("Murder Mystery - Player not found. [healedactioned()]")
       } else {
         //if (row.actioned === 1) return message.reply("You have already healed someone!");
       }
@@ -7329,116 +6624,163 @@ bot.on('message', message => {
   }
 
   function heal(user, murdergameid, userid, playerid, stuff) {
+    //user = user.id
+    //userid = message.author.id
     sql.get(`SELECT * FROM murderMystery WHERE guildId ='${message.guild.id}'`).then(row1 => {
-      if (playerid !== "") {
-        sql.get(`SELECT * FROM murderMysteryPlayers WHERE userId ='${playerid}' AND guildId ='${message.guild.id}'`).then(row => {
-          if (!row) {
-            message.reply(translate[row1.lang].userisnotingame)
-
-          } else {
-
-            let users = bot.users.get(row.userId)
-            if (row.isDead === 0) return message.reply(translate[row1.lang].thatpersonisntdead)
-            healedactioned()
-            sql.get(`SELECT * FROM murderMysteryPlayers WHERE userId ='${userid}' AND guildId ='${message.guild.id}'`).then(row1 => {
-
-              if (row1.actioned === 1) {
-                return;
-              }
-
-            })
-            //message.reply("You have healed " + users + "!\nHe will be alive in the morning!")
-            //bot.channels.get(murdergameid).send(":angel: " + users + " has been revived by a **Healer** :angel:")
-            checkrole(user.id, "", function (checkrolee) {
-              if (checkrolee === 1) {
-                bot.channels.get(row.murderchannelid).overwritePermissions(users, {
-                  SEND_MESSAGES: true
-                })
-              }
-              if (checkrolee === 2) {
-                bot.channels.get(row.sheriffchannelid).overwritePermissions(users, {
-                  SEND_MESSAGES: true
-                })
-              }
-              if (checkrolee === 4) {
-                bot.channels.get(row.radiochannelid).overwritePermissions(users, {
-                  SEND_MESSAGES: true
-                })
-              }
-              if (checkrolee === 6) {
-                bot.channels.get(row.jailorchannelid).overwritePermissions(users, {
-                  SEND_MESSAGES: true
-                })
-                bot.channels.get(row.jailchannelid).overwritePermissions(users, {
-                  SEND_MESSAGES: true
-                })
-
-              }
-              bot.channels.get(row.murdergamechannelid).overwritePermissions(users, {
-                SEND_MESSAGES: null
-              })
-              bot.channels.get(row.shopchannelid).overwritePermissions(users, {
-                SEND_MESSAGES: null
-              })
-              message.reply(translate[row1.lang].jobchannelmsgs.healer.youhavehealed + users + translate[row1.lang].jobchannelmsgs.healer.youhavehealed2)
-              bot.channels.get(murdergameid).send(":angel: " + users + translate[row1.lang].jobchannelmsgs.healer.hasbeenrevived)
-              // users.send(":angel: You have been revived by a **Healer**! You will be alive tomorrow morning. :angel:")
-              users.send(translate[row1.lang].jobchannelmsgs.healer.dm)
-              sql.run(`UPDATE murderMysteryPlayers SET isDead = 0 WHERE userId = ${playerid} AND guildId = "${message.guild.id}"`);
-              sql.run(`UPDATE murderMystery SET players = ${stuff + 1} WHERE guildId = '${message.guild.id}'`);
-            })
-          }
-
-        })
-        return;
-      }
       sql.get(`SELECT * FROM murderMysteryPlayers WHERE userId ='${user}' AND guildId ='${message.guild.id}'`).then(row => {
         if (!row) {
           message.reply(translate[row1.lang].userisnotingame)
-
         } else {
+          if (row1.modeId === 12) {
+            let gameData = row1.gameData.split("|")
+            gameData.forEach(function (a) {
+              let zD = a.split(',')
+              if (zD[0] === user) {
+                let findInfected = gameData.find(function (b) {
+                  return b === `${zD[0]},${zD[1]}`
+                })
+                if (findInfected === undefined) {
+                  if (row.isDead === 0) return message.reply(translate[row1.lang].thatpersonisntdead)
+                  if (row.isDead === 1) {
+                    healedactioned()
+                    checkrole(user, playerid, function (checkrolee) {
+                      if ([1, 5, 7].includes(checkrolee)) return;
+                      if (checkrolee === 1) {
+                        return;
+                        bot.channels.get(row1.murderchannelid).overwritePermissions(users, {
+                          SEND_MESSAGES: true
+                        })
+                      }
+                      if (checkrolee === 2) {
+                        bot.channels.get(row1.sheriffchannelid).overwritePermissions(users, {
+                          SEND_MESSAGES: true
+                        })
+                      }
+                      if (checkrolee === 4) {
+                        bot.channels.get(row1.radiochannelid).overwritePermissions(users, {
+                          SEND_MESSAGES: true
+                        })
+                      }
+                      if (checkrolee === 6) {
+                        bot.channels.get(row1.jailorchannelid).overwritePermissions(users, {
+                          SEND_MESSAGES: true
+                        })
+                        bot.channels.get(row1.jailchannelid).overwritePermissions(users, {
+                          SEND_MESSAGES: true
+                        })
+
+                      }
+                      bot.channels.get(row1.murdergamechannelid).overwritePermissions(users, {
+                        SEND_MESSAGES: null
+                      })
+                      bot.channels.get(row1.shopchannelid).overwritePermissions(users, {
+                        SEND_MESSAGES: null
+                      })
+                      message.reply(translate[row1.lang].jobchannelmsgs.healer.youhavehealed + users + translate[row1.lang].jobchannelmsgs.healer.youhavehealed2)
+                      bot.channels.get(murdergameid).send(":angel: " + users + translate[row1.lang].jobchannelmsgs.healer.hasbeenrevived)
+                      // users.send(":angel: You have been revived by a **Healer**! You will be alive tomorrow morning. :angel:")
+                      users.send(translate[row1.lang].jobchannelmsgs.healer.dm)
+                      sql.run(`UPDATE murderMysteryPlayers SET isDead = 0 WHERE userId = ${user} AND guildId = "${message.guild.id}"`);
+                      sql.run(`UPDATE murderMystery SET players = ${stuff + 1} WHERE guildId = '${message.guild.id}'`);
+                    })
+                  }
+                } else {
+                  let users = bot.users.get(user)
+                  if (row.isDead === 1) {
+                    healedactioned()
+                    checkrole(user, playerid, function (checkrolee) {
+                      if ([1, 5, 7].includes(checkrolee)) return;
+                      if (checkrolee === 1) {
+                        return;
+                        bot.channels.get(row1.murderchannelid).overwritePermissions(users, {
+                          SEND_MESSAGES: true
+                        })
+                      }
+                      if (checkrolee === 2) {
+                        bot.channels.get(row1.sheriffchannelid).overwritePermissions(users, {
+                          SEND_MESSAGES: true
+                        })
+                      }
+                      if (checkrolee === 4) {
+                        bot.channels.get(row1.radiochannelid).overwritePermissions(users, {
+                          SEND_MESSAGES: true
+                        })
+                      }
+                      if (checkrolee === 6) {
+                        bot.channels.get(row1.jailorchannelid).overwritePermissions(users, {
+                          SEND_MESSAGES: true
+                        })
+                        bot.channels.get(row1.jailchannelid).overwritePermissions(users, {
+                          SEND_MESSAGES: true
+                        })
+
+                      }
+                      bot.channels.get(row1.murdergamechannelid).overwritePermissions(users, {
+                        SEND_MESSAGES: null
+                      })
+                      bot.channels.get(row1.shopchannelid).overwritePermissions(users, {
+                        SEND_MESSAGES: null
+                      })
+                      message.reply(translate[row1.lang].jobchannelmsgs.healer.youhavehealed + users + translate[row1.lang].jobchannelmsgs.healer.youhavehealed2)
+                      bot.channels.get(murdergameid).send(":angel: " + users + translate[row1.lang].jobchannelmsgs.healer.hasbeenrevived)
+                      // users.send(":angel: You have been revived by a **Healer**! You will be alive tomorrow morning. :angel:")
+                      users.send(translate[row1.lang].jobchannelmsgs.healer.dm)
+                      sql.run(`UPDATE murderMysteryPlayers SET isDead = 0 WHERE userId = ${user} AND guildId = "${message.guild.id}"`);
+                      sql.run(`UPDATE murderMystery SET players = ${stuff + 1} WHERE guildId = '${message.guild.id}'`);
+                      gameData.splice(gameData.indexOf(a), 1)
+
+                    })
+                  } else {
+                    message.reply(translate[row1.lang].jobchannelmsgs.healer.youhavehealed + users)
+                    users.send(translate[row.lang].jobchannelmsgs.zombie.healer)
+                    gameData.splice(gameData.indexOf(a), 1)
+                  }
+                }
+              }
+            })
+          }
           let users = bot.users.get(user)
           //if (row.isDead === 0) return message.reply("That person isn't dead!")
           if (row.isDead === 0) return message.reply(translate[row1.lang].thatpersonisntdead)
           healedactioned()
           //message.reply("You have healed " + users + "!\nHe will be alive in the morning!")
           //bot.channels.get(murdergameid).send(":angel: " + users + " has been revived by a **Healer** :angel:")
-          checkrole(user.id, playerid, function (checkrolee) {
+          checkrole(user, playerid, function (checkrolee) {
+            if ([1, 5, 7].includes(checkrolee)) return;
             if (checkrolee === 1) {
-              bot.channels.get(row.murderchannelid).overwritePermissions(users, {
+              bot.channels.get(row1.murderchannelid).overwritePermissions(users, {
                 SEND_MESSAGES: true
               })
             }
             if (checkrolee === 2) {
-              bot.channels.get(row.sheriffchannelid).overwritePermissions(users, {
+              bot.channels.get(row1.sheriffchannelid).overwritePermissions(users, {
                 SEND_MESSAGES: true
               })
             }
             if (checkrolee === 4) {
-              bot.channels.get(row.radiochannelid).overwritePermissions(users, {
+              bot.channels.get(row1.radiochannelid).overwritePermissions(users, {
                 SEND_MESSAGES: true
               })
             }
             if (checkrolee === 6) {
-              bot.channels.get(row.jailorchannelid).overwritePermissions(users, {
+              bot.channels.get(row1.jailorchannelid).overwritePermissions(users, {
                 SEND_MESSAGES: true
               })
-              bot.channels.get(row.jailchannelid).overwritePermissions(users, {
+              bot.channels.get(row1.jailchannelid).overwritePermissions(users, {
                 SEND_MESSAGES: true
               })
-
             }
-            bot.channels.get(row.murdergamechannelid).overwritePermissions(users, {
+            bot.channels.get(row1.murdergamechannelid).overwritePermissions(users, {
               SEND_MESSAGES: null
             })
-            bot.channels.get(row.shopchannelid).overwritePermissions(users, {
+            bot.channels.get(row1.shopchannelid).overwritePermissions(users, {
               SEND_MESSAGES: null
             })
             message.reply(translate[row1.lang].jobchannelmsgs.healer.youhavehealed + users + translate[row1.lang].jobchannelmsgs.healer.youhavehealed2)
             bot.channels.get(murdergameid).send(":angel: " + users + translate[row1.lang].jobchannelmsgs.healer.hasbeenrevived)
             // users.send(":angel: You have been revived by a **Healer**! You will be alive tomorrow morning. :angel:")
             users.send(translate[row1.lang].jobchannelmsgs.healer.dm)
-            sql.run(`UPDATE murderMysteryPlayers SET isDead = ${row.isDead = 0} WHERE userId = ${user} AND guildId = "${message.guild.id}"`);
+            sql.run(`UPDATE murderMysteryPlayers SET isDead = 0 WHERE userId = ${user} AND guildId = "${message.guild.id}"`);
             sql.run(`UPDATE murderMystery SET players = ${stuff + 1} WHERE guildId = '${message.guild.id}'`);
           })
         }
@@ -7450,24 +6792,27 @@ bot.on('message', message => {
     if (playerid !== "") {
       sql.get(`SELECT * FROM murderMysteryPlayers WHERE playerid ='${playerid}' AND guildId ='${message.guild.id}'`).then(row => {
         if (!row) {
-          new Error("Murder Mystery - Player not found.")
+          console.log("Murder Mystery - Player not found. [checkrole()]")
         } else {
-          if (row.isMurderer === 1) {
+          if (row.roleId === 1) {
             return fn(1)
           }
-          if (row.isSheriff === 1) {
+          if (row.roleId === 2) {
             return fn(2)
           }
-          if (row.isHealer === 1) {
+          if (row.roleId === 3) {
             return fn(3)
           }
-          if (row.isRadioPerson === 1) {
+          if (row.roleId === 4) {
             return fn(4)
           }
-          if (row.isAssassin === 1) {
+          if (row.roleId === 5) {
             return fn(5)
           }
-          if (row.isJailor === 1) {
+          if (row.roleId === 6) {
+            return fn(6)
+          }
+          if (row.roleId === 7) {
             return fn(6)
           }
         }
@@ -7476,25 +6821,25 @@ bot.on('message', message => {
     }
     sql.get(`SELECT * FROM murderMysteryPlayers WHERE userId ='${user}' AND guildId ='${message.guild.id}'`).then(row => {
       if (!row) {
-        new Error("Murder Mystery - Player not found.")
+        console.log("Murder Mystery - Player not found. [checkrole()]")
       } else {
-        if (row.isMurderer === 1) {
-          return 1
+        if (row.roleId === 1) {
+          return fn(1)
         }
-        if (row.isSheriff === 1) {
-          return 2
+        if (row.roleId === 2) {
+          return fn(2)
         }
-        if (row.isHealer === 1) {
-          return 3
+        if (row.roleId === 3) {
+          return fn(3)
         }
-        if (row.isRadioPerson === 1) {
-          return 4
+        if (row.roleId === 4) {
+          return fn(4)
         }
-        if (row.isAssassin === 1) {
-          return 5
+        if (row.roleId === 5) {
+          return fn(5)
         }
-        if (row.isJailor === 1) {
-          return 6
+        if (row.roleId === 6) {
+          return fn(6)
         }
       }
     })
@@ -7548,70 +6893,6 @@ bot.on('message', message => {
       }
     })
   }
-
-  if (command === "healid") {
-    if (message.channel.type === 'dm') {
-      message.author.send("I cannot respond with this command in DMS.")
-      return;
-    }
-
-    sql.get(`SELECT * FROM murderMystery WHERE guildId ='${message.guild.id}'`).then(row => {
-      if (!row) {
-        message.reply("You have not put your data in the database! Please type " + config.prefix + "game setupdata\nto insert your data into the database!")
-        return
-      } else {
-
-
-
-        //if(message.guild.id !== preventjoinData.guildID) return message.reply("That is not your game!")
-        //if(preventjoinData.start === 0) return message.reply("The game hasn't started yet!")
-        if (row.gameStarted === 0) return message.reply(translate[row.lang].gamehasntstart)
-
-
-        if (message.channel.id !== row.healchannelid) return;
-
-        deadcheck(function (ded) {
-          if (ded === true) return;
-          if (row.modeId !== 9 && row.modeId !== 10) {
-            if (row.isDay === 1) return message.reply(translate[row.lang].eeer)
-          }
-          if (row.modeId === 9) {
-            if (row.isNight === 1) return message.reply(translate[row.lang].lola)
-          }
-          let users = args[0]
-          if (!users) return message.reply("Please enter a user id!")
-          var somettt = isactioned()
-          if (somettt === true) return;
-          sql.get(`SELECT * FROM murderMysteryPlayers WHERE userId ='${message.author.id}' AND guildId ='${message.guild.id}'`).then(row1 => {
-            if (!row1) {
-
-            } else {
-              if (row.modeId !== 10) {
-                if (row1.actioned === 1) {
-                  return;
-                }
-              }
-              if (row1.isjailed === 1) return;
-              if (users === message.author.id) return message.reply(translate[row.lang].jobchannelmsgs.healer.wasteheal)
-              var checkrolee = checkrole(0, user, function (a) {
-                return a;
-              })
-              heal(0, row.murdergamechannelid, message.author.id, user)
-              //if(mmplayersDataa.isDead === 0) return message.reply("That person isn't dead!")
-              let aaaaaaaa = message.guild.roles.get(row.murdermysteryRoleID)
-              healnumber(user)
-              sql.run(`UPDATE murderMystery SET players = ${row.players + 1} WHERE guildId = '${message.guild.id}'`);
-              /**
-                      fs.writeFile('./mmplayers.json', JSON.stringify(mmplayers), (err) => {
-                    if (err) console.error(err)
-                    });
-              **/
-            }
-          })
-        })
-      }
-    })
-  }
   if (command === "heal") {
     if (message.channel.type === 'dm') {
       message.author.send("I cannot respond with this command in DMS.")
@@ -7624,49 +6905,56 @@ bot.on('message', message => {
             message.reply("You have not put your data in the database! Please type " + config.prefix + "game setupdata\nto insert your data into the database!")
             return
           } else {
-
-
-
             //if(message.guild.id !== preventjoinData.guildID) return message.reply("That is not your game!")
             //if(preventjoinData.start === 0) return message.reply("The game hasn't started yet!")
             if (row.gameStarted === 0) return message.reply(translate[row.lang].gamehasntstart)
-
-
             if (message.channel.id !== row.healchannelid) return;
-
             deadcheck(function (ded) {
-              if (ded === true) return;
+              if (ded) /*123717*/ return;
               if (row.modeId !== 9 && row.modeId !== 10) {
                 if (row.isDay === 1) return message.reply(translate[row.lang].eeer)
               }
               if (row.modeId === 9) {
                 if (row.isNight === 1) return message.reply(translate[row.lang].lola)
               }
-              let user = message.mentions.users.first();
-              if (!user) return message.reply(translate[row.lang].userdoesntexist)
-              //var somettt = isactioned()
-              //if (somettt === true) return;
-              /*
-          sql.get(`SELECT * FROM murderMysteryPlayers WHERE userId ='${message.author.id}' AND guildId ='${message.guild.id}'`).then(row1 => {
-  
-            if (row1.actioned === 1) {
-              return;
-            }
-  
-          })
-  */
-              sql.get(`SELECT * FROM murderMysteryPlayers WHERE userId ='${message.author.id}' AND guildId ='${message.guild.id}'`).then(row1 => {
-                if (!row1) {
-                  new Error("Murder Mystery - Player not found.")
+              let userMention = message.mentions.users.first();
+              let userPID = args[0]
+              let query = "userId = ?"
+              let query2 = ""
+              if (!userMention) {
+                if (isNaN(parseInt(userPID))) {
+                  return message.reply(translate[row.lang].userdoesntexist)
+                }
+                if (!userPID) {
+                  return message.reply(translate[row.lang].userdoesntexist)
+                }
+              }
+              if (userPID) {
+                query = `userId = ?`
+                query2 = userPID
+              }
+              if (userMention) {
+                query = `userId = ?`
+                query2 = userMention.id
+              }
+              sql.get(`SELECT * FROM murderMysteryPlayers WHERE ${query}`, [query2]).then(user => {
+                if (!user) {
+                  message.reply(translate[row.lang].userdoesntexist)
                 } else {
-                  //if (row.actioned === 1) return message.reply("You have already searched/shot someone!");
-                  if (row.modeId !== 10) {
-                    if (row1.actioned === 1) return message.reply(translate[row.lang].alreadyjailed);
-                  }
-                  if (row1.isjailed === 1) return;
-                  //if (user.id === message.author.id) return message.reply("You realize that you healed yourself, You have successfully wasted a first-aid kit. How terrible, heres another one *gives another one* Now dont use it on yourself!")
-                  if (user.id === message.author.id) return message.reply(translate[row.lang].jobchannelmsgs.healer.wasteheal)
-                  heal(user.id, row.murdergamechannelid, message.author.id, "", row.players)
+                  sql.get(`SELECT * FROM murderMysteryPlayers WHERE userId ='${message.author.id}' AND guildId ='${message.guild.id}'`).then(row1 => {
+                    if (!row1) {
+                      console.log("Murder Mystery - Player not found. [mm!heal]")
+                    } else {
+                      //if (row.actioned === 1) return message.reply("You have already searched/shot someone!");
+                      if (row.modeId !== 10) {
+                        if (row1.actioned === 1) return message.reply(translate[row.lang].alreadyjailed);
+                      }
+                      if (row1.isjailed === 1) return;
+                      //if (user.id === message.author.id) return message.reply("You realize that you healed yourself, You have successfully wasted a first-aid kit. How terrible, heres another one *gives another one* Now dont use it on yourself!")
+                      if (user.userId === message.author.id) return message.reply(translate[row.lang].jobchannelmsgs.healer.wasteheal)
+                      heal(user.userId, row.murdergamechannelid, message.author.id, "", row.players)
+                    }
+                  })
                 }
               })
             })
@@ -7687,18 +6975,17 @@ bot.on('message', message => {
     })
   }
 
-  function checkassassindead() {
-    let dewd = 1
-    sql.get(`SELECT * FROM murderMysteryPlayers WHERE isAssassin = '${dewd}' AND guildId ='${message.guild.id}'`).then(row => {
+  function checkassassindead(fn) {
+    sql.get(`SELECT * FROM murderMysteryPlayers WHERE roleId = 5 AND guildId ='${message.guild.id}'`).then(row => {
       if (!row) {
-        new Error("Murder Mystery - Player not found.")
+        console.log("Murder Mystery - Player not found.")
         return
       } else {
 
         if (row.isDead === 1) {
-          return 1;
+          return fn(1);
         } else {
-          return 0;
+          return fn(0);
         }
 
       }
@@ -7708,19 +6995,20 @@ bot.on('message', message => {
   function playeridthingssss() {
     sql.get(`SELECT * FROM murderMystery WHERE guildId ='${message.guild.id}'`).then(row => {
       if (!row) {
-        new Error("Murder Mystery - Player not found.")
+        console.log("Murder Mystery - Player not found.")
         return
       } else {
-        let assassinded = checkassassindead()
-        if (assassinded === 1) {
-          if (row.players === 1) {
-            return nonvict()
+        checkassassindead(function (assassinded) {
+          if (assassinded === 1) {
+            if (row.players === 1) {
+              return nonvict()
+            }
+          } else {
+            if (row.players === 2) {
+              return nonvict()
+            }
           }
-        } else {
-          if (row.players === 2) {
-            return nonvict()
-          }
-        }
+        })
       }
     })
   }
@@ -7729,46 +7017,137 @@ bot.on('message', message => {
     sql.get(`SELECT * FROM murderMystery WHERE guildId ='${message.guild.id}'`).then(row => {
       if (!row) return;
       if (row.gameStarted === 0) return;
-    })
-    var playeridz = 1
-    sql.get(`SELECT * FROM murderMysteryPlayers WHERE isMurderer = 1 AND guildId ='${message.guild.id}'`).then(row1 => {
-      if (!row1) {
-        throw new Error("Error Code 499 at checkmurderdead")
-      } else {
-        checkifhasitem(row1.userId, 4, 1, function (hasItem) {
-          if (hasItem === true) {
-            sql.run(`DELETE FROM murderMysteryItems WHERE guildId ='${message.guild.id}' AND userId ='${row1.userId}' AND itemId =4 AND isDark = 1`)
+
+      var playeridz = 1
+      sql.get(`SELECT * FROM murderMysteryPlayers WHERE roleId = 1 AND guildId ='${message.guild.id}'`).then(row1 => {
+        if (!row1) {
+          if (row.modeId === 12) {
+            sql.get(`SELECT count(*) FROM murderMysteryPlayers WHERE roleId = 7 AND guildId ='${message.guild.id}' AND isDead = 0`).then(getZombies => {
+              if (getZombies['count(*)'] === 0) {
+                victory()
+              } else {
+                if (getZombies['count(*)'] == row.players) {
+                  nonvict()
+                }
+              }
+            })
+          } else {
+            console.error("[Murder Mystery Error] Error Code 499 at checkmurderdead")
           }
-          checkifhasitem(row1.userId, 2, 1, function (hasItem2) {
-            if (hasItem2 === true) {
-              sql.run(`DELETE FROM murderMysteryItems WHERE guildId ='${message.guild.id}' AND userId ='${row1.userId}' AND itemId =2 AND isDark = 1`)
+
+        } else {
+          checkifhasitem(row1.userId, 4, 1, function (hasItem) {
+            if (hasItem) /*123717*/ {
+              sql.run(`DELETE FROM murderMysteryItems WHERE guildId ='${message.guild.id}' AND userId ='${row1.userId}' AND itemId =4 AND isDark = 1`)
             }
-            if (row1.isDead === 0) {
-              playeridthingssss()
-            } else {
-              return victory()
-            }
+            checkifhasitem(row1.userId, 2, 1, function (hasItem2) {
+              if (hasItem2) /*123717*/ {
+                sql.run(`DELETE FROM murderMysteryItems WHERE guildId ='${message.guild.id}' AND userId ='${row1.userId}' AND itemId =2 AND isDark = 1`)
+              }
+              if (row.modeId === 2) {
+                sql.get(`SELECT count(*) FROM murderMysteryPlayers WHERE roleId = 1 AND guildId ='${message.guild.id}' AND isDead = 0`).then(getMurderers => {
+                  if (getMurderers['count(*)'] == 1) {
+                    victory()
+                  }
+                })
+              } else {
+                if (row1.isDead === 0) {
+                  playeridthingssss()
+                } else {
+                  if (row.modeId === 12) {
+                    sql.get(`SELECT count(*) FROM murderMysteryPlayers WHERE roleId = 7 AND guildId ='${message.guild.id}' AND isDead = 0`).then(getZombies => {
+                      if (getZombies['count(*)'] === 0) {
+                        victory()
+                      } else {
+                        if (getZombies['count(*)'] == row.players) {
+                          nonvict()
+                        }
+                      }
+                    })
+                  } else {
+                    return victory()
+                  }
+                }
+              }
+            })
           })
-        })
-      }
+        }
+      })
     })
   }
 
   function isDay() {
     sql.get(`SELECT * FROM murderMystery WHERE guildId ='${message.guild.id}'`).then(row => {
       if (!row) {
-        throw new Error("Murder Mystery - ERR.")
+        console.error("[Murder Mystery Error] Murder Mystery - ERR.")
         return
       } else {
         if (debugmode === 1) {
           console.log("[DEBUG] isDay")
         }
-
         //if (row.isHumansvsbots === 1) {
         if (row.modeId === 4) {
           setTimeout(function () {
             botquotesa()
           }, 2000)
+        }
+        if (row.modeId === 12) {
+          let gameData = row.gameData.split("|")
+          let gameDataString = ""
+          if (row.gameData.length > 0) {
+            gameData.forEach(function (a) {
+              let zD = a.split(",")
+              if (parseInt(zD[1]) >= 1) {
+                sql.get(`SELECT * FROM murderMysteryPlayers WHERE userId = ? AND guildId = "${message.guild.id}"`, [zD[0]]).then(userData => {
+                  if (!userData) return
+                  if (userData.isDead === 1) return
+                  bot.users.get(zD[0]).send(translate[row.lang].jobchannelmsgs.zombie.turnedintozombie)
+                  let turnedzombieString = translate[row.lang].jobchannelmsgs.zombie.turnedintozombie
+                  turnedzombieString = turnedzombieString.replace("%user%", "<@" + zD[0] + ">")
+                  turnedzombieString = turnedzombieString.replace("%role%", getRoleId(userData.roleId, row.lang))
+                  bot.channels.get(row.zombiechannelid).send(turnedzombieString)
+                  sql.run(`UPDATE murderMysteryPlayers SET roleId = 7 WHERE guildId = "${message.guild.id}" AND userId = ?`, [zD[0]])
+                  gameData.splice(gameData.indexOf(a), 1)
+                  gameDataString += `${zD[0]},${zD[1]}|`
+                  checkrole(zD[0], userData.roleId, function (checkrolee) {
+                    if (checkrolee === 1) {
+                      bot.channels.get(row.murderchannelid).overwritePermissions(bot.users.get(zD[0]), {
+                        READ_MESSAGES: null
+                      })
+                    }
+                    if (checkrolee === 2) {
+                      bot.channels.get(row.sheriffchannelid).overwritePermissions(bot.users.get(zD[0]), {
+                        READ_MESSAGES: null
+                      })
+                    }
+                    if (checkrolee === 4) {
+                      bot.channels.get(row.radiochannelid).overwritePermissions(bot.users.get(zD[0]), {
+                        READ_MESSAGES: null
+                      })
+                    }
+                    if (checkrolee === 6) {
+                      bot.channels.get(row.jailorchannelid).overwritePermissions(bot.users.get(zD[0]), {
+                        READ_MESSAGES: null
+                      })
+                      bot.channels.get(row.jailchannelid).overwritePermissions(bot.users.get(zD[0]), {
+                        READ_MESSAGES: null
+                      })
+
+                    }
+                    bot.channels.get(row.zombiechannelid).overwritePermissions(bot.users.get(zD[0]), {
+                      READ_MESSAGES: true
+                    })
+                  })
+                })
+              } else {
+                zD[1] = parseInt(zD[1]) + 1
+                gameDataString += `${zD[0]},${zD[1]}|`
+                gameDataString = gameDataString.slice(0, -1)
+              }
+            })
+            sql.run(`UPDATE murderMystery SET gameData = ? WHERE guildId = "${message.guild.id}"`, [gameDataString])
+          }
+
         }
         if (row.modeId === 7) {
           setTimeout(function () {
@@ -7776,7 +7155,7 @@ bot.on('message', message => {
           }, 2000)
         }
         //if (row.isMurderparty === 0) {
-        sql.run(`UPDATE murderMystery SET day = ${row.day + 1} WHERE guildId = '${message.guild.id}'`)
+        sql.run(`UPDATE murderMystery SET day = day + 1 WHERE guildId = '${message.guild.id}'`)
         //}
         //if (row.isMurderparty === 1) {
         if (row.modeId === 3) {
@@ -7800,26 +7179,22 @@ bot.on('message', message => {
             console.log("[DEBUG] CHECK MURDER DEAD OUTSIDE FUNCTION")
           }
         }
-
+        sql.run(`DELETE FROM murderMysteryItems WHERE guildId = '${message.guild.id}' AND itemId = 2 AND isDark = 1`)
+        sql.run(`UPDATE murderMysteryPlayers SET voted = 0, isjailed = 0, actioned = 0, hasVoted = 0, gold = gold + 1 WHERE guildId = '${message.guild.id}'`)
+        sql.run(`UPDATE murderMysteryPlayers SET darkgold = darkgold + 0.5 WHERE roleId = 1 AND guildId = '${message.guild.id}'`)
+        /*
         sql.all(`SELECT * FROM murderMysteryPlayers WHERE guildId LIKE '${message.guild.id}' ORDER BY userId`).then((rows) => {
           for (let row6 of rows) {
             if (debugmode === 1) {
               console.log("[DEBUG] REPLACED ALL THINGS")
             }
-            sql.run(`UPDATE murderMysteryPlayers SET voted = ${row6.voted = 0} WHERE userId = '${row6.userId}' AND guildId = '${message.guild.id}'`)
-            sql.run(`UPDATE murderMysteryPlayers SET isjailed = ${row6.isjailed = 0} WHERE userId = '${row6.userId}' AND guildId = '${message.guild.id}'`)
-            sql.run(`UPDATE murderMysteryPlayers SET actioned = ${row6.actioned = 0} WHERE userId = '${row6.userId}' AND guildId = '${message.guild.id}'`)
-            sql.run(`UPDATE murderMysteryPlayers SET hasVoted = ${row6.hasVoted = 0} WHERE userId = '${row6.userId}' AND guildId = '${message.guild.id}'`)
-            sql.run(`UPDATE murderMysteryPlayers SET gold = ${row6.gold + 1} WHERE userId = '${row6.userId}' AND guildId = '${message.guild.id}'`)
-            if (row6.isMurderer === 1) {
+            if (row6.roleId === 1) {
               sql.run(`UPDATE murderMysteryPlayers SET darkgold = ${row6.darkgold + 0.5} WHERE userId = '${row6.userId}' AND guildId = '${message.guild.id}'`)
             }
           }
         });
-
-        sql.run(`UPDATE murderMystery SET isNight = ${row.isNight = 0} WHERE guildId = '${message.guild.id}'`)
-
-        sql.run(`UPDATE murderMystery SET isDay = ${row.isDay = 1} WHERE guildId = '${message.guild.id}'`)
+        */
+        sql.run(`UPDATE murderMystery SET isNight = 0, isDay = 1 WHERE guildId = '${message.guild.id}'`)
         //mmplayersData.hasvoted = 0
         //mmplayersData.actioned = 0
         /**
@@ -7851,7 +7226,7 @@ bot.on('message', message => {
           return;
         }
         if (row.modeId === 10) return;
-        isdayloop = setTimeout(isNight, 60000)
+        isdayloop = setTimeout(isNight, (row.nighttimelen * 1000))
       }
     })
   }
@@ -7863,7 +7238,7 @@ bot.on('message', message => {
     }
     sql.get(`SELECT * FROM murderMystery WHERE guildId ='${message.guild.id}'`).then(row => {
       if (!row) {
-        new Error("Murder Mystery - Player not found.")
+        console.log("Murder Mystery - Player not found.")
         return
       } else {
 
@@ -7883,7 +7258,7 @@ bot.on('message', message => {
           isnightloop = setTimeout(isDay, 30000)
           return;
         }
-        isnightloop = setTimeout(isDay, 55000)
+        isnightloop = setTimeout(isDay, (row.daytimelen * 1000))
 
       }
     })
@@ -7910,7 +7285,7 @@ bot.on('message', message => {
         message.reply("That player isn't in the game!")
         return
       } else {
-        sql.run(`UPDATE murderMysteryPlayers SET voted = ${row.voted + 1} WHERE userId ='${useridz}' AND guildId = '${message.guild.id}'`)
+        sql.run(`UPDATE murderMysteryPlayers SET voted = voted + 1 WHERE userId ='${useridz}' AND guildId = '${message.guild.id}'`)
 
 
       }
@@ -7937,8 +7312,6 @@ bot.on('message', message => {
         return
       } else {
         sql.run(`UPDATE murderMysteryPlayers SET hasvoted = 1 WHERE userId ='${message.author.id}' AND guildId = '${message.guild.id}'`)
-
-
       }
     })
   }
@@ -7966,7 +7339,7 @@ bot.on('message', message => {
   function willcheck(useridz, murderparty, murderchannelid) {
     sql.get(`SELECT * FROM murderMysteryPlayers WHERE userId ='${useridz}' AND guildId = '${message.guild.id}'`).then(row => {
       if (!row) {
-        new Error("Murder Mystery - Player not found.")
+        console.log("Murder Mystery - Player not found.")
       } else {
         if (murderparty === 1) {
           if (row.lastwill !== "") {
@@ -8139,481 +7512,154 @@ this.channels.has("423154259404521472") && this.channels.get("423154259404521472
     return message.reply("**Please put in on what type of suggestion you are suggesting!**\nTypes:\n```\nGamemodes (If you are using this then use this format: mm!suggest gamemodes <Name>|<Description>)\nRoles (If you are using this then use this format: mm!suggest roles <Name>|<Description>|<What the role can do and cannot do>)\nShop Items (If you are using this then use this format: mm!suggest shopitems <Name>|<Description>|<Price>|<What can it do>)\nDark Shop Items (If you are using this then use this format: mm!suggest darkshopitems <Name>|<Description>|<Price>|<What can it do>)\nOther (If you are using this then use this format: mm!suggest other <Name>|<Description>)\n```\n**NOTE:** Abusing this command will result in a blacklist for the bot, meaning you cannot submit any bugs or suggestions but can still start games.")
   }
   if (command === "votehang") {
-    sql.get(`SELECT * FROM murderMystery WHERE guildId ='${message.guild.id}'`).then(row => {
-      if (!row) {
-        message.reply("You have not put your data in the database! Please type " + config.prefix + "game setupdata\nto insert your data into the database!")
-        return
-      } else {
-        //if(message.guild.id !== preventjoinData.guildID) return message.reply("That is not your game!")
-        //if(preventjoinData.start === 0) return message.reply("The game hasn't started yet!")
-        if (row.gameStarted === 0) return message.reply(translate[row.lang].gamehasntstart)
-
-        if (message.channel.id !== row.murdergamechannelid) return; //message.reply("You cannot vote in your private channel!");
-
-        //if (row.isNight === 1) return message.reply("You cannot do this in the night!")
-        if (row.isNight === 1) return message.reply(translate[row.lang].lola)
-        unaction()
-        //mmplayersData.actioned = 0
-
-        let user = message.mentions.users.first();
-        if (!user) return message.reply(translate[row.lang].userdoesntexist)
-        hasvotedcheck()
-        sql.get(`SELECT * FROM murderMysteryPlayers WHERE userId = '${message.author.id}' AND guildId ='${message.guild.id}'`).then(row2 => {
-          if (!row2) {
-            //message.reply("You aren't in the game!")
-            message.reply(translate[row.lang].isntingame)
+    sql.get(`SELECT * FROM murderMysteryLobbies WHERE extraData LIKE "%${message.channel.id}%" AND shard = ${bot.shard.id}`).then(lobby => {
+      if (!lobby) {
+        sql.get(`SELECT * FROM murderMystery WHERE guildId ='${message.guild.id}'`).then(row => {
+          if (!row) {
+            message.reply("You have not put your data in the database! Please type " + config.prefix + "game setupdata\nto insert your data into the database!")
+            return
           } else {
+            //if(message.guild.id !== preventjoinData.guildID) return message.reply("That is not your game!")
+            //if(preventjoinData.start === 0) return message.reply("The game hasn't started yet!")
+            if (row.gameStarted === 0) return message.reply(translate[row.lang].gamehasntstart)
 
+            if (message.channel.id !== row.murdergamechannelid) return; //message.reply("You cannot vote in your private channel!");
 
-            sql.get(`SELECT * FROM murderMysteryPlayers WHERE userId = '${user.id}' AND guildId ='${message.guild.id}'`).then(row1 => {
-              if (!row1) {
-                //message.reply("That user isn't in the game!")
-                message.reply(translate[row.lang].userisnotingame)
+            //if (row.isNight === 1) return message.reply("You cannot do this in the night!")
+            if (row.isNight === 1) return message.reply(translate[row.lang].lola)
+            //mmplayersData.actioned = 0
+            let user = message.mentions.users.first();
+            if (!user) return message.reply(translate[row.lang].userdoesntexist)
+            hasvotedcheck()
+            sql.get(`SELECT * FROM murderMysteryPlayers WHERE userId = '${message.author.id}' AND guildId ='${message.guild.id}'`).then(row2 => {
+              if (!row2) {
+                //message.reply("You aren't in the game!")
+                message.reply(translate[row.lang].isntingame)
               } else {
-                //if(mmplayersData.hasvoted === 1) return message.reply("You have already voted!")
-                //if (row2.hasVoted === 1) return message.reply("You have already voted!")
-                if (row2.hasVoted === 1) return message.reply(translate[row.lang].b)
-                //if (row.isMurderparty === 1) {
-                if (row.modeId === 3) {
-                  //return message.reply("Votehang is disabled on this mode.")
-                  return message.reply(translate[row.lang].c)
-                }
-                if (row.modeId === 7) {
-                  //return message.reply("Votehang is disabled on this mode.")
-                  return message.reply(translate[row.lang].c)
-                }
-                if (row.modeId !== 1) {
-                  //return message.reply("Votehang is disabled on this mode.")
-                  return message.reply(translate[row.lang].c)
-                }
-                if (row.modeId === 2) {
-                  return message.reply(translate[row.lang].c)
-                  /*
-                  //let mmplayersDataa = mmplayers[user.id]
+                sql.get(`SELECT * FROM murderMysteryPlayers WHERE userId = '${user.id}' AND guildId ='${message.guild.id}'`).then(row1 => {
+                  if (!row1) {
+                    //message.reply("That user isn't in the game!")
+                    message.reply(translate[row.lang].userisnotingame)
+                  } else {
+                    //if(mmplayersData.hasvoted === 1) return message.reply("You have already voted!")
+                    //if (row2.hasVoted === 1) return message.reply("You have already voted!")
+                    if (row2.hasVoted === 1) return message.reply(translate[row.lang].b)
+                    if (row1.isDead === 1) return message.reply(translate[row.lang].thatpersonisdead)
+                    //if (user.id === message.author.id) return message.reply("You cannot vote yourself!")
+                    if (user.id === message.author.id) return message.reply(translate[row.lang].fkefoekf)
+                    sql.get(`SELECT * FROM murderMysteryPlayers WHERE roleId = 5 AND guildId = '${message.guild.id}'`).then(getAssassin => {
+                      if (!getAssassin) {
+                        message.channel.send("**ERROR** Assassin not found!\nThis error may show if you are on a gamemode in which the Assassin doesn't exist in.")
+                      } else {
+                        checkifhasitem(getAssassin.userId, 6, 1, function (checkItem) {
+                          checkassignedid(user.id, function (checkassignedd) {
+                            //mmplayersDataa.voted++;
+                            if (checkItem) /*123717*/ {
+                              sql.run(`UPDATE murderMysteryPlayers SET voted = voted + 1 WHERE userId ='${user.id}' AND guildId = '${message.guild.id}'`)
+                            }
+                            sql.run(`UPDATE murderMysteryPlayers SET voted = voted + 1, hasVoted = 1 WHERE userId ='${user.id}' AND guildId = '${message.guild.id}'`)
 
-                  //if(!mmplayersDataa) return message.reply("That user isn't in the game!")
+                            function diedbeingkilled() {
+                              bot.channels.get(row.murdergamechannelid).send(user + translate[row.lang].hasbeenhung)
+                            }
 
-                  if (user.id === message.author.id) return message.reply("You cannot vote yourself!")
-                  votemp(user.id)
+                            function nowill() {
+                              bot.channels.get(row.murdergamechannelid).send("There were no last wills to be found...")
+                            }
 
-                  //mmplayersDataa.voted++;
-                  sql.run(`UPDATE murderMysteryPlayers SET voted = ${row1.voted + 1} WHERE userId ='${user.id}' AND guildId = '${message.guild.id}'`)
-                  sql.run(`UPDATE murderMysteryPlayers SET hasVoted = ${row2.hasVoted = 1} WHERE userId ='${user.id}' AND guildId = '${message.guild.id}'`)
+                            function haswill() {
+                              bot.channels.get(row.murdergamechannelid).send(user + " Had a last will!\nHis will reads:\n```\n" + row1.lastwill + "\n```")
+                            }
 
-                  //mmplayersData.hasvoted = 1
-
-                  if (row1.voted === 5) {
-
-                    message.reply(user + " has been voted, and has around 5 votes, He will now be killed...")
-                    user.send(translate[row.lang].youhavedied)
-                    let aaaaaaaa = message.guild.roles.get(row.murdermysteryRoleID)
-
-                    function diedbeingkilled() {
-                      bot.channels.get(row.murdergamechannelid).send(user + translate[row.lang].hasbeenhung)
-                    }
-
-
-
-                    //message.guild.member(user).removeRole(aaaaaaaa.id)
-                    bot.channels.get(row.murdergamechannelid).overwritePermissions(user, {
-                      SEND_MESSAGES: false
-                    })
-                    setTimeout(diedbeingkilled, 500)
-
-                    willcheck(user.id, 1, row.murdergamechannelid)
-                    /**
-                                if(mmplayersDataa.lastwill === ""){
-
+                            function hisrole() {
+                              if (row1.roleId !== 1 || row1.roleId !== 5) {
+                                if (row1.roleId === 0) {
+                                  bot.channels.get(row.murdergamechannelid).send(`${user} ${translate[row.lang].wasan} **${getRoleId(row1.roleId, row.lang)}**`)
+                                  if (checkassignedd === 1) {
+                                    bot.channels.get(row.murdergamechannelid).send(`${user} was an **${getRoleId(row1.roleId, row.lang)}** and the **Assassin** gained 3 gold for killing his target!"`)
+                                    dmassassin(5)
+                                    sql.run(`UPDATE murderMysteryPlayers SET hasVoted = 0 WHERE userId ='${message.author.id}' AND guildId = '${message.guild.id}'`)
+                                    return
+                                  }
+                                } else {
+                                  if (checkassignedd === 1) {
+                                    bot.channels.get(row.murdergamechannelid).send(`${user} ${translate[row.lang].wasa} **${getRoleId(row1.roleId, row.lang)}** and the **Assassin** gained 3 gold for killing his target!`)
+                                    sql.run(`UPDATE murderMysteryPlayers SET hasVoted = 0 WHERE userId ='${message.author.id}' AND guildId = '${message.guild.id}'`)
+                                    dmassassin(5)
+                                    return
+                                  }
+                                  bot.channels.get(row.murdergamechannelid).send(`${user} ${translate[row.lang].wasa} **${getRoleId(row1.roleId, row.lang)}**`)
+                                  sql.run(`UPDATE murderMysteryPlayers SET hasVoted = 0 WHERE userId ='${message.author.id}' AND guildId = '${message.guild.id}'`)
+                                  return
                                 }
-                                if(mmplayersDataa.lastwill !== ""){
-                                  setTimeout(haswill, 1000)
-
-                                  setTimeout(hisrole, 2000, 1, row.murdergamechannelid)
-                                  return;
+                              } else {
+                                if (row1.roleId === 1) {
+                                  bot.channels.get(row.murdergamechannelid).send(`${user} ${translate[row.lang].wasthe} **${getRoleId(row1.roleId, row.lang)}**`)
+                                  sql.run(`UPDATE murderMysteryPlayers SET hasVoted = 0 WHERE userId ='${message.author.id}' AND guildId = '${message.guild.id}'`)
+                                  setTimeout(victory, 2000)
+                                } else {
+                                  bot.channels.get(row.murdergamechannelid).send(`${user} ${translate[row.lang].wasan} **${getRoleId(row1.roleId, row.lang)}**`)
+                                  sql.run(`UPDATE murderMysteryPlayers SET hasVoted = 0 WHERE userId ='${message.author.id}' AND guildId = '${message.guild.id}'`)
                                 }
-                    **/
-                  /*
-                                      return
-                                    }
-
-
-
-                                    if (mmplayersDataa.voted === 1) {
-                                      message.reply(user + " has been voted, " + "**2**" + " more votes needed until he dies.")
-
-                                    }
-                                    if (mmplayersDataa.voted === 2) {
-                                      message.reply(user + " has been voted, " + "**1**" + " more vote needed until he dies.")
-
-                                    }
-                                    //message.reply(user + " has been voted, " + mmplayersDataa.voted / 3 + " votes needed until he dies.")
-
-                                    /**
-
-                                              fs.writeFile('./mmplayers.json', JSON.stringify(mmplayers), (err) => {
-                                            if (err) console.error(err)
-                                            });
-                                          **/
-                  //return;
-                }
-                /// thing thing ting thing thigng
-                if (row.modeId === 1) {
-                  //if (user.id === message.author.id) return message.reply("You cannot vote yourself!")
-                  if (user.id === message.author.id) return message.reply(translate[row.lang].fkefoekf)
-                  sql.get(`SELECT * FROM murderMysteryPlayers WHERE isAssassin = 1 AND guildId = '${message.guild.id}'`).then(getAssassin => {
-                    if (!getAssassin) {
-                      message.channel.send("**ERROR** Assassin not found!")
-                    } else {
-                      checkifhasitem(getAssassin.userId, 6, 1, function (checkItem) {
-                        checkassignedid(user.id, function (checkassignedd) {
-                          //mmplayersDataa.voted++;
-                          //mmplayersData.hasvoted = 1
-                          if (checkItem === true) {
-                            sql.run(`UPDATE murderMysteryPlayers SET voted = ${row1.voted + 1} WHERE userId ='${user.id}' AND guildId = '${message.guild.id}'`)
-                          }
-                          sql.run(`UPDATE murderMysteryPlayers SET voted = ${row1.voted + 1}, hasVoted = ${row2.hasVoted = 1} WHERE userId ='${user.id}' AND guildId = '${message.guild.id}'`)
-
-                          function diedbeingkilled() {
-                            bot.channels.get(row.murdergamechannelid).send(user + translate[row.lang].hasbeenhung)
-                          }
-
-                          function nowill() {
-                            bot.channels.get(row.murdergamechannelid).send("There were no last wills to be found...")
-                          }
-
-                          function haswill() {
-                            bot.channels.get(row.murdergamechannelid).send(user + " Had a last will!\nHis will reads:\n```\n" + row1.lastwill + "\n```")
-                          }
-
-                          function hisrole() {
-                            if (row1.isMurderer === 1) {
-                              bot.channels.get(row.murdergamechannelid).send(user + " was the **Murderer**")
-                              sql.run(`UPDATE murderMysteryPlayers SET hasVoted = ${row2.hasVoted = 0} WHERE userId ='${message.author.id}' AND guildId = '${message.guild.id}'`)
-
-                              setTimeout(victory, 2000)
-                              return
-                            }
-                            if (row1.isSheriff === 1) {
-                              if (checkassignedd === 1) {
-                                bot.channels.get(row.murdergamechannelid).send(user + " was a **Detective** and the **Assassin** gained 3 gold for killing his target!")
-                                sql.run(`UPDATE murderMysteryPlayers SET hasVoted = ${row2.hasVoted = 0} WHERE userId ='${message.author.id}' AND guildId = '${message.guild.id}'`)
-
-
-                                //bot.users.get(arr[4]).send("You have gained $3!\nYou have no new Targets.")
-                                dmassassin(5)
-                                return
                               }
-                              bot.channels.get(row.murdergamechannelid).send(user + " was a **Detective**")
-                              sql.run(`UPDATE murderMysteryPlayers SET hasVoted = ${row2.hasVoted = 0} WHERE userId ='${message.author.id}' AND guildId = '${message.guild.id}'`)
-
-                              return;
                             }
-                            if (row1.isHealer === 1) {
-
-                              if (checkassignedd === 1) {
-                                bot.channels.get(row.murdergamechannelid).send(user + " was a **Healer** and the **Assassin** gained 3 gold for killing his target!")
-                                sql.run(`UPDATE murderMysteryPlayers SET hasVoted = ${row2.hasVoted = 0} WHERE userId ='${message.author.id}' AND guildId = '${message.guild.id}'`)
-
-
-                                dmassassin(5)
-
-
-                                return
-                              }
-
-                              bot.channels.get(row.murdergamechannelid).send(user + " was a **Healer**")
-                              sql.run(`UPDATE murderMysteryPlayers SET hasVoted = ${row2.hasVoted = 0} WHERE userId ='${message.author.id}' AND guildId = '${message.guild.id}'`)
-
-                              return
-                            }
-                            if (row1.isRadioPerson === 1) {
-                              if (checkassignedd === 1) {
-                                bot.channels.get(row.murdergamechannelid).send(user + " was a **Radio Person** and the **Assassin** gained 3 gold for killing his target!")
-
-                                dmassassin(5)
-
-                                sql.run(`UPDATE murderMysteryPlayers SET hasVoted = ${row2.hasVoted = 0} WHERE userId ='${message.author.id}' AND guildId = '${message.guild.id}'`)
-
-                                return
-                              }
-                              bot.channels.get(row.murdergamechannelid).send(user + " was a **Radio Person**")
-                              sql.run(`UPDATE murderMysteryPlayers SET hasVoted = ${row2.hasVoted = 0} WHERE userId ='${message.author.id}' AND guildId = '${message.guild.id}'`)
-
-                              return;
-                            }
-                            if (row1.isJailor === 1) {
-                              if (checkassignedd === 1) {
-                                bot.channels.get(row.murdergamechannelid).send(user + " was a **Jailor** and the **Assassin** gained 3 gold for killing his target!")
-                                dmassassin(5)
-                                sql.run(`UPDATE murderMysteryPlayers SET hasVoted = ${row2.hasVoted = 0} WHERE userId ='${message.author.id}' AND guildId = '${message.guild.id}'`)
-                                return
-                              }
-                              bot.channels.get(row.murdergamechannelid).send(user + " was a **Jailor**")
-                              sql.run(`UPDATE murderMysteryPlayers SET hasVoted = ${row2.hasVoted = 0} WHERE userId ='${message.author.id}' AND guildId = '${message.guild.id}'`)
-
-                              return;
-                            }
-                            if (row1.isAssassin === 1) {
-                              bot.channels.get(row.murdergamechannelid).send(user + " was an **Assassin**")
-                              sql.run(`UPDATE murderMysteryPlayers SET hasVoted = ${row2.hasVoted = 0} WHERE userId ='${message.author.id}' AND guildId = '${message.guild.id}'`)
-
-                              return
-                            }
-                            bot.channels.get(row.murdergamechannelid).send(user + " was **Innocent**")
-
-
-                            sql.run(`UPDATE murderMysteryPlayers SET hasVoted = ${row2.hasVoted = 0} WHERE userId ='${message.author.id}' AND guildId = '${message.guild.id}'`)
-
-
-                          }
-                          /*
-                                              if (row.players >= 8) {
-                                                if (row1.voted === 7) {
-                                                  message.reply(user + translate[row.lang].hasaroundvote + "**7**" + translate[row.lang].hasaroundvote2)
-                                                  user.send(translate[row.lang].youhavedied)
-                                                  bot.channels.get(row.murdergamechannelid).overwritePermissions(user, {
-                                                    SEND_MESSAGES: false
-                                                  })
-      
-                                                  nopermstoanychannel(row.playerId)
-                                                  sql.run(`UPDATE murderMysteryPlayers SET isDead = ${row1.isDead = 1} WHERE guildId ='${message.guild.id}' AND userId ='${user.id}'`)
-                                                  setTimeout(diedbeingkilled, 1000)
-      
-                                                  if (row1.lastwill === 0) {
-                                                    setTimeout(nowill, 5000)
-      
-                                                    setTimeout(hisrole, 10000)
-                                                    return;
-                                                  }
-                                                  if (row1.lastwill !== 0) {
-                                                    setTimeout(haswill, 5000)
-      
-                                                    setTimeout(hisrole, 10000)
-                                                    return;
-                                                  }
-      
-      
-                                                  return
-                                                }
-                                                if (row1.voted === 1) {
-                                                  message.reply(user + translate[row.lang].hasbeenvoted + "**6**" + translate[row.lang].morevotes)
-      
-                                                }
-                                                if (row1.voted === 2) {
-                                                  message.reply(user + translate[row.lang].hasbeenvoted + "**5**" + translate[row.lang].morevotes)
-      
-                                                }
-                                                if (row1.voted === 3) {
-                                                  message.reply(user + translate[row.lang].hasbeenvoted + "**4**" + translate[row.lang].morevotes)
-      
-                                                }
-                                                if (row1.voted === 4) {
-                                                  message.reply(user + translate[row.lang].hasbeenvoted + "**3**" + translate[row.lang].morevotes)
-      
-                                                }
-                                                if (row1.voted === 5) {
-                                                  message.reply(user + translate[row.lang].hasbeenvoted + "**2**" + translate[row.lang].morevotes)
-      
-                                                }
-                                                if (row1.voted === 6) {
-                                                  message.reply(user + translate[row.lang].hasbeenvoted + "**1**" + translate[row.lang].morevotes)
-      
-                                                }
-                                              }
-                                              if (row.players === 7) {
-                                                if (row1.voted === 6) {
-                                                  message.reply(user + translate[row.lang].hasaroundvote + "**6**" + translate[row.lang].hasaroundvote2)
-                                                  user.send(translate[row.lang].youhavedied)
-                                                  bot.channels.get(row.murdergamechannelid).overwritePermissions(user, {
-                                                    SEND_MESSAGES: false
-                                                  })
-                                                  nopermstoanychannel(row.playerId)
-                                                  sql.run(`UPDATE murderMysteryPlayers SET isDead = ${row1.isDead = 1} WHERE guildId ='${message.guild.id}' AND userId ='${user.id}'`)
-                                                  setTimeout(diedbeingkilled, 1000)
-      
-                                                  if (row1.lastwill === 0) {
-                                                    setTimeout(nowill, 5000)
-      
-                                                    setTimeout(hisrole, 10000)
-                                                    return;
-                                                  }
-                                                  if (row1.lastwill !== 0) {
-                                                    setTimeout(haswill, 5000)
-      
-                                                    setTimeout(hisrole, 10000)
-                                                    return;
-                                                  }
-                                                  return
-                                                }
-                                                if (row1.voted === 1) {
-                                                  message.reply(user + translate[row.lang].hasbeenvoted + "**5**" + translate[row.lang].morevotes)
-      
-                                                }
-                                                if (row1.voted === 2) {
-                                                  message.reply(user + translate[row.lang].hasbeenvoted + "**4**" + translate[row.lang].morevotes)
-      
-                                                }
-                                                if (row1.voted === 3) {
-                                                  message.reply(user + translate[row.lang].hasbeenvoted + "**3**" + translate[row.lang].morevotes)
-      
-                                                }
-                                                if (row1.voted === 4) {
-                                                  message.reply(user + translate[row.lang].hasbeenvoted + "**2**" + translate[row.lang].morevotes)
-      
-                                                }
-                                                if (row1.voted === 5) {
-                                                  //message.reply(user + " has been voted, " + "**1**" + " more vote needed until he dies.")
-                                                  message.reply(user + translate[row.lang].hasbeenvoted + "**1**" + translate[row.lang].morevotes)
-                                                }
-                                              }
-                                              */
-                          /*
-                          if (row.players === 2) {
-                            if (row1.voted === 1) {
-                              message.reply(user + translate[row.lang].hasaroundvote + "**1**" + translate[row.lang].hasaroundvote2)
-                              user.send(translate[row.lang].youhavedied)
+                            let aldadaasd = parseInt(row.players) - 1
+                            if (aldadaasd === row1.voted) {
+                              message.reply(user + translate[row.lang].hasaroundvote + "**0**" + translate[row.lang].hasaroundvote2)
+                              //user.send(translate[row.lang].youhavedied)
+                              user.send(translate[row.lang].youhavedied).catch(e => {
+                                message.channel.send(`${user}, ${translate[row.lang].dmsdisabled}`)
+                              })
                               bot.channels.get(row.murdergamechannelid).overwritePermissions(user, {
                                 SEND_MESSAGES: false
                               })
-                              nopermstoanychannel(row.playerId)
-                              sql.run(`UPDATE murderMysteryPlayers SET isDead = ${row1.isDead = 1} WHERE guildId ='${message.guild.id}' AND userId ='${user.id}'`)
+                              //nopermstoanychannel(row.playerId)
+                              sql.run(`UPDATE murderMysteryPlayers SET isDead = 1 WHERE guildId ='${message.guild.id}' AND userId ='${user.id}'`)
                               setTimeout(diedbeingkilled, 1000)
-      
+
                               if (row1.lastwill === 0) {
                                 setTimeout(nowill, 5000)
-      
+
                                 setTimeout(hisrole, 10000)
                                 return;
                               }
                               if (row1.lastwill !== 0) {
                                 setTimeout(haswill, 5000)
-      
+
                                 setTimeout(hisrole, 10000)
                                 return;
                               }
-                              return
-                            }
-                          }
-      */
-                          let aldadaasd = parseInt(row.players) - 1
-                          if (aldadaasd === row1.voted) {
-                            message.reply(user + translate[row.lang].hasaroundvote + "**0**" + translate[row.lang].hasaroundvote2)
-                            //user.send(translate[row.lang].youhavedied)
-                            user.send(translate[row.lang].youhavedied).catch(e => {
-                              message.channel.send(`${user}, ${translate[row.lang].dmsdisabled}`)
-                            })
-                            bot.channels.get(row.murdergamechannelid).overwritePermissions(user, {
-                              SEND_MESSAGES: false
-                            })
-                            //nopermstoanychannel(row.playerId)
-                            sql.run(`UPDATE murderMysteryPlayers SET isDead = 1 WHERE guildId ='${message.guild.id}' AND userId ='${user.id}'`)
-                            setTimeout(diedbeingkilled, 1000)
-
-                            if (row1.lastwill === 0) {
-                              setTimeout(nowill, 5000)
-
-                              setTimeout(hisrole, 10000)
-                              return;
-                            }
-                            if (row1.lastwill !== 0) {
-                              setTimeout(haswill, 5000)
-
-                              setTimeout(hisrole, 10000)
-                              return;
-                            }
-                          } else {
-                            if (checkItem === true) {
-                              let weird = aldadaasd - row1.voted
-                              let tasdasd = weird + 1
-                              message.reply(user + translate[row.lang].hasbeenvoted + `**${tasdasd}**` + translate[row.lang].morevotes)
                             } else {
-                              let weird = aldadaasd - row1.voted
-                              message.reply(user + translate[row.lang].hasbeenvoted + `**${weird}**` + translate[row.lang].morevotes)
+                              if (checkItem) /*123717*/ {
+                                let weird = aldadaasd - row1.voted
+                                let tasdasd = weird + 1
+                                message.reply(user + translate[row.lang].hasbeenvoted + `**${tasdasd}**` + translate[row.lang].morevotes)
+                              } else {
+                                let weird = aldadaasd - row1.voted
+                                message.reply(user + translate[row.lang].hasbeenvoted + `**${weird}**` + translate[row.lang].morevotes)
+                              }
                             }
-                          }
-                          /*
-                                              if (row.players === 6) {
-                                                if (row1.voted === 5) {
-                                                  message.reply(user + translate[row.lang].hasaroundvote + "**5**" + translate[row.lang].hasaroundvote2)
-                                                  //user.send(translate[row.lang].youhavedied)
-                                                  user.send(translate[row.lang].youhavedied)
-                                                  bot.channels.get(row.murdergamechannelid).overwritePermissions(user, {
-                                                    SEND_MESSAGES: false
-                                                  })
-                                                  nopermstoanychannel(row.playerId)
-                                                  sql.run(`UPDATE murderMysteryPlayers SET isDead = ${row1.isDead = 1} WHERE guildId ='${message.guild.id}' AND userId ='${user.id}'`)
-                                                  setTimeout(diedbeingkilled, 1000)
-      
-                                                  if (row1.lastwill === 0) {
-                                                    setTimeout(nowill, 5000)
-      
-                                                    setTimeout(hisrole, 10000)
-                                                    return;
-                                                  }
-                                                  if (row1.lastwill !== 0) {
-                                                    setTimeout(haswill, 5000)
-      
-                                                    setTimeout(hisrole, 10000)
-                                                    return;
-                                                  }
-                                                  return
-                                                }
-                                                if (row1.voted === 1) {
-                                                  message.reply(user + translate[row.lang].hasbeenvoted + "**4**" + translate[row.lang].morevotes)
-                                                }
-                                                if (row1.voted === 2) {
-                                                  message.reply(user + translate[row.lang].hasbeenvoted + "**3**" + translate[row.lang].morevotes)
-                                                }
-                                                if (row1.voted === 3) {
-                                                  message.reply(user + translate[row.lang].hasbeenvoted + "**2**" + translate[row.lang].morevotes)
-                                                }
-                                                if (row1.voted === 4) {
-                                                  message.reply(user + translate[row.lang].hasbeenvoted + "**1**" + translate[row.lang].morevotes)
-                                                }
-                                              }
-                                              */
+                          })
                         })
-                        //message.reply(user + " has been voted, " + mmplayersDataa.voted / 3 + " votes needed until he dies.")
-                        /** 
-                                fs.writeFile('./mmplayers.json', JSON.stringify(mmplayers), (err) => {
-                                  if (err) console.error(err)
-                                });
-                        **/
-                      })
-                    }
-                  })
-                }
+                      }
+                    })
+                  }
+                })
               }
             })
           }
         })
-      }
-    })
-  }
-
-  function unactionpp() {
-    sql.get(`SELECT * FROM murderMysteryPlayers WHERE userId ='${message.author.id}' AND guildId = '${message.guild.id}'`).then(row => {
-      if (!row) {
-        new Error("Murder Mystery - Player not found.")
       } else {
-        sql.run(`UPDATE murderMysteryPlayers SET actioned = 0 WHERE userId ='${message.author.id}' AND guildId = '${message.guild.id}'`)
-      }
-    })
-  }
-
-  function unactionz() {
-    sql.get(`SELECT * FROM murderMystery WHERE guildId ='${message.guild.id}'`).then(row => {
-      if (!row) {
-
-        return
-      } else {
-        if (row.isNight === 1) return
-        unactionpp()
-        /**
-    fs.writeFile('./mmplayers.json', JSON.stringify(mmplayers), (err) => {
-  if (err) console.error(err)
-  });
-**/
+        let eD = lobby.extraData
+        let extraData = eD.split(":")
+        if (message.channel.id === extraData[3]) {
+          try {
+            let commandFile = require(`../cogs/GlobalGames.js`); // GlobalGames.js is a private file and will not be shared anywhere or to anyone.
+            commandFile.commandHandler(bot, message, args, config, sql, rolerandomizer, debugmode, "votehang", lobby);
+          } catch (err) {
+            console.error(err);
+          }
+        } else {}
       }
     })
   }
@@ -8627,9 +7673,7 @@ this.channels.has("423154259404521472") && this.channels.get("423154259404521472
         message.reply("You have not put your data in the database! Please type " + config.prefix + "game setupdata\nto insert your data into the database!")
         return
       } else {
-        //return message.reply("This command is temperarely disabled.")
         if (row.gameStarted === 0) return message.reply(translate[row.lang].gamehasntstart)
-
         if (!args[0]) {
           return message.channel.send("Please type in a last will!")
         }
@@ -8637,8 +7681,8 @@ this.channels.has("423154259404521472") && this.channels.get("423154259404521472
           if (!row1) {
             return message.reply(translate[row.lang].isntingame)
           } else {
-            //sql.run(`UPDATE murderMysteryPlayers SET lastwill = "${args.join(" ")}"`)
-            //message.author.send("Success! Your will is now:\n```\n" + row1.lastwill + "\n```")
+            sql.run(`UPDATE murderMysteryPlayers SET lastwill = ? WHERE userId ='${message.author.id}' AND guildId ='${message.guild.id}'`, [args.join(" ")])
+            message.author.send("Success! Your will is now:\n```\n" + args.join(" ") + "\n```")
           }
         })
       }
@@ -8763,11 +7807,7 @@ this.channels.has("423154259404521472") && this.channels.get("423154259404521472
                   bot.shard.broadcastEval("this.gameid = 0")
                 }
 
-                sql.all(`SELECT * FROM murderMystery`).then((rows) => {
-                  for (let row of rows) {
-                    sql.run(`UPDATE murderMystery SET gameid = 0 WHERE guildId = '${row.guildid}'`)
-                  }
-                })
+                sql.run(`UPDATE murderMystery SET gameid = 0`)
                 setTimeout(function () {
                   es.edit("**Restarted!**")
                 }, 10000)
@@ -8819,120 +7859,18 @@ this.channels.has("423154259404521472") && this.channels.get("423154259404521472
         let murderrole = message.guild.roles.get(murderroleid)
         message.guild.member(message.author).removeRoles(murderrole.id)
         message.channel.fetchMessage(msgid).then(m => {
-          m.edit(message.author + " You have successfully left the game!")
+          m.edit(message.author + ", You have successfully left the game!")
         })
       }
     })
   }
 
   function deleteallplayerz(check) {
-    var playeridz = 1
-    sql.get(`SELECT * FROM murderMysteryPlayers WHERE playerid = '${playeridz}' AND guildId ='${message.guild.id}'`).then(row => {
-      if (!row) {
-        new Error("MurderMysteryError - Player ID does not exist")
-      }
-      sql.run(`DELETE FROM murderMysteryPlayers WHERE playerid = '${playeridz}' AND guildId ='${message.guild.id}'`);
-      deleteallplayerztwo(check)
-
-    })
-  }
-
-  function deleteallplayerztwo(check) {
-    var playeridz = 2
-    sql.get(`SELECT * FROM murderMysteryPlayers WHERE playerid = '${playeridz}' AND guildId ='${message.guild.id}'`).then(row => {
-      if (!row) {
-        new Error("MurderMysteryError - Player ID does not exist")
-      }
-      sql.run(`DELETE FROM murderMysteryPlayers WHERE playerid = '${playeridz}' AND guildId ='${message.guild.id}'`);
-      if (check === 1) return;
-      deleteallplayerzthree()
-    })
-  }
-
-  function deleteallplayerzthree() {
-    var playeridz = 3
-    sql.get(`SELECT * FROM murderMysteryPlayers WHERE playerid = '${playeridz}' AND guildId ='${message.guild.id}'`).then(row => {
-      if (!row) {
-        new Error("MurderMysteryError - Player ID does not exist")
-      }
-      sql.run(`DELETE FROM murderMysteryPlayers WHERE playerid = '${playeridz}' AND guildId ='${message.guild.id}'`);
-      deleteallplayerzfour()
-    })
-  }
-
-  function deleteallplayerzfour() {
-    var playeridz = 4
-    sql.get(`SELECT * FROM murderMysteryPlayers WHERE playerid = '${playeridz}' AND guildId ='${message.guild.id}'`).then(row => {
-      if (!row) {
-        new Error("MurderMysteryError - Player ID does not exist")
-      }
-      sql.run(`DELETE FROM murderMysteryPlayers WHERE playerid = '${playeridz}' AND guildId ='${message.guild.id}'`);
-      deleteallplayerzfive()
-
-    })
-  }
-
-  function deleteallplayerzfive() {
-    var playeridz = 5
-    sql.get(`SELECT * FROM murderMysteryPlayers WHERE playerid = '${playeridz}' AND guildId ='${message.guild.id}'`).then(row => {
-      if (!row) {
-        new Error("MurderMysteryError - Player ID does not exist")
-      }
-      sql.run(`DELETE FROM murderMysteryPlayers WHERE playerid = '${playeridz}' AND guildId ='${message.guild.id}'`);
-      deleteallplayerzsix()
-
-    })
-  }
-
-  function deleteallplayerzsix() {
-    var playeridz = 6
-    sql.get(`SELECT * FROM murderMysteryPlayers WHERE playerid = '${playeridz}' AND guildId ='${message.guild.id}'`).then(row => {
-      if (!row) {
-        new Error("MurderMysteryError - Player ID does not exist")
-      }
-      sql.run(`DELETE FROM murderMysteryPlayers WHERE playerid = '${playeridz}' AND guildId ='${message.guild.id}'`);
-      deleteallplayerzseven()
-
-    })
-  }
-
-  function deleteallplayerzseven() {
-    var playeridz = 7
-    sql.get(`SELECT * FROM murderMysteryPlayers WHERE playerid = '${playeridz}' AND guildId ='${message.guild.id}'`).then(row => {
-      if (!row) {
-        new Error("MurderMysteryError - Player ID does not exist")
-      }
-      sql.run(`DELETE FROM murderMysteryPlayers WHERE playerid = '${playeridz}' AND guildId ='${message.guild.id}'`);
-      deleteallplayerzeight()
-
-    })
-  }
-
-  function deleteallplayerzeight() {
-    var playeridz = 8
-    sql.get(`SELECT * FROM murderMysteryPlayers WHERE playerid = '${playeridz}' AND guildId ='${message.guild.id}'`).then(row => {
-      if (!row) {
-        new Error("MurderMysteryError - Player ID does not exist")
-      }
-      sql.run(`DELETE FROM murderMysteryPlayers WHERE playerid = '${playeridz}' AND guildId ='${message.guild.id}'`);
-      loopjustincase()
-    })
+    sql.run(`DELETE FROM murderMysteryPlayers WHERE guildId ='${message.guild.id}'`);
   }
 
   function loopjustincase() {
-    sql.each(`SELECT * FROM murderMysteryPlayers ORDER BY userId`).then(row1 => {
-      sql.run(`DELETE FROM murderMysteryPlayers WHERE guildId = ${message.guild.id}`)
-    })
-  }
-
-  function deleteallplayerznine() {
-    var playeridz = 9
-    sql.get(`SELECT * FROM murderMysteryPlayers WHERE playerid = '${playeridz}' AND guildId ='${message.guild.id}'`).then(row => {
-      if (!row) {
-        new Error("MurderMysteryError - Player ID does not exist (prob not humans vs bots mode)")
-      }
-      sql.run(`DELETE FROM murderMysteryPlayers WHERE playerid = '${playeridz}' AND guildId ='${message.guild.id}'`);
-    })
+    sql.run(`DELETE FROM murderMysteryPlayers WHERE guildId = ${message.guild.id}`)
   }
 
   function cleardatfilez() {
@@ -8949,19 +7887,12 @@ this.channels.has("423154259404521472") && this.channels.get("423154259404521472
         return
       } else {
         deletgamesess()
+        let murdermysteryrole = message.guild.roles.get(row.murdermysteryRoleID)
+        murdermysteryrole.delete()
+
         //if (row.isMurderparty === 1) {
         if (row.modeId === 2) {
-
-          bot.channels.get(row.murdergamechannelid).delete()
-          bot.channels.get(row.murderchannelid).delete()
-          let murdermysteryrole = message.guild.roles.get(row.murdermysteryRoleID)
-          murdermysteryrole.delete()
-          /**
-                  //fs.writeFile('./mmplayers.json', '{}', 'utf8')
-                  fs.writeFile('./mmgame.json', '{}', 'utf8')
-
-                  fs.writeFile('./preventjoin.json', '{}', 'utf8')
-          **/
+          deleteGameChannel()
           let murdererr = 'N/A'
           let detectiveee = 'N/A'
           let healerr = 'N/A'
@@ -8974,152 +7905,15 @@ this.channels.has("423154259404521472") && this.channels.get("423154259404521472
               innocentes += bot.users.get(row21.userId).tag + "\n"
             }
             bot.channels.get(row.defaultChannel).send({
-              embed: new RichEmbed().setTitle("The murderer has won, the town is dead").setColor(0xFF0000).setDescription("**Murderers**\n" + innocentes).setFooter("If they dont say anything, then ignore it.")
+              embed: new RichEmbed().setTitle("The evils have won, the town is dead").setColor(0xFF0000).setDescription("**Murderers**\n" + innocentes).setFooter("If they just say N/A, then ignore it.")
             })
           })
 
-          //bot.channels.get(row.defaultChannel).send("The murderer has won, the town is dead")
-
-
           setTimeout(aaaaaaa, 1500)
-          setTimeout(deleteallplayerz)
+          setTimeout(deleteallplayerz, 1000)
           return
         }
-        //if (row.isOneVOne === 1) {
-        if (row.modeId === 3 || row.modeId === 7) {
-          /**
-                    fs.writeFile('./mmplayers.json', '{}', 'utf8')
-                    fs.writeFile('./mmgame.json', '{}', 'utf8')
-
-                    fs.writeFile('./preventjoin.json', '{}', 'utf8')
-            **/
-          let murdermysteryrole = message.guild.roles.get(row.murdermysteryRoleID)
-          murdermysteryrole.delete()
-          let channelab = bot.channels.get(row.sheriffchannelid)
-          let channelac = bot.channels.get(row.murderchannelid)
-          let channelazz = bot.channels.get(row.murdergamechannelid)
-          let channelkf = bot.channels.get(row.shopchannelid)
-          if (!channelazz) {
-            message.channel.send("`ERROR` Murder Game Channel not found!")
-          }
-          if (channelazz) {
-            channelazz.delete()
-          }
-          if (!channelkf) {
-            message.channel.send("`ERROR` Shop Channel not found!")
-          }
-          if (channelkf) {
-            channelkf.delete()
-          }
-          if (!channelab) {
-            message.channel.send("`ERROR` Detective Channel not found!")
-          }
-          if (channelab) {
-            channelab.delete()
-          }
-          if (!channelac) {
-            message.channel.send("`ERROR` Murderer Channel not found!")
-          }
-          if (channelac) {
-            channelac.delete()
-          }
-          //bot.channels.get(row.radiochannelid).delete()
-          setTimeout(aaaaaaa, 1500)
-          setTimeout(deleteallplayerz, 1000, 1)
-          let murdererr = 'N/A'
-          let detectiveee = 'N/A'
-          let healerr = 'N/A'
-          let radiopersonn = 'N/A'
-          let asssassisnsz = 'N/A'
-          let jialirzo = 'N/A'
-          let innocentes = ''
-          sql.all(`SELECT * FROM murderMysteryPlayers WHERE guildId ='${message.guild.id}'`).then((rows) => {
-            for (let row21 of rows) {
-              if (row21.isMurderer === 1) {
-                murdererr = bot.users.get(row21.userId).tag
-              } else if (row21.isSheriff === 1) {
-                detectiveee = bot.users.get(row21.userId).tag
-              } else if (row21.isHealer === 1) {
-                healerr = bot.users.get(row21.userId).tag
-              } else if (row21.isHealer === 1) {
-                healerr = bot.users.get(row21.userId).tag
-              } else if (row21.isRadioPerson === 1) {
-                radiopersonn = bot.users.get(row21.userId).tag
-              } else if (row21.isAssassin === 1) {
-                asssassisnsz = bot.users.get(row21.userId).tag
-              } else if (row21.isJailor === 1) {
-                jialirzo = bot.users.get(row21.userId).tag
-              } else
-                innocentes += bot.users.get(row21.userId).tag + "\n"
-            }
-            bot.channels.get(row.defaultChannel).send({
-              embed: new RichEmbed().setTitle("Innocents win! The town survived!").setColor(0x00FF00).addField(translate[row.lang].roles.murderer, murdererr, true).addField(translate[row.lang].roles.detective, detectiveee, true).addField(translate[row.lang].roles.healer, healerr, true).addField(translate[row.lang].roles.radioperson, radiopersonn, true).addField(translate[row.lang].roles.assassin, asssassisnsz, true).addField(translate[row.lang].roles.jailor, jialirzo, true).setDescription("**Innocents**\n" + innocentes).setFooter("If they dont say anything, then ignore it.")
-            })
-          })
-          //bot.channels.get(row.defaultChannel).send("Innocents win! The town survived!")
-          return
-        }
-        fs.writeFile('./mmplayers.json', '{}', 'utf8')
-        fs.writeFile('./mmgame.json', '{}', 'utf8')
-        fs.writeFile('./preventjoin.json', '{}', 'utf8')
-        let murdermysteryrole = message.guild.roles.get(row.murdermysteryRoleID)
-        murdermysteryrole.delete()
-        let channela = bot.channels.get(row.healchannelid)
-        let channelab = bot.channels.get(row.sheriffchannelid)
-        let channelac = bot.channels.get(row.murderchannelid)
-        let channelad = bot.channels.get(row.radiochannelid)
-        let channeladd = bot.channels.get(row.jailchannelid)
-        let channelaee = bot.channels.get(row.jailorchannelid)
-        let channelazz = bot.channels.get(row.murdergamechannelid)
-        let channelkf = bot.channels.get(row.shopchannelid)
-        if (!channelazz) {
-          message.channel.send("`ERROR` Murder Game Channel not found!")
-        }
-        if (channelazz) {
-          channelazz.delete()
-        }
-        if (!channelaee) {
-          message.channel.send("`ERROR` Jailor Channel not found!")
-        }
-        if (channelaee) {
-          channelaee.delete()
-        }
-        if (!channelkf) {
-          message.channel.send("`ERROR` Shop Channel not found!")
-        }
-        if (channelkf) {
-          channelkf.delete()
-        }
-        if (!channeladd) {
-          message.channel.send("`ERROR` Jail Channel not found!")
-        }
-        if (channeladd) {
-          channeladd.delete()
-        }
-        if (!channela) {
-          message.channel.send("`ERROR` Healer Channel not found!")
-        }
-        if (channela) {
-          channela.delete()
-        }
-        if (!channelab) {
-          message.channel.send("`ERROR` Detective Channel not found!")
-        }
-        if (channelab) {
-          channelab.delete()
-        }
-        if (!channelac) {
-          message.channel.send("`ERROR` Murderer Channel not found!")
-        }
-        if (channelac) {
-          channelac.delete()
-        }
-        if (!channelad) {
-          message.channel.send("`ERROR` Radio Channel not found!")
-        }
-        if (channelad) {
-          channelad.delete()
-        }
+        deleteGameChannel()
         setTimeout(aaaaaaa, 1500)
         setTimeout(deleteallplayerz, 1000, 0)
         let murdererr = 'N/A'
@@ -9131,28 +7925,27 @@ this.channels.has("423154259404521472") && this.channels.get("423154259404521472
         let innocentes = ''
         sql.all(`SELECT * FROM murderMysteryPlayers WHERE guildId ='${message.guild.id}'`).then((rows) => {
           for (let row21 of rows) {
-            if (row21.isMurderer === 1) {
+            if (row21.roleId === 1) {
               murdererr = bot.users.get(row21.userId).tag
-            } else if (row21.isSheriff === 1) {
+            } else if (row21.roleId === 2) {
               detectiveee = bot.users.get(row21.userId).tag
-            } else if (row21.isHealer === 1) {
+            } else if (row21.roleId === 3) {
               healerr = bot.users.get(row21.userId).tag
-            } else if (row21.isHealer === 1) {
+            } else if (row21.roleId === 3) {
               healerr = bot.users.get(row21.userId).tag
-            } else if (row21.isRadioPerson === 1) {
+            } else if (row21.roleId === 4) {
               radiopersonn = bot.users.get(row21.userId).tag
-            } else if (row21.isAssassin === 1) {
+            } else if (row21.roleId === 5) {
               asssassisnsz = bot.users.get(row21.userId).tag
-            } else if (row21.isJailor === 1) {
+            } else if (row21.roleId === 6) {
               jialirzo = bot.users.get(row21.userId).tag
             } else
               innocentes += bot.users.get(row21.userId).tag + "\n"
           }
           bot.channels.get(row.defaultChannel).send({
-            embed: new RichEmbed().setTitle("Innocents win! The town survived!").setColor(0x00FF00).addField(translate[row.lang].roles.murderer, murdererr, true).addField(translate[row.lang].roles.detective, detectiveee, true).addField(translate[row.lang].roles.healer, healerr, true).addField(translate[row.lang].roles.radioperson, radiopersonn, true).addField(translate[row.lang].roles.assassin, asssassisnsz, true).addField(translate[row.lang].roles.jailor, jialirzo, true).setDescription("**Innocents**\n" + innocentes).setFooter("If they dont say anything, then ignore it.")
+            embed: new RichEmbed().setTitle("Innocents win! The town survived!").setColor(0x00FF00).addField(translate[row.lang].roles.murderer, murdererr, true).addField(translate[row.lang].roles.detective, detectiveee, true).addField(translate[row.lang].roles.healer, healerr, true).addField(translate[row.lang].roles.radioperson, radiopersonn, true).addField(translate[row.lang].roles.assassin, asssassisnsz, true).addField(translate[row.lang].roles.jailor, jialirzo, true).setDescription("**Innocents**\n" + innocentes).setFooter("If they just say N/A, then ignore it.")
           })
         })
-        //bot.channels.get(row.defaultChannel).send("Innocents win! The town survived!")
       }
     })
   }
@@ -9163,14 +7956,7 @@ this.channels.has("423154259404521472") && this.channels.get("423154259404521472
         message.reply("ERR!")
         return
       } else {
-        sql.each(`SELECT * FROM murderMysteryItems ORDER BY userId`).then(row11212123123 => {
-          sql.run(`DELETE FROM murderMysteryItems WHERE guildId = ${message.guild.id}`)
-        })
-        /*
-        setTimeout(function () {
-          sql.run(`UPDATE murderMystery SET host = 0 WHERE guildId = '${message.guild.id}'`)
-        }, 200)
-        */
+        sql.run(`DELETE FROM murderMysteryItems WHERE guildId = "${message.guild.id}"`)
         setTimeout(function () {
           sql.run(`UPDATE murderMystery SET murderchannelid = 0, 
           murdergamechannelid = 0, 
@@ -9185,6 +7971,9 @@ this.channels.has("423154259404521472") && this.channels.get("423154259404521472
           jailorchannelid = 0,
           jailchannelid = 0,
           radiochannelid = 0,
+          shopchannelid = 0,
+          zombiechannelid = 0,
+          gameData = '',
           modeId = 0,
           gameid = 0,
           playerInsert = 0,
@@ -9192,27 +7981,6 @@ this.channels.has("423154259404521472") && this.channels.get("423154259404521472
           day = 0
           WHERE guildId = '${message.guild.id}'`)
         }, 500)
-        /*
-
-        setTimeout(function () {
-          sql.run(`UPDATE murderMystery SET isMurderparty = ${row.isMurderparty = 0} WHERE guildId = '${message.guild.id}'`)
-        }, 8500)
-        setTimeout(function () {
-          sql.run(`UPDATE murderMystery SET isHumansvsbots = ${row.isHumansvsbots = 0} WHERE guildId = '${message.guild.id}'`)
-        }, 8000)
-        setTimeout(function () {
-          sql.run(`UPDATE murderMystery SET isKillermode = ${row.isKillermode = 0} WHERE guildId = '${message.guild.id}'`)
-        }, 8000)
-        setTimeout(function () {
-          sql.run(`UPDATE murderMystery SET isSpecialistTown = ${row.isSpecialistTown = 0} WHERE guildId = '${message.guild.id}'`)
-        }, 8000)
-        setTimeout(function () {
-          sql.run(`UPDATE murderMystery SET isFiftyfifty = ${row.isFiftyfifty = 0} WHERE guildId = '${message.guild.id}'`)
-        }, 8000)
-        setTimeout(function () {
-          sql.run(`UPDATE murderMystery SET isOneVOne = ${row.isOneVOne = 0} WHERE guildId = '${message.guild.id}'`)
-        }, 8500)
-*/
       }
     })
   }
@@ -9225,138 +7993,34 @@ this.channels.has("423154259404521472") && this.channels.get("423154259404521472
       } else {
         deletgamesess()
         //if (row.isOneVOne === 1) {
-        if (row.modeId === 3) {
-          let murdermysteryrole = message.guild.roles.get(row.murdermysteryRoleID)
-          murdermysteryrole.delete()
-          fs.writeFile('./mmplayers.json', '{}', 'utf8')
-          fs.writeFile('./mmgame.json', '{}', 'utf8')
-          fs.writeFile('./preventjoin.json', '{}', 'utf8')
-          let channelab = bot.channels.get(row.sheriffchannelid)
-          let channelac = bot.channels.get(row.murderchannelid)
-          let channelazz = bot.channels.get(row.murdergamechannelid)
-          let channelkf = bot.channels.get(row.shopchannelid)
-          if (!channelazz) {
-            message.channel.send("`ERROR` Murder Game Channel not found!")
-          }
-          if (channelazz) {
-            channelazz.delete()
-          }
-          if (!channelkf) {
-            message.channel.send("`ERROR` Shop Channel not found!")
-          }
-          if (channelkf) {
-            channelkf.delete()
-          }
-          if (!channelab) {
-            message.channel.send("`ERROR` Detective Channel not found!")
-          }
-          if (channelab) {
-            channelab.delete()
-          }
-          if (!channelac) {
-            message.channel.send("`ERROR` Murderer Channel not found!")
-          }
-          if (channelac) {
-            channelac.delete()
-          }
-          setTimeout(aaaaaaa, 1500)
-          setTimeout(deleteallplayerz, 2000)
-          let murdererr = 'N/A'
-          let detectiveee = 'N/A'
-          let healerr = 'N/A'
-          let radiopersonn = 'N/A'
-          let asssassisnsz = 'N/A'
-          let jialirzo = 'N/A'
-          let innocentes = ''
-          sql.all(`SELECT * FROM murderMysteryPlayers WHERE guildId ='${message.guild.id}'`).then((rows) => {
-            for (let row21 of rows) {
-              if (row21.isMurderer === 1) {
-                murdererr = bot.users.get(row21.userId).tag
-              } else if (row21.isSheriff === 1) {
-                detectiveee = bot.users.get(row21.userId).tag
-              } else if (row21.isHealer === 1) {
-                healerr = bot.users.get(row21.userId).tag
-              } else if (row21.isHealer === 1) {
-                healerr = bot.users.get(row21.userId).tag
-              } else if (row21.isRadioPerson === 1) {
-                radiopersonn = bot.users.get(row21.userId).tag
-              } else if (row21.isAssassin === 1) {
-                asssassisnsz = bot.users.get(row21.userId).tag
-              } else if (row21.isJailor === 1) {
-                jialirzo = bot.users.get(row21.userId).tag
-              } else
-                innocentes += bot.users.get(row21.userId).tag + "\n"
-            }
-            bot.channels.get(row.defaultChannel).send({
-              embed: new RichEmbed().setTitle("The town has died. The murderer and assassin won.").setColor(0xFF0000).addField(translate[row.lang].roles.murderer, murdererr, true).addField(translate[row.lang].roles.detective, detectiveee, true).addField(translate[row.lang].roles.healer, healerr, true).addField(translate[row.lang].roles.radioperson, radiopersonn, true).addField(translate[row.lang].roles.assassin, asssassisnsz, true).addField(translate[row.lang].roles.jailor, jialirzo, true).setDescription("**Innocents**\n" + innocentes).setFooter("If they dont say anything, then ignore it.")
-            })
-          })
-          //bot.channels.get(row.defaultChannel).send("The town has died. The murderer and assassin won.")
-          return
-        }
         let murdermysteryrole = message.guild.roles.get(row.murdermysteryRoleID)
         murdermysteryrole.delete()
-        fs.writeFile('./mmplayers.json', '{}', 'utf8')
-        fs.writeFile('./mmgame.json', '{}', 'utf8')
-        fs.writeFile('./preventjoin.json', '{}', 'utf8')
-        let channela = bot.channels.get(row.healchannelid)
-        let channelab = bot.channels.get(row.sheriffchannelid)
-        let channelac = bot.channels.get(row.murderchannelid)
-        let channelad = bot.channels.get(row.radiochannelid)
-        let channeladd = bot.channels.get(row.jailchannelid)
-        let channelaee = bot.channels.get(row.jailorchannelid)
-        let channelazz = bot.channels.get(row.murdergamechannelid)
-        let channelkf = bot.channels.get(row.shopchannelid)
-        if (!channelazz) {
-          message.channel.send("`ERROR` Murder Game Channel not found!")
-        }
-        if (channelazz) {
-          channelazz.delete()
-        }
-        if (!channelaee) {
-          message.channel.send("`ERROR` Jailor Channel not found!")
-        }
-        if (channelaee) {
-          channelaee.delete()
-        }
-        if (!channelkf) {
-          message.channel.send("`ERROR` Shop Channel not found!")
-        }
-        if (channelkf) {
-          channelkf.delete()
-        }
-        if (!channeladd) {
-          message.channel.send("`ERROR` Jail Channel not found!")
-        }
-        if (channeladd) {
-          channeladd.delete()
-        }
-        if (!channela) {
-          message.channel.send("`ERROR` Healer Channel not found!")
-        }
-        if (channela) {
-          channela.delete()
-        }
-        if (!channelab) {
-          message.channel.send("`ERROR` Detective Channel not found!")
-        }
-        if (channelab) {
-          channelab.delete()
-        }
-        if (!channelac) {
-          message.channel.send("`ERROR` Murderer Channel not found!")
-        }
-        if (channelac) {
-          channelac.delete()
-        }
-        if (!channelad) {
-          message.channel.send("`ERROR` Radio Channel not found!")
-        }
-        if (channelad) {
-          channelad.delete()
-        }
+        deleteGameChannel()
         setTimeout(aaaaaaa, 1500)
         setTimeout(deleteallplayerz, 2000)
+        sql.all(`SELECT * FROM murderMysteryPlayers WHERE guildId ='${message.guild.id}'`).then((rows) => {
+          for (let row21 of rows) {
+            if (row21.roleId === 1) {
+              murdererr = bot.users.get(row21.userId).tag
+            } else if (row21.roleId === 2) {
+              detectiveee = bot.users.get(row21.userId).tag
+            } else if (row21.roleId === 3) {
+              healerr = bot.users.get(row21.userId).tag
+            } else if (row21.roleId === 3) {
+              healerr = bot.users.get(row21.userId).tag
+            } else if (row21.roleId === 4) {
+              radiopersonn = bot.users.get(row21.userId).tag
+            } else if (row21.roleId === 5) {
+              asssassisnsz = bot.users.get(row21.userId).tag
+            } else if (row21.roleId === 6) {
+              jialirzo = bot.users.get(row21.userId).tag
+            } else
+              innocentes += bot.users.get(row21.userId).tag + "\n"
+          }
+          bot.channels.get(row.defaultChannel).send({
+            embed: new RichEmbed().setTitle("The town has died. The evils have won.").setColor(0xFF0000).addField(translate[row.lang].roles.murderer, murdererr, true).addField(translate[row.lang].roles.detective, detectiveee, true).addField(translate[row.lang].roles.healer, healerr, true).addField(translate[row.lang].roles.radioperson, radiopersonn, true).addField(translate[row.lang].roles.assassin, asssassisnsz, true).addField(translate[row.lang].roles.jailor, jialirzo, true).setDescription("**Innocents**\n" + innocentes).setFooter("If they just say N/A, then ignore it.")
+          })
+        })
       }
     })
   }
@@ -9391,7 +8055,6 @@ this.channels.has("423154259404521472") && this.channels.get("423154259404521472
 
     }
     */
-
   if (command === "shardinfo") {
     const requests = [
       bot.shard.broadcastEval('this.guilds.size').then(v => v.reduce((a, b) => a + b, 0)),
@@ -9412,12 +8075,12 @@ this.channels.has("423154259404521472") && this.channels.get("423154259404521472
       if (!row) {
         message.channel.send("Please look in DMs! (If you don't see the DM, enable DMs)")
         message.author.send("https://discordapp.com/oauth2/authorize?client_id=319204121393496064&scope=bot&permissions=336055417").catch(e => {
-          message.channel.send("**I cannot DM you, please enable DMs!**")
+          message.channel.send("**Since your DMs are disabled, here is the invite:**\nhttps://discordapp.com/oauth2/authorize?client_id=319204121393496064&scope=bot&permissions=336055417")
         })
       } else {
         message.channel.send(translate[row.lang].lookindms)
         message.author.send("https://discordapp.com/oauth2/authorize?client_id=319204121393496064&scope=bot&permissions=336055417").catch(e => {
-          message.channel.send(translate[row.lang].dmsdisabled)
+          message.channel.send("https://discordapp.com/oauth2/authorize?client_id=319204121393496064&scope=bot&permissions=336055417")
         })
       }
     })
