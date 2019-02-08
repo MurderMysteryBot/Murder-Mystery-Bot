@@ -4,6 +4,11 @@
         "botownerjointwo": "` has joined your server! 👑",
         "botadminjoin": ":gear: A Bot Administrator `",
         "botadminjointwo": "` has joined your server! :gear:",
+        "youarea": "You are a ",
+        "youarean": "You are an ",
+        "wasthe": "was the",
+        "wasa": "was a",
+        "wasan": "was an",
         "errors": {
             "error498code": "Error Code 498 at roleupdate",
             "errorroleupdate": "`ERROR` Role ID not found ",
@@ -105,10 +110,19 @@
             },
             "assassin": {
                 "channel": "Hello there, You are an **Assassin**, You are a person that is trying to get your target killed, if your target is killed you earn $3 and you will get a new target to kill... Your main goal is to kill your target, The murderer will know who the Assassin is, but you do not know who the Murderer is, You will be DM'd on what your next target is. Make sure the murderer can assign a target AND can kill once per night (Money system coming soon)"
+            },
+            "zombie": {
+                "channel": "Brainzzz...You are a **Zombie**, Your job is to try and infect as many people as possible to win!\nYou can infect people by typing mm!bite <@User/UserID>, but it will take around 1 day for them to turn into a zombie!",
+                "alreadybitten": "**You have already infected someone!**",
+                "bitten": "**You have infected %user%!**\nIt will take around 1 day for %user% to turn into a **Zombie** (unless healed by the Healer)!\nThe player however knows they have been infected but it hasn't been announced in the chat.",
+                "turnedintozombie": "%user% has been turned into a **Zombie**, their previous role was **%role%**.",
+                "turnedintozombiedm": "**It is the 2nd day and you have been turned into a `Zombie`!**\nPlease go to #zombie and scroll up to see what you can do.",
+                "infecteddm": "**You have been bitten by a **Zombie**!\nYou have 1 day until you turn into a Zombie unless you get healed by the Healer!",
+                "healer": "**The healer has healed you and you are no longer infected!**"
             }
         },
         "enoughplayers": "There are already enough players! (You can go on another server if you have like 17 people or somethin, or play unlimited players mode or 5050.)",
-        "settings": "Hello there! Welcome to the **Settings Help Menu**! Here are the commands!\n\nmm!settings locales set (language) - Sets your locales! (Used if you are a different language)\nmm!settings locales - Shows the locales options!",
+        "settings": "Hello there! Welcome to the **Settings Help Menu**! Here are the commands!\n\nmm!settings locales set (language) - Sets your locales! (Used if you are a different language)\nmm!settings locales - Shows the locales options!\nmm!settings daytime <Length of day time in seconds> - This will set it for how long a day should last in-game!\nmm!settings nighttime <Length of night time in seconds> - This will set it for how long a night should last in-game!\nmm!settings category <Category / Category Channel Name> - Set the category of what Murder Mystery Bot should set the channels for the game!",
         "langsuccess": "**Successfully set your language to** `",
         "thatpersonisdead": "That person is dead!",
         "thatpersonisalreadydead": "That person is already dead!",
@@ -127,6 +141,7 @@
         "stabbed": " has been stabbed by the **Murderer**! :dagger:",
         "stabbed2": ":skull: You have been stabbed by the **Murderer** :skull:",
         "stabbed3": "A murderer tried to attack you! But you were in jail!",
+        "stabbed4": "Someone tried to attack you! But you were in jail!",
         "reeeess": "You can't kill yourself...Are you trying to commit suicide?",
         "welluhh": "That person is your partner!",
         "lola": "You cannot do this in the night!",
@@ -149,7 +164,8 @@
         "plstypemsg": "**Please type a message!**",
         "hasnotbought": "**Sorry but you haven't bought this item!**",
         "shopclosed": "**The shop is closed during the night...**",
-        "defaultchannel": "Please mention a channel! (Examaple: #general)",
+        "defaultchannel": "Please mention a channel! (Example: #general)",
+        "enternumber": "**Please enter a number!**",
         "shopitems": [{
                 "name": "Defense Knife",
                 "price": 10,
@@ -241,7 +257,7 @@
             "isDark": 1
         }, {
             "name": "The Radio Sapper",
-            "price": 4,
+            "price": 3,
             "description": "Disables radio for the next day.",
             "id": 4,
             "usable": 0,
@@ -261,6 +277,13 @@
             "id": 6,
             "usable": 0,
             "isDark": 1
+        }, {
+            "name": "Eternal Power (Knife)", 
+            "price": 4,
+            "description": "Each time you murder someone, for every gold they have, becomes the amount of how many dark gold you get; If they had 3 gold, you get 2 dark gold.",
+            "id": 7,
+            "usable": 0,
+            "isDark": 1
         }],
         "roles": {
             "murderer": "Murderer",
@@ -269,6 +292,7 @@
             "radioperson": "Radio Person",
             "assassin": "Assassin",
             "jailor": "Jailor",
+            "zombie": "Zombie",
             "innocent": "Innocent"
         },
         "deakofk": " was shot by the **Detective** and he/she was the **%role%**! :gun:",
@@ -292,6 +316,8 @@
         "notrightarguments": "**Those weren't the right arguments!**\n%modename% Commands:",
         "sandboxmode": {
             "typeofgold": "**Please type in the type of gold!** <Normal/Dark>",
+            "typeofitem": "**Please type in the type of item!** <Normal/Dark>",
+            "pleaseenteritemid": "**Please enter the Item ID!**",
             "pleaseenteramount": "**Please enter the amount of gold.**",
             "destruction": "**Successfully killed everyone**",
             "daytime": "**Successfully set the time to Day**",
@@ -309,6 +335,11 @@
         "botownerjointwo": "` is de server binnengetreden! 👑",
         "botadminjoin": ":gear: Een Bot Administrator `",
         "botadminjointwo": "` is de server binnengetreden! :gear:",
+        "youarea": "Je bent een ",
+        "youarean": "Je bent een ",
+        "wasthe": "was de",
+        "wasa": "was een",
+        "wasan": "was een",
         "errors": {
             "error498code": "Error Code 498 bij roleupdate",
             "errorroleupdate": "`ERROR` Rol ID niet gevonden ",
@@ -410,10 +441,19 @@
             },
             "assassin": {
                 "channel": "Hallo! Je bent een **Huurmoordenaar**, Jij probeert je doelwit dood te krijgen, als je doelwit dood gaat ontvang jij $3 en krijg je een nieuw doelwit om te doden... Je hoofddoel is om je doelwit te doden, De Moordenaar weet wie de Huurmoordenaar is, maar jij weet niet wie de Moordenaar is. Je krijgt een DM met informatie over je volgende doelwit. Zorg ervoor dat de Moordenaar een doelwit kan designeren EN eens per nacht kan doden. (Economie systeem binnenkort beschikbaar)"
+            },
+            "zombie": {
+                "channel": "Brainzzz...Je bent een **Zombie**, het is jouw taak om te proberen zoveel mogelijk mensen te laten winnen!\nJe kunt mensen infecteren door mm!bite <@User/UserID> in te voeren, maar het zal ongeveer 1 dag duren voordat ze in een zombie veranderen!",
+                "alreadybitten": "**U hebben al iemand besmet!**",
+                "bitten": "**U hebt %user% besmet!**\nHet duurt ongeveer een dag voordat %user% verandert in een **Zombie**! (tenzij genezen door de Genezer)\nDe speler weet echter dat ze zijn geïnfecteerd, maar dit is niet aangekondigd in de chat.",
+                "turnedintozombie": "%user% is omgezet in een **Zombie**, hun vorige rol was **%role%**.",
+                "turnedintozombiedm": "**Het is de tweede dag en je bent veranderd in een `Zombie`!**\nGa alsjeblieft naar #zombie en scrol omhoog om te zien wat je kunt doen.",
+                "infecteddm": "**Je bent gebeten door een **Zombie**!\nJe hebt een dag totdat je in een Zombie verandert, tenzij je wordt genezen door de Genezer!",
+                "healer": "**De genezer heeft je genezen en je bent niet langer geïnfecteerd!**"
             }
         },
         "enoughplayers": "Er zijn al genoeg spelers! (Je kan eventueel naar een andere server gaan, Onbeperkte Spelers spelen of 50/50 modus spelen.)",
-        "settings": "Hallo! Welkom in het **Instellingen/Help Menu**! Hier zijn de commando's!\n\nmm!game settings locales (taal) - Stelt je taal in! (Als je een andere taal wilt gebruiken.)",
+        "settings": "Hallo! Welkom in het **Instellingen/Help Menu**! Hier zijn de commando's!\n\nmm!game settings locales (taal) - Stelt je taal in! (Als je een andere taal wilt gebruiken.)\nmm!settings daytime <Lengte van de dag in seconden> - Dit bepaalt hoe lang een dag in de game moet duren!\nmm!settings nighttime <Lengte van de nachttijd in seconden> - Dit bepaalt hoe lang een nacht in de game moet duren!\nmm!settings category <Categorie / Categorie Kanaalnaam> - Stel de categorie in van wat Murder Mystery Bot de kanalen voor het spel zou moeten instellen!",
         "langsuccess": "**Taal gewijzigd naar** `",
         "thatpersonisdead": "Deze persoon is dood!",
         "thatpersonisalreadydead": "Deze persoon is al dood!",
@@ -432,6 +472,7 @@
         "stabbed": " is neergestoken door de **Moordenaar**! :dagger:",
         "stabbed2": ":skull: Je bent neergestoken door de **Moordenaar** :skull:",
         "stabbed3": "Een Moordenaar probeerde je aan te vallen! Maar je zat al in de gevangenis!",
+        "stabbed4": "Iemand probeerde je aan te vallen! Maar je zat al in de gevangenis!",
         "reeeess": "Je kan jezelf niet vermoorden...Probeer je soms zelfmoord te plegen?",
         "welluhh": "Deze persoon is je partner!",
         "lola": "Je kan dit niet s'nachts doen!",
@@ -454,7 +495,8 @@
         "plstypemsg": "**Type alstublieft een bericht!**",
         "hasnotbought": "**Sorry, maar je hebt dit voorwerp niet gekocht!**",
         "shopclosed": "**De winkel is s'nachts gesloten...**",
-        "defaultchannel": "Vermeld een kanaal! (Examaple: #general)",
+        "defaultchannel": "Vermeld een kanaal! (Voorbeeld: #general)",
+        "enternumber": "**Voer alstublieft een nummer in!**",
         "shopitems": [{
                 "name": "Verdedigingsmes",
                 "price": 10,
@@ -496,28 +538,28 @@
                 "id": 3,
                 "usable": 0,
                 "isDark": 1
-                }, {
-                    "name": "Emmer met spek",
-                    "price": 1,
-                    "description": "Een emmer gevuld met spek. Perfect voor (n)iets.",
-                    "id": 4,
-                    "usable": 0,
-                    "isDark": 0
-                }, {
-                    "name": "Emmer met kokende olie",
-                    "price": 1,
-                    "description": "Een emmer met kokende olie, bevat mogelijk giftige stoffen.",
-                    "id": 5,
-                    "usable": 0,
-                    "isDark": 0
-                }, {
-                    "name": "Emmer met kaas",
-                    "price": 1,
-                    "description": "Een emmer gevuld met kaas, of is het gele verf?",
-                    "id": 6,
-                    "usable": 0,
-                    "isDark": 0
-                }
+            }, {
+                "name": "Emmer met spek",
+                "price": 1,
+                "description": "Een emmer gevuld met spek. Perfect voor (n)iets.",
+                "id": 4,
+                "usable": 0,
+                "isDark": 0
+            }, {
+                "name": "Emmer met kokende olie",
+                "price": 1,
+                "description": "Een emmer met kokende olie, bevat mogelijk giftige stoffen.",
+                "id": 5,
+                "usable": 0,
+                "isDark": 0
+            }, {
+                "name": "Emmer met kaas",
+                "price": 1,
+                "description": "Een emmer gevuld met kaas, of is het gele verf?",
+                "id": 6,
+                "usable": 0,
+                "isDark": 0
+            }
         ],
         "darkshopitems": [{
             "name": "Vernietig het Universum",
@@ -565,6 +607,13 @@
             "id": 6,
             "usable": 0,
             "isDark": 1
+        }, {
+            "name": "Eeuwige kracht (Mes)",
+            "price": 4,
+            "description": "Elke keer dat je iemand vermoordt, wordt voor elk goud dat ze hebben, de hoeveelheid van hoeveel donker goud je krijgt; Als ze 3 goud hadden, krijg je 2 donker goud.",
+            "id": 7,
+            "usable": 0,
+            "isDark": 1
         }],
         "roles": {
             "murderer": "Moordenaar",
@@ -573,6 +622,7 @@
             "radioperson": "Radiohost",
             "assassin": "Huurmoordenaar",
             "jailor": "Cipier",
+            "zombie": "Zombie",
             "innocent": "Onschuldige"
         },
         "deakofk": " was neergeschoten door de **Detective** en hij/zij was de **%role%**! :gun:",
@@ -596,7 +646,9 @@
         "notrightarguments": "**Dat waren niet de juiste argumenten!**\n%modename% commandos:",
         "sandboxmode": {
             "typeofgold": "**Vul a.u.b. het type goud in!** <Normal/Dark>",
+            "typeofitem": "**Voer het type item in!** <Normal/Dark>",
             "pleaseenteramount": "**Vul a.u.b. de hoeveelheid goud in.**",
+            "pleaseenteritemid": "**Voer de Item ID in!**",
             "destruction": "**Iedereen succesvol vermoord**",
             "daytime": "**Tijd met succes ingesteld op dag**",
             "nighttime": "**TIjd met succes ingesteld op nacht**",
