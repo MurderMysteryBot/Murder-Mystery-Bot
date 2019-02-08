@@ -1,5 +1,41 @@
 <> ---- CHANGE LOG ---- <>
 
+Update V1.2.0b
+Added mm!settings daytime <Length of day time in seconds>
+Added mm!settings nighttime <Length of night time in seconds>
+Eternal Power (Knife) - 3 Dark Gold - Each time you murder someone, for every gold they have, becomes the amount of how many dark gold you get; If they had 3 gold, you get 2 dark gold.
+Added Votehang for all modes
+Added Frame in the Dark shop
+Added the ability to set your own lastwill
+Added the announce menu (for staff panel)
+Added the ability for the bot to set the channels into categorys
+Added mm!votehang to Globalgames
+Removed the id role commands and merging it with the main role commands
+Added Zombie Mode
+Added a roleId column, that way I can add more roles
+Added it so it tells the player what role they are (In DMs)
+Changed the price for The Radio Sapper (4 dark gold to 3 dark gold)
+Fixed the bug where the broadcast dark item doesnt work
+Fixed the bug where healing doesnt work
+Added it so that it shows what role someone was if they were killed by the murderer
+Fixed the bug where if you votehang someone even if they are dead, you can still vote hang them
+Fixed the lang bugs
+Fixed murderparty
+Fixed it so if the detective shoots the assassin then the game ends for some reason
+Added mm!game modecmds additem <@User> <Type (either normal/dark)> <ItemID>
+Changed all throw new errors to console.errors
+Added mm!ping
+Added mm!prefix
+Added it so you can mention the bot to also input commands
+Added it so if you just mention the bot it'll tell you the prefix.
+Added it so that roles that can attack can not attack people in jail
+Added awaits for reactions [GlobalGames]
+Fixed the mm!leave bug
+Added it so that if you type mm!players it'll say if the player is alive or dead
+Added it so that if a user were to join the game, and the user was on the murder mystery bot official server, they would automatically get the "Beta Tester" role
+Fixed the announcements [GlobalGames]
+Added it so it will ping you in your private channel
+
 Update V1.1.0b
 Added a feature where you can join a global game from other people from other servers. < It has to be on your shard only.
 Added a ban system (for global games)
