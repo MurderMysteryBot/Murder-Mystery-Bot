@@ -1,4 +1,9 @@
 <> ---- CHANGE LOG ---- <>
+Update V1.2.1b
+Fixed the bug where if you were to murder someone, it would end the game saying that some channels werent found.
+Fixed the bug where if a user is dead, they would still be able to chat
+Fixed the bug where zombie mode doesn't work (radioperson not found)
+Fixed the bug where you can't set the daytime and nighttime
 
 Update V1.2.0b
 Added mm!settings daytime <Length of day time in seconds>
