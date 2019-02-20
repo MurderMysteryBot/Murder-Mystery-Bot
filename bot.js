@@ -1,6 +1,6 @@
 /**
  *    Murder Mystery Bot
- *        V1.2.0b
+ *        V1.2.1b
  *      By FireMario211
  */
 
@@ -138,7 +138,7 @@ if (config.sharding === 1) {
   })
 }
 sql.open('./murdermystery.sqlite')
-var version = "1.2.0b"
+var version = "1.2.1b"
 var botnames = ["Jake", "Jeff", "OhMan", "Noah", "William", "John", "Bob", "Ryan", "Logan", "Aiden", "Ross", "Mark", "Steve", "Landon", "Daniel", "Dan", "Charley", "Charles", "Mario", "Luigi", "Michael", "Yukko", "Luca", "Lucas", "Alfred", "Alex", "Mike", "Henry", "Jacob", "Emily", "Mio-chan", "Yumi", "Joshua", "Matthew", "Christopher", "Andrew", "Ethan", "Joseph", "Anthony", "David", "Alexander", "Madison", "Emma", "Olivia", "Hannah", "Abigail", "Isabella", "Samantha", "Elizabeth", "Ashley", "Alexis", "Sarah", "Sophia", "Amy", "Sora", "Alan", "Parker", "August", "Jason", "Aaron", "Jayden", "Kyle", "Alex", "Carlos", "Steven", "Cody", "Seth", "Blade", "Blake", "Wessel", "Nadeko", "An Unknown Person", "Mikan", "NobleShyGuy", "Etzer", "HtD", "FireMario211", "Krazyman50", "KyleMC1912", "JJking_1", "Sov", "Phase", "FaZe", "Anonymous", "FaZe_Banks", "oklookitsAugust", "Phineas", "AugustBoat", "KEEL"]
 var botquotes = ["Hi guys", "Uh..", "LMAO", "Oh no...", "Rip", "Lol", "LOL", "Hmmm <:Thinkhung:320597771310727169>", "Its him!", "Its her!", "Im scared...", "Whos gonna die...?", "Im the Healer!", "Im the Detective!", "Im the Broadcaster!", "Ur ded", "first, oh wait... am i?", "when is time to scream?", "EVERYONE VOTEHANG HIM/HER!!!", "hey guys!", "how yer doin?", "Im the murderer! pls dont kill me ;(", "hi ;)", "hi....", "hello...?", "lol", "rip you all", "where is andrew?", "where did i come from?", "im definetly not gonna die", "Your gonna die tonight :)", "Maybe I will die? xD", "Is it September or August?"]
 var rarequotes = ["Hehehehehehhehehhehehe", "You know i have one spooky part in THIS movie ;)", "you cant find me", "wessel was here... >:)", "i bet fire is in this game he made us xdxdxdxdx", "i i KILL HUMANZ", "~~im on meth~~", "You better watch out ;)", "i know your secrets... ;) ;D", "OhMan on meth", "Noble hacked this bot ;) (not rly)", "I will find you and kill you ;)", "IM GOING TO KEEL YOU (define KEEL in DMS and you will be in the bot names. DM me FireMario211#2948) I'll tell you if you are right or wrong. You can only DM me once for that then thats it, so be wise... *use alts*)"]
@@ -480,6 +480,7 @@ bot.on('message', message => {
                 if (row.categoryChannelId !== "0") {
                   c.setParent(row.categoryChannelId)
                 }
+                sql.run(`UPDATE murderMystery SET murderchannelid = "${c.id}" WHERE guildId = '${message.guild.id}'`)
                 if (data.isMurderParty === 1) {
                   c.send(translate[row.lang].jobchannelmsgs.murderer.channel)
                   c.send("@everyone" + translate[row.lang].jobchannelmsgs.murderer.channel4)
@@ -507,7 +508,6 @@ bot.on('message', message => {
                     c.send("<@" + row6.userId + ">" + translate[row.lang].jobchannelmsgs.murderer.channel2 + "<@" + row1.userId + ">" + translate[row.lang].jobchannelmsgs.murderer.channel3)
                   })
                 }
-                sql.run(`UPDATE murderMystery SET murderchannelid = "${c.id}" WHERE guildId = '${message.guild.id}'`)
               })
             }
           })
@@ -641,12 +641,12 @@ bot.on('message', message => {
                       c.setParent(row.categoryChannelId)
                     }
                     //c.send("Hello, Welcome to **Jail**, this is where you have jailed people and you interrogate them by answering some questions, Also hello jailed person! Welcome to jail, If the Jailor thinks your suspicious, then you probably are going to be executed, If you murder the person, They might have a last will and then it will show the public chat the will and show who they jailed. Anyways, Don't try to get executed or else you'll end up like Shadow where he had his head cut off. Anyways, Hope you try to not get executed!")
-                    c.send(translate[row5.lang].jobchannelmsgs.jailor.jailchannel)
+                    c.send(translate[row.lang].jobchannelmsgs.jailor.jailchannel)
                     sql.run(`UPDATE murderMystery SET jailchannelid = "${c.id}" WHERE guildId = '${message.guild.id}'`)
                   })
                 }
-                var await0 = a()
-                var await1 = b()
+                var await0 = await a()
+                var await1 = await b()
               }
               createChannels()
             }
@@ -922,7 +922,7 @@ bot.on('message', message => {
   //if (message.channel.type === 'dm') return message.author.send("You cannot use commands in DMs! Please use it on a server!")
   function afwefaw() {
     try {
-      let commandFile = require(`../cogs/GlobalGames.js`); // GlobalGames.js is a private file and will not be shared anywhere or to anyone.
+      let commandFile = require(`./cogs/GlobalGames.js`); // GlobalGames.js is a private file and will not be shared anywhere or to anyone.
       commandFile.messageEvent(bot, message, config, sql, rolerandomizer, debugmode, cooldowns);
     } catch (err) {
       console.error(err);
@@ -953,7 +953,7 @@ bot.on('message', message => {
   //let command = message.content.split(" ")[0];
   //command = command.slice(config.prefix.length);
   if (config.sharding === 0) {
-    console.log(message.author.username + '#' + message.author.discriminator + ' (' + message.author.id + ') did the command: ' + command + " on " + message.guild.name + " (" + message.guild.id + ")");
+    console.log(message.author.username + '#' + message.author.discriminator + ' (' + message.author.id + ') did the command: ' + message.content + " on " + message.guild.name + " (" + message.guild.id + ")");
   }
   if (config.sharding === 1) {
     console.log("[SHARD " + bot.shard.id + "] " + message.author.username + '#' + message.author.discriminator + ' (' + message.author.id + ') did the command: ' + command + " on " + message.guild.name + " (" + message.guild.id + ")");
@@ -1145,7 +1145,7 @@ bot.on('message', message => {
   }
   if (command === "profile") {
     try {
-      let commandFile = require(`../cogs/GlobalGames.js`); // GlobalGames.js is a private file and will not be shared anywhere or to anyone.
+      let commandFile = require(`./cogs/GlobalGames.js`); // GlobalGames.js is a private file and will not be shared anywhere or to anyone.
       commandFile.globalgamesCMD(bot, message, args, config, sql, rolerandomizer, debugmode, "profile");
     } catch (err) {
       console.error(err);
@@ -1153,7 +1153,7 @@ bot.on('message', message => {
   }
   if (command === "acceptreport") {
     try {
-      let commandFile = require(`../cogs/GlobalGames.js`); // GlobalGames.js is a private file and will not be shared anywhere or to anyone.
+      let commandFile = require(`./cogs/GlobalGames.js`); // GlobalGames.js is a private file and will not be shared anywhere or to anyone.
       commandFile.reportCommand(bot, message, args, config, sql, rolerandomizer, debugmode, "acceptreport");
     } catch (err) {
       console.error(err);
@@ -1161,7 +1161,7 @@ bot.on('message', message => {
   }
   if (command === "rejectreport") {
     try {
-      let commandFile = require(`../cogs/GlobalGames.js`); // GlobalGames.js is a private file and will not be shared anywhere or to anyone.
+      let commandFile = require(`./cogs/GlobalGames.js`); // GlobalGames.js is a private file and will not be shared anywhere or to anyone.
       commandFile.reportCommand(bot, message, args, config, sql, rolerandomizer, debugmode, "rejectreport");
     } catch (err) {
       console.error(err);
@@ -1191,7 +1191,7 @@ bot.on('message', message => {
       setTimeout(() => timestamps.delete(message.author.id), cooldownAmount);
     }
     try {
-      let commandFile = require(`../cogs/GlobalGames.js`); // GlobalGames.js is a private file and will not be shared anywhere or to anyone.
+      let commandFile = require(`./cogs/GlobalGames.js`); // GlobalGames.js is a private file and will not be shared anywhere or to anyone.
       commandFile.globalgamesCMD(bot, message, args, config, sql, rolerandomizer, debugmode, "report");
     } catch (err) {
       console.error(err);
@@ -1221,7 +1221,7 @@ bot.on('message', message => {
       setTimeout(() => timestamps.delete(message.author.id), cooldownAmount);
     }
     try {
-      let commandFile = require(`../cogs/GlobalGames.js`); // GlobalGames.js is a private file and will not be shared anywhere or to anyone.
+      let commandFile = require(`./cogs/GlobalGames.js`); // GlobalGames.js is a private file and will not be shared anywhere or to anyone.
       commandFile.commandHandler(bot, message, args, config, sql, rolerandomizer, debugmode, "taunt");
     } catch (err) {
       console.error(err);
@@ -1229,7 +1229,7 @@ bot.on('message', message => {
   }
   if (command === "leave") {
     try {
-      let commandFile = require(`../cogs/GlobalGames.js`); // GlobalGames.js is a private file and will not be shared anywhere or to anyone.
+      let commandFile = require(`./cogs/GlobalGames.js`); // GlobalGames.js is a private file and will not be shared anywhere or to anyone.
       commandFile.commandHandler(bot, message, args, config, sql, rolerandomizer, debugmode, "leave");
     } catch (err) {
       console.error(err);
@@ -1325,7 +1325,7 @@ bot.on('message', message => {
       setTimeout(() => timestamps.delete(message.author.id), cooldownAmount);
     }
     try {
-      let commandFile = require(`../cogs/GlobalGames.js`); // GlobalGames.js is a private file and will not be shared anywhere or to anyone.
+      let commandFile = require(`./cogs/GlobalGames.js`); // GlobalGames.js is a private file and will not be shared anywhere or to anyone.
       commandFile.globalgamesCMD(bot, message, args, config, sql, rolerandomizer, debugmode, -1);
     } catch (err) {
       console.error(err);
@@ -1642,20 +1642,20 @@ bot.on('message', message => {
               } else {
                 if (checkUser.isDead === 0) return
                 bot.channels.get(row.murderchannelid).overwritePermissions(user, {
-                  SEND_MESSAGES: true
+                  SEND_MESSAGES: null
                 })
                 bot.channels.get(row.sheriffchannelid).overwritePermissions(user, {
-                  SEND_MESSAGES: true
+                  SEND_MESSAGES: null
                 })
 
                 bot.channels.get(row.radiochannelid).overwritePermissions(user, {
-                  SEND_MESSAGES: true
+                  SEND_MESSAGES: null
                 })
                 bot.channels.get(row.jailorchannelid).overwritePermissions(user, {
-                  SEND_MESSAGES: true
+                  SEND_MESSAGES: null
                 })
                 bot.channels.get(row.jailchannelid).overwritePermissions(user, {
-                  SEND_MESSAGES: true
+                  SEND_MESSAGES: null
                 })
 
                 bot.channels.get(row.murdergamechannelid).overwritePermissions(user, {
@@ -4202,7 +4202,7 @@ bot.on('message', message => {
           })
         }
         if (cater === "daytime") {
-          let int = args[0]
+          let int = args[1]
           if (!int) return message.channel.send(translate[row.lang].enternumber)
           int = parseInt(int)
           if (isNaN(int)) return message.channel.send(translate[row.lang].enternumber)
@@ -4210,7 +4210,7 @@ bot.on('message', message => {
           message.channel.send("**Successfully set on how long a day should last!**\nThe day will last `" + int + " seconds`")
         }
         if (cater === "nighttime") {
-          let int = args[0]
+          let int = args[1]
           if (!int) return message.channel.send(translate[row.lang].enternumber)
           int = parseInt(int)
           if (isNaN(int)) return message.channel.send(translate[row.lang].enternumber)
@@ -4830,7 +4830,7 @@ bot.on('message', message => {
         let extraData = eD.split(":")
         if (message.channel.id === extraData[1] && parseInt(lobby.gameType) !== 3) {
           try {
-            let commandFile = require(`../cogs/GlobalGames.js`); // GlobalGames.js is a private file and will not be shared anywhere or to anyone.
+            let commandFile = require(`./cogs/GlobalGames.js`); // GlobalGames.js is a private file and will not be shared anywhere or to anyone.
             commandFile.commandHandler(bot, message, args, config, sql, rolerandomizer, debugmode, "kill", lobby);
           } catch (err) {
             console.error(err);
@@ -5064,7 +5064,7 @@ bot.on('message', message => {
         let extraData = eD.split(":")
         if (message.channel.id === extraData[9] || message.channel.id === extraData[10]) {
           try {
-            let commandFile = require(`../cogs/GlobalGames.js`); // GlobalGames.js is a private file and will not be shared anywhere or to anyone.
+            let commandFile = require(`./cogs/GlobalGames.js`); // GlobalGames.js is a private file and will not be shared anywhere or to anyone.
             commandFile.commandHandler(bot, message, args, config, sql, rolerandomizer, debugmode, "execute", lobby);
           } catch (err) {
             console.error(err);
@@ -5239,6 +5239,12 @@ bot.on('message', message => {
           }
           if (jgoergqwww) {
             bot.channels.get(row.sheriffchannelid).delete()
+          }
+          if (row.modeId === 12) {
+            let jgoergqwwwdda = bot.channels.get(row.zombiechannelid)
+            if (jgoergqwwwdda) {
+              jgoergqwwwdda.delete()
+            }
           }
           if (row.modeId !== 3 && row.modeId !== 7) {
             let jgoergqwwwa = bot.channels.get(row.radiochannelid)
@@ -5619,7 +5625,7 @@ bot.on('message', message => {
             //if(message.guild.id !== preventjoinData.guildID) return message.reply("That is not your game!")
             //if(preventjoinData.start === 0) return message.reply("The game hasn't started yet!")
             if (row.gameStarted === 0) return message.reply(translate[row.lang].gamehasntstart)
-            if (message.channel.id !== row.jailorchannelid || message.channel.id !== row.jailchannelid) return;
+            if (message.channel.id !== row.jailorchannelid) return;
             deadcheck(function (ded) {
               if (ded) /*123717*/ return;
               if (row.modeId !== 9 && row.modeId !== 10) {
@@ -5659,7 +5665,7 @@ bot.on('message', message => {
                     if (!user) {
                       message.reply(translate[row.lang].userdoesntexist)
                     } else {
-
+                      console.log("JAILING")
                       //if (user.id === message.author.id) return message.reply("You can't jail yourself.")
                       if (user.userId === message.author.id) return message.reply(translate[row.lang].jailingurself)
 
@@ -5681,7 +5687,7 @@ bot.on('message', message => {
         let extraData = eD.split(":")
         if (message.channel.id === extraData[9]) {
           try {
-            let commandFile = require(`../cogs/GlobalGames.js`); // GlobalGames.js is a private file and will not be shared anywhere or to anyone.
+            let commandFile = require(`./cogs/GlobalGames.js`); // GlobalGames.js is a private file and will not be shared anywhere or to anyone.
             commandFile.commandHandler(bot, message, args, config, sql, rolerandomizer, debugmode, "jail", lobby);
           } catch (err) {
             console.error(err);
@@ -5846,6 +5852,7 @@ bot.on('message', message => {
           } else {
             //if(message.guild.id !== preventjoinData.guildID) return message.reply("That is not your game!")
             if (row.gameStarted === 0) return message.reply(translate[row.lang].gamehasntstart)
+            if (message.channel.id !== row.murderchannelid) return;
             deadcheck(function (ded) {
               if (row.modeId !== 9 && row.modeId !== 10) {
                 if (row.isDay === 1) return message.reply(translate[row.lang].eeer)
@@ -5941,15 +5948,19 @@ bot.on('message', message => {
                         let jgoergqwww = bot.channels.get(row.sheriffchannelid)
                         if (!ajwgiwajgr) return nochannelfound()
                         if (!jgoergqwww) return nochannelfound()
-                        if (row.modeId !== 3 && row.modeId !== 7) {
+                        if (row.modeId !== 3 && row.modeId !== 7 && row.modeId !== 12) {
                           let jgoergqwwwa = bot.channels.get(row.radiochannelid)
                           if (!jgoergqwwwa) return nochannelfound()
-                          if (row.modeId !== 8) {
-                            let jgoergqwwwb = bot.channels.get(row.jailorchannelid)
-                            let jgoergqwwwc = bot.channels.get(row.jailchannelid)
-                            if (!jgoergqwwwb) return nochannelfound()
-                            if (!jgoergqwwwc) return nochannelfound()
-                          }
+                        }
+                        if (row.modeId == 12) {
+                          let jgoergqwwwfefa = bot.channels.get(row.zombiechannelid)
+                          if (!jgoergqwwwfefa) return nochannelfound()
+                        }
+                        if (row.modeId !== 3 && row.modeId !== 7 && row.modeId !== 8) {
+                          let jgoergqwwwb = bot.channels.get(row.jailorchannelid)
+                          let jgoergqwwwc = bot.channels.get(row.jailchannelid)
+                          if (!jgoergqwwwb) return nochannelfound()
+                          if (!jgoergqwwwc) return nochannelfound()
                         }
                       }
                       if (!checkjfwfj) return nochannelfound()
@@ -5976,7 +5987,7 @@ bot.on('message', message => {
         let extraData = eD.split(":")
         if (message.channel.id === extraData[0]) {
           try {
-            let commandFile = require(`../cogs/GlobalGames.js`); // GlobalGames.js is a private file and will not be shared anywhere or to anyone.
+            let commandFile = require(`./cogs/GlobalGames.js`); // GlobalGames.js is a private file and will not be shared anywhere or to anyone.
             commandFile.commandHandler(bot, message, args, config, sql, rolerandomizer, debugmode, "kill", lobby);
           } catch (err) {
             console.error(err);
@@ -6111,7 +6122,7 @@ bot.on('message', message => {
         let extraData = eD.split(":")
         if (message.channel.id === extraData[1]) {
           try {
-            let commandFile = require(`../cogs/GlobalGames.js`); // GlobalGames.js is a private file and will not be shared anywhere or to anyone.
+            let commandFile = require(`./cogs/GlobalGames.js`); // GlobalGames.js is a private file and will not be shared anywhere or to anyone.
             commandFile.commandHandler(bot, message, args, config, sql, rolerandomizer, debugmode, "search", lobby);
           } catch (err) {
             console.error(err);
@@ -6213,7 +6224,7 @@ bot.on('message', message => {
         let extraData = eD.split(":")
         if (message.channel.id === extraData[4]) {
           try {
-            let commandFile = require(`../cogs/GlobalGames.js`); // GlobalGames.js is a private file and will not be shared anywhere or to anyone.
+            let commandFile = require(`./cogs/GlobalGames.js`); // GlobalGames.js is a private file and will not be shared anywhere or to anyone.
             commandFile.commandHandler(bot, message, args, config, sql, rolerandomizer, debugmode, "broadcast", lobby);
           } catch (err) {
             console.error(err);
@@ -6603,7 +6614,7 @@ bot.on('message', message => {
         let extraData = eD.split(":")
         if (message.channel.id === extraData[1]) {
           try {
-            let commandFile = require(`../cogs/GlobalGames.js`); // GlobalGames.js is a private file and will not be shared anywhere or to anyone.
+            let commandFile = require(`./cogs/GlobalGames.js`); // GlobalGames.js is a private file and will not be shared anywhere or to anyone.
             commandFile.commandHandler(bot, message, args, config, sql, rolerandomizer, debugmode, "shoot", lobby);
           } catch (err) {
             console.error(err);
@@ -6648,25 +6659,25 @@ bot.on('message', message => {
                       if (checkrolee === 1) {
                         return;
                         bot.channels.get(row1.murderchannelid).overwritePermissions(users, {
-                          SEND_MESSAGES: true
+                          SEND_MESSAGES: null
                         })
                       }
                       if (checkrolee === 2) {
                         bot.channels.get(row1.sheriffchannelid).overwritePermissions(users, {
-                          SEND_MESSAGES: true
+                          SEND_MESSAGES: null
                         })
                       }
                       if (checkrolee === 4) {
                         bot.channels.get(row1.radiochannelid).overwritePermissions(users, {
-                          SEND_MESSAGES: true
+                          SEND_MESSAGES: null
                         })
                       }
                       if (checkrolee === 6) {
                         bot.channels.get(row1.jailorchannelid).overwritePermissions(users, {
-                          SEND_MESSAGES: true
+                          SEND_MESSAGES: null
                         })
                         bot.channels.get(row1.jailchannelid).overwritePermissions(users, {
-                          SEND_MESSAGES: true
+                          SEND_MESSAGES: null
                         })
 
                       }
@@ -6693,25 +6704,25 @@ bot.on('message', message => {
                       if (checkrolee === 1) {
                         return;
                         bot.channels.get(row1.murderchannelid).overwritePermissions(users, {
-                          SEND_MESSAGES: true
+                          SEND_MESSAGES: null
                         })
                       }
                       if (checkrolee === 2) {
                         bot.channels.get(row1.sheriffchannelid).overwritePermissions(users, {
-                          SEND_MESSAGES: true
+                          SEND_MESSAGES: null
                         })
                       }
                       if (checkrolee === 4) {
                         bot.channels.get(row1.radiochannelid).overwritePermissions(users, {
-                          SEND_MESSAGES: true
+                          SEND_MESSAGES: null
                         })
                       }
                       if (checkrolee === 6) {
                         bot.channels.get(row1.jailorchannelid).overwritePermissions(users, {
-                          SEND_MESSAGES: true
+                          SEND_MESSAGES: null
                         })
                         bot.channels.get(row1.jailchannelid).overwritePermissions(users, {
-                          SEND_MESSAGES: true
+                          SEND_MESSAGES: null
                         })
 
                       }
@@ -6749,25 +6760,25 @@ bot.on('message', message => {
             if ([1, 5, 7].includes(checkrolee)) return;
             if (checkrolee === 1) {
               bot.channels.get(row1.murderchannelid).overwritePermissions(users, {
-                SEND_MESSAGES: true
+                SEND_MESSAGES: null
               })
             }
             if (checkrolee === 2) {
               bot.channels.get(row1.sheriffchannelid).overwritePermissions(users, {
-                SEND_MESSAGES: true
+                SEND_MESSAGES: null
               })
             }
             if (checkrolee === 4) {
               bot.channels.get(row1.radiochannelid).overwritePermissions(users, {
-                SEND_MESSAGES: true
+                SEND_MESSAGES: null
               })
             }
             if (checkrolee === 6) {
               bot.channels.get(row1.jailorchannelid).overwritePermissions(users, {
-                SEND_MESSAGES: true
+                SEND_MESSAGES: null
               })
               bot.channels.get(row1.jailchannelid).overwritePermissions(users, {
-                SEND_MESSAGES: true
+                SEND_MESSAGES: null
               })
             }
             bot.channels.get(row1.murdergamechannelid).overwritePermissions(users, {
@@ -6844,55 +6855,6 @@ bot.on('message', message => {
       }
     })
   }
-
-  function healnumber(playerid) {
-    sql.get(`SELECT * FROM murderMystery WHERE guildId ='${message.guild.id}'`).then(row => {
-      if (!row) {
-        message.reply("You have not put your data in the database! Please type " + config.prefix + "game setupdata\nto insert your data into the database!")
-        return
-      } else {
-        sql.get(`SELECT * FROM murderMysteryPlayers WHERE playerid ='${playerid}' AND guildId ='${message.guild.id}'`).then(row1 => {
-          if (!row1) {
-            return;
-          }
-          let user = bot.users.get(row1.userId)
-          checkrole(0, playerid, function (checkrolee) {
-            if (checkrolee === 1) {
-              bot.channels.get(row.murderchannelid).overwritePermissions(user, {
-                SEND_MESSAGES: true
-              })
-            }
-            if (checkrolee === 2) {
-              bot.channels.get(row.sheriffchannelid).overwritePermissions(user, {
-                SEND_MESSAGES: true
-              })
-            }
-            if (checkrolee === 4) {
-              bot.channels.get(row.radiochannelid).overwritePermissions(user, {
-                SEND_MESSAGES: true
-              })
-            }
-            if (checkrolee === 6) {
-              bot.channels.get(row.jailorchannelid).overwritePermissions(user, {
-                SEND_MESSAGES: true
-              })
-              bot.channels.get(row.jailchannelid).overwritePermissions(user, {
-                SEND_MESSAGES: true
-              })
-            }
-            bot.channels.get(row.murdergamechannelid).overwritePermissions(user, {
-              SEND_MESSAGES: null
-            })
-            bot.channels.get(row.shopchannelid).overwritePermissions(users, {
-              SEND_MESSAGES: null
-            })
-
-          })
-        })
-
-      }
-    })
-  }
   if (command === "heal") {
     if (message.channel.type === 'dm') {
       message.author.send("I cannot respond with this command in DMS.")
@@ -6965,7 +6927,7 @@ bot.on('message', message => {
         let extraData = eD.split(":")
         if (message.channel.id === extraData[2]) {
           try {
-            let commandFile = require(`../cogs/GlobalGames.js`); // GlobalGames.js is a private file and will not be shared anywhere or to anyone.
+            let commandFile = require(`./cogs/GlobalGames.js`); // GlobalGames.js is a private file and will not be shared anywhere or to anyone.
             commandFile.commandHandler(bot, message, args, config, sql, rolerandomizer, debugmode, "heal", lobby);
           } catch (err) {
             console.error(err);
@@ -7217,7 +7179,7 @@ bot.on('message', message => {
 
         bot.channels.get(row.murdergamechannelid).send(translate[row.lang].goodmorning)
         bot.channels.get(row.murdergamechannelid).overwritePermissions(message.guild.id, {
-          SEND_MESSAGES: true,
+          SEND_MESSAGES: null,
           READ_MESSAGES: false
         })
         //if (row.isFasterMode === 1) {
@@ -7631,8 +7593,7 @@ this.channels.has("423154259404521472") && this.channels.get("423154259404521472
                               }
                             } else {
                               if (checkItem) /*123717*/ {
-                                let weird = aldadaasd - row1.voted
-                                let tasdasd = weird + 1
+                                var weird = ((aldadaasd - row1.voted) + 1)
                                 message.reply(user + translate[row.lang].hasbeenvoted + `**${tasdasd}**` + translate[row.lang].morevotes)
                               } else {
                                 let weird = aldadaasd - row1.voted
@@ -7654,7 +7615,7 @@ this.channels.has("423154259404521472") && this.channels.get("423154259404521472
         let extraData = eD.split(":")
         if (message.channel.id === extraData[3]) {
           try {
-            let commandFile = require(`../cogs/GlobalGames.js`); // GlobalGames.js is a private file and will not be shared anywhere or to anyone.
+            let commandFile = require(`./cogs/GlobalGames.js`); // GlobalGames.js is a private file and will not be shared anywhere or to anyone.
             commandFile.commandHandler(bot, message, args, config, sql, rolerandomizer, debugmode, "votehang", lobby);
           } catch (err) {
             console.error(err);
