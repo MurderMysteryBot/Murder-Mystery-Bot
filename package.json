@@ -2,11 +2,10 @@
   "name": "murder-mystery-bot",
   "description": "Are you bored and want to play Murder Mystery? Well this is the bot for you! You can play Murder Mystery with Murder Mystery Bot!",
   "version": "1.4.0b",
-  "main": "Shard.js",
+  "main": "bot.js",
   "contributors": [
     {
       "name": "FireMario211",
-      "email": "firemario07@gmail.com",
       "web": "https://github.com/FireMario211"
     },
     {
