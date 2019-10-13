@@ -1,4 +1,62 @@
 <> ---- CHANGE LOG ---- <>
+Update V1.4.0b
+Added parties for global games (so if you want to play with your friend you can)
+Fixed mm!game leave
+Fixed it so mm!votehang doesn't need to have the assassin
+Fixed mm!votehang since apparently there needs to be 1 extra player to vote
+Changed it so when starting a game, it'll show the progress of what the bot is doing (for example: "Randomizing roles and setting them to players..."
+Fixed mm!leave (Global Games)
+Removed Dutch translations (Due to there no longer being a dutch translator)
+Fixed translations
+Rewrote mm!game
+
+Update V1.3.0b
+Changed it so anything that says he will be changed to "they/them" (this is because the bot assumed someones gender and they were a girl ._.)
+Added the Chaos'ity gamemode (3 Murderers, 2 Detectives, 5 Innocents)
+Cleaned out code to make creating game modes easier
+Added the ability to spectate (you can see whats going on but not talk) [mm!spectate]
+Fixed Global Games (Basically fixed some bugs)
+Added the ability to join friends games [GlobalGames]
+Added custom prefixes (mm!settings prefix [any prefix])
+Fixed the bug where if you were to die by a detective, you could still talk in #murdergame
+Fixed the bug where if you were killed by the murderer but healed, your channel wouldnt be there
+Fixed the bug where it doesn't show that the murderer killed an innocent
+Added mm!assign to mm!help
+Fixed the bug where if you were executed by the Jailor, you could still chat even if you were dead.
+Rewrote mm!game (to give clearer rules and more info on roles)
+Removed mm!(rolecommand)id from any of the translations
+Added modes that were hidden before in mm!game start
+Added it so if a guild removes the bot, itll automatically end the game via the database and not try to delete any channels or roles.
+Fixed both events for guildCreate and guildDelete
+Fixed the bug where if you were to die you would still be able to talk in the shop
+Added it so that you can't talk in the shop at night
+Fixed bug where if a Detective were to shoot a zombie, it would not display that the detective shot the Zombie
+Fixed bug where it wouldnt show that the evils won
+Fixed a bug where users can enter role commands even though it isn't night (caused by game just starting)
+Fixed bug where if you were dead, you can vote
+Added mm!friendinfo <Account ID>
+[GlobalGames] Fixed the no achievements bug
+[GlobalGames] Fixed the bug where it doesn't show any friends in friends list
+Removed mm!game setupdata and made it so the bot automatically inserts the guild to the database
+Added it so in mm!game addhostrole, you no longer have to make your roles case-sensitive, and you can also mention the role :)
+Fixed bug where if you were to DM murder mystery bot, the bot would crash (Due to me adding the custom prefix thing)
+Fixed the bug where mm!darkbuy was not working
+Fixed the bug where if you were to use the frame dark item (as the murderer), it wouldnt say they were the murderer from the detectives perspective
+Added it so that if you were to join, it wouldnt automatically assign the role, instead it would assign the role once the game starts
+Fixed the bug where if users joined too quickly, it wouldn't assign the roles properly
+Added mm!stats old
+Updated mm!stats to support all shard stuff
+Updated mm!shardinfo
+Fixed bug where if you were to delete a channel, and the bot stops (due to channels being missing) the bot doesn't delete the #healer channel
+Changed the message for when the game stops
+Fixed the issue where it wouldn't ping the murderer in the #murderer channel
+Fixed bug where if the game were to stop, the bot would crash.
+Changed the mm!game start message
+
+Update V1.2.2b
+Fixed the mm!game category bug
+Fixed the [GlobalGames Earned Achievements Bug]
+
 Update V1.2.1b
 Fixed the bug where if you were to murder someone, it would end the game saying that some channels werent found.
 Fixed the bug where if a user is dead, they would still be able to chat
