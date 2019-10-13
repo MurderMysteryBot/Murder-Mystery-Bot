@@ -16,10 +16,10 @@
             "hostrole": "You have not either put the host role in the database OR you deleted it!",
             "hostrolenotfound": "Error...\nHost Role Not Found!",
             "mmrolenotfound": "Error...\nMurder Mystery Role Not Found!",
-            "startcmd": "You haven't started the game yet! Type `mm!game start` to start the game!",
-            "database": "You have not put your data in the database! Please type mm!game setupdata\nto insert your data into the database!"
+            "startcmd": "You haven't started the game yet! Type `%prefix%game start` to start the game!",
+            "database": "You have not put your data in the database! Please type %prefix%game setupdata\nto insert your data into the database!"
         },
-        "about": "Hello! I am %user% developed by <@126119057232625664> & <@280158289667555328>!\nI was based on the Hypixel game \"Murder Mystery\"; I was being private for 2 months and 30 days (So long...) but I am public as of August 24th, 2017!\nIf you need help, Do **mm!help** or if you need my stats? Use **mm!stats**, Is there a bug? Use **mm!bug [report]** to report a bug!",
+        "about": "Hello! I am %user% developed by <@126119057232625664> & <@280158289667555328>!\nI was based on the Hypixel game \"Murder Mystery\"; I was being private for 2 months and 30 days (So long...) but I am public as of August 24th, 2017!\nIf you need help, Do **%prefix%help** or if you need my stats? Use **%prefix%stats**, Is there a bug? Use **%prefix%bug [report]** to report a bug!",
         "lookindms": "Please look in DMs! (If you don't see the DM, enable DMs)",
         "fixgame": "Attempting to fix the game... (Make sure you deleted all the channels Murder Mystery Bot made, also the role as well)",
         "fixedgame": "Successfully fixed the game! hopefully it works now ._.",
@@ -32,22 +32,24 @@
         "kreor": "You can't have more then ",
         "people": "people",
         "wekfo": "You need more than 0+ people.",
-        "murdergameregular": "Hello everyone! Lets play a game of Murder Mystery shall we? Lets find out who the murderer is! If you died, you will be DM'd this:\nhttp://prntscr.com/gcaf7d\nOnce the user has put in their Last Will it will probably be announced to the server, if some admin is on the game and has the permission Administrator, Then that'll be cheating! (unless if they dont check the other channels ya mean?)\nIf you want to vote to kill someone, type mm!votehang and they will be voted to die!\nThat is the game! Hope Innocents Win!",
-        "gamestart": "Game has started! GL (if you see a error, pls stop the game - if the game is buggy, contact FireMario211 by going on his server (mm!server))",
-        "murdergamemurderparty": "Hello everyone! Lets play a game of Murder Mystery shall we? Lets find out who the murderer is! **Everyone** is a Murderer...wait why is **Everyone** a murderer...? There is suppose to be one murderer...OH I remember! We are playing Murder Party Mode! That means EVERYONE is a murderer, and you should not trust ANYONE If you died, you will be DM'd this:\nhttp://prntscr.com/ffad0j\nOnce the user has put in their Last Will it will probably be announced to the server, where there will be dead players in the chat, if some admin is on the game and has the permission Administrator, then it doesn't matter because everyone is a murderer\nIf you want to vote to kill someone, type mm!votehang and they will be voted to die!\nThat is the game!~~Hope Innocents Win!~~",
+        "murdergameregular": "Hello everyone! Lets play a game of Murder Mystery shall we? Lets find out who the murderer is! If you died, you will be DM'd this:\nhttp://prntscr.com/gcaf7d\nOnce the user has put in their Last Will it will probably be announced to the server, if some admin is on the game and has the permission Administrator, Then that'll be cheating! (unless if they dont check the other channels ya mean?)\nIf you want to vote to kill someone, type %prefix%votehang and they will be voted to die!\nThat is the game! Hope Innocents Win!",
+        "gamestart": "Game has started! GL (if you see a error, pls stop the game - if the game is buggy, contact FireMario211 by going on his server (%prefix%server))",
+        "murdergamemurderparty": "Hello everyone! Lets play a game of Murder Mystery shall we? Lets find out who the murderer is! **Everyone** is a Murderer...wait why is **Everyone** a murderer...? There is suppose to be one murderer...OH I remember! We are playing Murder Party Mode! That means EVERYONE is a murderer, and you should not trust ANYONE If you died, you will be DM'd this:\nhttp://prntscr.com/ffad0j\nOnce the user has put in their Last Will it will probably be announced to the server, where there will be dead players in the chat, if some admin is on the game and has the permission Administrator, then it doesn't matter because everyone is a murderer\nIf you want to vote to kill someone, type %prefix%votehang and they will be voted to die!\nThat is the game!~~Hope Innocents Win!~~",
         "keofr": "You don't have enough players! You need 1+ people in order to play",
         "keofra": "You don't have enough players! You need 2+ people in order to play",
         "wdkdd": "You cant have more than 8 people!",
-        "fkeow": "You don't have enough players! You need 6+ people in order to play",
+        "fkeow": "You don't have enough players! You need %minplayer%+ people in order to play",
         "fkeowa": "You don't have enough players! You need 4+ people in order to play",
         "gamehasntstart": "The game hasn't been started yet!",
         "gamealreadystart": "Sorry but the game has already started!",
         "hasbeenvoted": " has been voted, ",
-        "morevotes": " more votes needed until he dies.",
+        "morevotes": " more votes needed until they die.",
         "hasaroundvote": " has been voted, and has around ",
-        "hasaroundvote2": " vote(s), He will now be killed...",
+        "hasaroundvote2": " vote(s), They will now be killed...",
         "youhavedied": ":skull: You have died! :skull:",
         "hasbeenhung": " has been hung :skull:",
+        "nolastwill": "There were no last wills to be found...",
+        "hadlastwill": "had a last will!\nTheir will reads:\n```\n%lastwill%\n```",
         "fkefoekf": "You cannot vote yourself!",
         "dke": "You cannot shoot yourself 🤔",
         "userisnotingame": "That user isn't in the game!",
@@ -58,27 +60,28 @@
         "thatuserhasntjoined": "That user hasn't joined the game!",
         "startc": "You have already started the game",
         "kfofee": " has setup a ",
-        "dkodee": " Murder Mystery Game! If you want to join, type\nmm!game join\nTo join the match!",
-        "modedoesntexist": "That mode doesn't exist!\nPlease use these categories:\n```md\nRegular - Classic Murder Mystery! (regular)\n\nMurder Party - Everyone is a murderer! (murderparty)\n\nHumans VS Bots - Added extra bots (not added yet)\n\nKiller Mode - There is one Detective and Everyone is a murderer (not added yet)\n\nSpecialist Town - Everyone is either Murderer, Detective, healer, etc (not added yet)\n\n5050 - 50 murderers, 50 detectives (not added yet)\n\n2 birds 1 stone - 2 murds 1 detect Or 2 detect 1 murd (not added yet)\nFaster mode - Classic murder mystery but the time is quicker (fastermode)\n\nTime mode - In the day time, the Murderer can attack, but in the night they cant. (not added yet)\n\n1v1 Mode - 1 Detective and 1 Murderer, ONLY 2 People can do this mode. (1v1)\n\nBot Murder Mode - At night the bot types mm!kill (random) (not added yet)\n\nRejected Roles Mode - A mode that contains (most of) the rejected roles (not added yet)\n\nUnlimted Players Mode - Have more than 8 people? this is the mode for you! You can have an unlimited amount of players! (unlimitedmode)\n\nShort roles - Want to play Murder Mystery with just 4 roles and 4 people? This is the mode! (shortroles)\n\nInsane - Always day, murder can kill anytime and sheriff (insane)\n\nSandbox - You have access to everything. (sandbox)\n\nThats all the modes\n```",
+        "dkodee": " Murder Mystery Game! If you want to join, type\n%prefix%game join\nTo join the match!",
+        "modedoesntexistoutdated": "That mode doesn't exist!\nPlease use these categories:\n```md\nRegular - Classic Murder Mystery! (regular)\n\nMurder Party - Everyone is a murderer! (murderparty)\n\nHumans VS Bots - Added extra bots (not added yet)\n\nKiller Mode - There is one Detective and Everyone is a murderer (not added yet)\n\nSpecialist Town - Everyone is either Murderer, Detective, healer, etc (not added yet)\n\n2 birds 1 stone - 2 murds 1 detect Or 2 detect 1 murd (not added yet)\nFaster mode - Classic murder mystery but the time is quicker (fastermode)\n\nTime mode - In the day time, the Murderer can attack, but in the night they cant. (not added yet)\n\n1v1 Mode - 1 Detective and 1 Murderer, ONLY 2 People can do this mode. (1v1)\n\nBot Murder Mode - At night the bot types %prefix%kill (random) (not added yet)\n\nRejected Roles Mode - A mode that contains (most of) the rejected roles (not added yet)\n\nUnlimted Players Mode - Have more than 8 people? this is the mode for you! You can have an unlimited amount of players! (unlimitedmode)\n\nShort roles - Want to play Murder Mystery with just 4 roles and 4 people? This is the mode! (shortroles)\n\nInsane - Always day, murder can kill anytime and sheriff (insane)\n\nZombie Mode - A mode but with zombies that invade the world by infecting others (zombie)\n\nSandbox - You have access to everything. (sandbox)\n\nBot 1v1 - A mode that requires 2 players but in reality there are 3 since the bot joins, the bot is either a Murderer, Detective, or Healer. (bot1v1)\n\nThats all the modes\n```",
+        "modedoesntexist": "**That gamemode doesn't exist!**\nPlease use these categories:\n```md\n%gamemodes%\n\nThose are all the available gamemodes\n```",
         "stoppedgame": "Successfully (or not) stopped the game!",
-        "stoppedgameglob": "The game has been stopped by `",
+        "stoppedgameglob": "The game has been stopped by `%user%`!",
         "jobchannelmsgs": {
             "murderer": {
-                "channel": "Hello there, You are a **Murderer**, You will try to kill as many people as you can! But remember, do not get caught! The Detective will try to find out who the Murderer is! There is also a Healer that can heal other people, so beware of that, the recommended thing to do is find the Detective and kill him/her. You can murder people by typing\nmm!kill `@user`\nThen someone will be murdered! But remember, it will be logged! It wont show your name though, remember not to talk in the public chat or else people will know who the murderer is! If you die, its game over! If you win, you win! Good luck murdering people... ;)",
+                "channel": "Hello there, You are a **Murderer**, You will try to kill as many people as you can! But remember, do not get caught! The Detective will try to find out who the Murderer is! There is also a Healer that can heal other people, so beware of that, the recommended thing to do is find the Detective and kill him/her. You can murder people by typing\n%prefix%kill `@user`\nThen someone will be murdered! But remember, it will be logged! It wont show your name though, remember not to talk in the public chat or else people will know who the murderer is! If you die, its game over! If you win, you win! Good luck murdering people... ;)",
                 "channel2": " is the Assassin AND\n",
                 "channel3": ", **YOU** are the murderer. ;)",
                 "channel4": " is the murderer.",
                 "stabstab": "You have stabbed `",
-                "stabbady": "`! But remember....He might be revived by the healer..."
+                "stabbady": "`! But remember....They might be revived by the healer..."
             },
             "detective": {
-                "channel": "Hello there, You are a **Detective**, You will try to find out who the Murderer is! The best option is to not trust anyone, Be sure to try your best to find out who the Murderer is, If you die, then there may be a new Detective, If you shoot someone, you cannot get your gun back, You've messed up buddy. If you die that means you can chat in the #general (or the main chat) (if the owner/admin has setup a thing where players with murder mystery role cant chat)\nIn order to search someone to see if they are murderer, Type mm!search `@user`\n(or mm!searchid `(userid)`)\nTo shoot someone, type mm!shoot `@user`\n(or mm!shootid `(userid)`)\nBut don't abuse your gun!\nThats all, hope you find out who the murderer is!",
+                "channel": "Hello there, You are a **Detective**, You will try to find out who the Murderer is! The best option is to not trust anyone, Be sure to try your best to find out who the Murderer is, If you die, then there may be a new Detective, If you shoot someone, you cannot get your gun back, You've messed up buddy. If you die that means you can chat in the #general (or the main chat) (if the owner/admin has setup a thing where players with murder mystery role cant chat)\nIn order to search someone to see if they are murderer, Type %prefix%search `@user`\n(or %prefix%search `(userid)`)\nTo shoot someone, type %prefix%shoot `@user`\n(or %prefix%shoot `(userid)`)\nBut don't abuse your gun!\nThats all, hope you find out who the murderer is!",
                 "shoot": "You have shot <@%user%> and they were a **%role%**!",
                 "sent": ":skull: You have been shot by a **Detective**! :skull:",
-                "sent2": " was shot by the **Detective** and they was a **%role%**! :gun:"
+                "sent2": " was shot by the **Detective** and they were a **%role%**! :gun:"
             },
             "healer": {
-                "channel": "Hello there, You are a **Healer**, You are a person that heals people that are dead! If you die, you cannot heal anyone anymore, Quick tip is try to not talk and say anything about your role. If you want to heal someone, just type\nmm!heal `@user`\nand you will be able to heal someone! Hope you avoid being murdered! Have a great game!",
+                "channel": "Hello there, You are a **Healer**, You are a person that heals people that are dead! If you die, you cannot heal anyone anymore, Quick tip is try to not talk and say anything about your role. If you want to heal someone, just type\n%prefix%heal `@user`\nand you will be able to heal someone! Hope you avoid being murdered! Have a great game!",
                 "wasteheal": "You realize that you healed yourself, You have successfully wasted a first-aid kit. How terrible, heres another one *gives another one* Now dont use it on yourself!",
                 "hasbeenrevived": " has been revived by a **Healer** :angel:",
                 "youhavehealed": "You have healed ",
@@ -86,7 +89,7 @@
                 "dm": ":angel: You have been revived by a **Healer**! You will be alive tomorrow morning. :angel:"
             },
             "jailor": {
-                "channel": "Hello there, You are the **Jailor**, You will jail people every night and ask them questions. If you think the person is the murderer, feel free to type \n**mm!execute**\nTo execute the person, If you want to jail the person, type\nmm!jail `@user`\nTo jail the person you want to interrogate someone, OR you can type\nmm!jailid `id`\nTo jail the user but in a list that will be shown below, If you execute someone, Then it will be announced in the #murdergame, Hope you find out who the murderer is!",
+                "channel": "Hello there, You are the **Jailor**, You will jail people every night and ask them questions. If you think the person is the murderer, feel free to type \n**%prefix%execute**\nTo execute the person, If you want to jail the person, type\n%prefix%jail `@user`\nTo jail the person you want to interrogate someone, OR you can type\n%prefix%jail `userid`\nTo jail the user but in a list that will be shown below, If you execute someone, Then it will be announced in the #murdergame, Hope you find out who the murderer is!",
                 "jailchannel": "Hello, Welcome to **Jail**, this is where you have jailed people and you interrogate them by answering some questions, Also hello jailed person! Welcome to jail, If the Jailor thinks your suspicious, then you probably are going to be executed, If you murder the person, They might have a last will and then it will show the public chat the will and show who they jailed. Anyways, Don't try to get executed or else you'll end up like Shadow where he had his head cut off. Anyways, Hope you try to not get executed!",
                 "alreadyinjail": "That person is already in jail!",
                 "isntinjail": "That person isn't in jail!",
@@ -104,15 +107,18 @@
                 "jailingurself": "You can't jail yourself."
             },
             "radioperson": {
-                "channel": "Hello! You are a **Radio Person** and you have the power to annonomously say to the public chat what YOU want to say. If you dont want to say anything, its fine buddy. If you want to broadcast to the public chat, Type\nmm!broadcast (message)\nTo send a message to the #murdergame!",
+                "channel": "Hello! You are a **Radio Person** and you have the power to annonomously say to the public chat what YOU want to say. If you dont want to say anything, its fine buddy. If you want to broadcast to the public chat, Type\n%prefix%broadcast (message)\nTo send a message to the #murdergame!",
                 "broadcast": "A Radio Person has broadcasted!",
-                "broadcast2": "You have sent a global message to the news! Everyone has saw what you said!\n\nOn TV - SHOCKING/REGULAR NEWS\nHello there, I'm your host %username%, and today we are talking about something that happened!\n"
+                "broadcast2": "You have sent a global message to the news! Everyone has saw what you said!\n\nOn TV - SHOCKING/REGULAR NEWS\nHello there, I'm your host %username%, and today we are talking about something that happened!\n",
+                "enterin": "**Please enter in a broadcast!**"
             },
             "assassin": {
-                "channel": "Hello there, You are an **Assassin**, You are a person that is trying to get your target killed, if your target is killed you earn $3 and you will get a new target to kill... Your main goal is to kill your target, The murderer will know who the Assassin is, but you do not know who the Murderer is, You will be DM'd on what your next target is. Make sure the murderer can assign a target AND can kill once per night (Money system coming soon)"
+                "channel": "Hello there, You are an **Assassin**, You are a person that is trying to get your target killed, if your target is killed you earn $3 and you will get a new target to kill... Your main goal is to kill your target, The murderer will know who the Assassin is, but you do not know who the Murderer is, You will be DM'd on what your next target is. Make sure the murderer can assign a target AND can kill once per night (Money system coming soon)",
+                "targetgone": "The %role% has killed your target! You have gained 3 <:gold:384017291316297729>!\nYou have no new Targets.",
+                "targetgone2": "Someone has killed your target! You have gained 3 <:gold:384017291316297729>!\nYou have no new Targets."
             },
             "zombie": {
-                "channel": "Brainzzz...You are a **Zombie**, Your job is to try and infect as many people as possible to win!\nYou can infect people by typing mm!bite <@User/UserID>, but it will take around 1 day for them to turn into a zombie!",
+                "channel": "Brainzzz...You are a **Zombie**, Your job is to try and infect as many people as possible to win!\nYou can infect people by typing %prefix%bite <@User/UserID>, but it will take around 1 day for them to turn into a zombie!",
                 "alreadybitten": "**You have already infected someone!**",
                 "bitten": "**You have infected %user%!**\nIt will take around 1 day for %user% to turn into a **Zombie** (unless healed by the Healer)!\nThe player however knows they have been infected but it hasn't been announced in the chat.",
                 "turnedintozombie": "%user% has been turned into a **Zombie**, their previous role was **%role%**.",
@@ -122,12 +128,12 @@
             }
         },
         "enoughplayers": "There are already enough players! (You can go on another server if you have like 17 people or somethin, or play unlimited players mode or 5050.)",
-        "settings": "Hello there! Welcome to the **Settings Help Menu**! Here are the commands!\n\nmm!settings locales set (language) - Sets your locales! (Used if you are a different language)\nmm!settings locales - Shows the locales options!\nmm!settings daytime <Length of day time in seconds> - This will set it for how long a day should last in-game!\nmm!settings nighttime <Length of night time in seconds> - This will set it for how long a night should last in-game!\nmm!settings category <Category / Category Channel Name> - Set the category of what Murder Mystery Bot should set the channels for the game!",
+        "settings": "Hello there! Welcome to the **Settings Help Menu**! Here are the commands!\n\n%prefix%settings locales set (language) - Sets your locales! (Used if you are a different language)\n%prefix%settings locales - Shows the locales options!\n%prefix%settings daytime <Length of day time in seconds> - This will set it for how long a day should last in-game!\n%prefix%settings nighttime <Length of night time in seconds> - This will set it for how long a night should last in-game!\n%prefix%settings category <Category / Category Channel Name> - Set the category of what Murder Mystery Bot should set the channels for the game!\n%prefix%settings prefix <New Prefix> - Sets what the prefix is for the bot! (Default: 'mm!')",
         "langsuccess": "**Successfully set your language to** `",
         "thatpersonisdead": "That person is dead!",
         "thatpersonisalreadydead": "That person is already dead!",
         "thatpersonisntdead": "That person isn't dead!",
-        "fekrofr": " has been jailed! Try and interrogate him, if (s)he sounds suspicious, you can execute them by typing mm!execute ",
+        "fekrofr": " has been jailed! Try and interrogate them, if they sound suspicious, you can execute them by typing %prefix%execute ",
         "reee": " has been executed by the **Jailor** and they were the **Murderer**",
         "eeer": "You cannot do this during the day time.",
         "nogamegoingon": "There is no game going on!",
@@ -138,6 +144,7 @@
         "alreadyexecute": "You have already executed someone!",
         "alreadybroadcast": "You have already broadcasted!",
         "alreadyjailed": "You have already jailed someone!",
+        "alreadyhealed": "You have already healed someone!",
         "stabbed": " has been stabbed by the **Murderer**! :dagger:",
         "stabbed2": ":skull: You have been stabbed by the **Murderer** :skull:",
         "stabbed3": "A murderer tried to attack you! But you were in jail!",
@@ -151,10 +158,10 @@
         "b": "You have already voted!",
         "c": "Votehang is disabled on this mode.",
         "goodnight": "Good night...",
-        "goodmorning": "Good morning!\nTo vote to kill you must type mm!votehang `@user`\nThe morning will go on for a minute.\nWhile its morning, chat with others to figure out who the murderer/assassin is!",
-        "help": "`Help Command`\n\n***Regular Commands***\n**mm!invite** - Invite Murder Mystery Bot to your server!\n**mm!settings** - Change the settings for Murder Mystery Bot!\n**mm!shardinfo**\n**mm!server** - Shows you the invite to the Offical Murder Mystery Bot Server!\n**mm!suggest** - Suggest something for the Bot! (Abusing this will result in a blacklist.)\n**mm!globalgames** - The global games command!\n**mm!leave** - Leave a global games game (Ingame command)\n**mm!profile** - Shows your profile status!\n**mm!taunt** - Use a taunt! (Global Games Ingame command)\n\n***Game Commands***\n**mm!game** - Shows the detail of the game and how to play I guess\n**mm!game rules** - Shows you the rules of the game!\n**mm!game start** - Start a game!\n**mm!game fixgame** - Attempts to fix the game.\n**mm!game join** - Join a game!\n**mm!game setupdata** - Add your guild data in our database!\n**mm!game modecmds <Options>** - Change the game options! (Right now only used for Sandbox Mode)\n**mm!game addhostrole <role name>** - Add your host role to the database!\n**mm!game leave** - Leave the game!\n**mm!game gamestart** - Start the game which will create all channels and setup roles, etc...\n**mm!game stop** - Stop the game!\n\n***Ingame Commands***\n**mm!kill <@user>** - Kill a user! (Murderer Permission Needed)\n**mm!search <@user>** - Search the user to see if they are the murderer!\n**mm!shoot <@user>** - Shoot a user if you think they are the murderer!\n**mm!broadcast** - Broadcast a global message to the news!\n**mm!votehang <@user>** - Vote to kill the person if you think they are suspicious!\n**mm!jail <@user>** - Jail a person to interrogate them\n**mm!execute <@user>** - Execute the user if they are suspicious...\n**mm!heal <@user>** - Bring the user back from the dead!\n**mm!lastwill <will>** - When you die or get hung, there will be a lastwill message to all the users to see before you actually die.\n**mm!buy** <Item ID> - Have enough gold? Well you can buy an item!\n**mm!item <Item ID> <@User (optional)>** - Bought an item? Well you can use your item!\n\n***Bot made by FireMario211***\nVersion %version%\nPlease note that there may be bugs, if you see any, please type mm!bug (message)",
-        "shop": "Welcome to the **Shop**! Here you can buy things that will protect you or buy it for killing others that you might think is the murderer...\nWe use currency named \"**Gold**\", You can get 1 **Gold** every day unless you are dead or you are cursed.\n**Items**:\n%item%\n\nIn order to buy a item, type **mm!buy <Item ID>**\nIn order to use the Item, type **mm!item <Item ID>** Or if you have someone to use it on, type **mm!item <Item ID> <@User>**",
-        "darkshop": "Welcome to the **Dark Shop**! This shop is provided by the murderers who attempted to murder everyone in the Town... Here you can buy things that will protect you or buy it for killing others, or even explode the universe...\nThe Murderers and Assassins use currency named \"**Dark Gold**\", You can get 0.5 **Dark Gold** every day unless you are dead...Now if you want to get 1 **Dark Gold**, you can convert **Gold** into **Dark Gold**\n**Items**:\n%item%\n\nIn order to buy a item, type **mm!darkbuy <Item ID>**\nIn order to use the Item, type **mm!darkitem <Item ID>** Or if you have someone to use it on, type **mm!darkitem <Item ID> <@User>**",
+        "goodmorning": "Good morning!\nTo vote to kill you must type %prefix%votehang `@user`\nThe morning will go on for a minute.\nWhile its morning, chat with others to figure out who the murderer/assassin is!",
+        "help": "`Help Command`\n\n***Regular Commands***\n**%prefix%invite** - Invite Murder Mystery Bot to your server!\n**%prefix%settings** - Change the settings for Murder Mystery Bot!\n**%prefix%shardinfo**\n**%prefix%server** - Shows you the invite to the Offical Murder Mystery Bot Server!\n**%prefix%suggest** - Suggest something for the Bot! (Abusing this will result in a blacklist.)\n**%prefix%globalgames** - The global games command!\n**%prefix%friendinfo** <Account ID> - View info of your friend! (Global Games Command)\n**%prefix%leave** - Leave a global games game (Ingame command)\n**%prefix%profile** - Shows your profile status!\n**%prefix%taunt** - Use a taunt! (Global Games Ingame command)\n\n***Game Commands***\n**%prefix%game** - Shows the detail of the game and how to play I guess\n**%prefix%game rules** - Shows you the rules of the game!\n**%prefix%game start** - Start a game!\n**%prefix%game fixgame** - Attempts to fix the game.\n**%prefix%game join** - Join a game!\n**%prefix%game setupdata** - Add your guild data in our database!\n**%prefix%game modecmds <Options>** - Change the game options! (Right now only used for Sandbox Mode)\n**%prefix%game addhostrole <role name>** - Add your host role to the database!\n**%prefix%game leave** - Leave the game!\n**%prefix%game gamestart** - Start the game which will create all channels and setup roles, etc...\n**%prefix%game stop** - Stop the game!\n\n***Ingame Commands***\n**%prefix%kill <@user>** - Kill a user! (Murderer Permission Needed)\n**%prefix%assign <@user>** - Assign someone as a target for the assassin! (Murderer Permission Needed)\n**%prefix%search <@user>** - Search the user to see if they are the murderer!\n**%prefix%shoot <@user>** - Shoot a user if you think they are the murderer!\n**%prefix%broadcast** - Broadcast a global message to the news!\n**%prefix%votehang <@user>** - Vote to kill the person if you think they are suspicious!\n**%prefix%jail <@user>** - Jail a person to interrogate them\n**%prefix%execute <@user>** - Execute the user if they are suspicious...\n**%prefix%heal <@user>** - Bring the user back from the dead!\n**%prefix%lastwill <will>** - When you die or get hung, there will be a lastwill message to all the users to see before you actually die.\n**%prefix%buy** <Item ID> - Have enough gold? Well you can buy an item!\n**%prefix%item <Item ID> <@User (optional)>** - Bought an item? Well you can use your item!\n\n***Bot made by FireMario211***\nVersion %version%\nPlease note that there may be bugs, if you see any, please type %prefix%bug (message)",
+        "shop": "Welcome to the **Shop**! Here you can buy things that will protect you or buy it for killing others that you might think is the murderer...\nWe use currency named \"**Gold**\", You can get 1 **Gold** every day unless you are dead or you are cursed.\n**Items**:\n%item%\n\nIn order to buy a item, type **%prefix%buy <Item ID>**\nIn order to use the Item, type **%prefix%item <Item ID>** Or if you have someone to use it on, type **%prefix%item <Item ID> <@User>**",
+        "darkshop": "Welcome to the **Dark Shop**! This shop is provided by the murderers who attempted to murder everyone in the Town... Here you can buy things that will protect you or buy it for killing others, or even explode the universe...\nThe Murderers and Assassins use currency named \"**Dark Gold**\", You can get 0.5 **Dark Gold** every day unless you are dead...Now if you want to get 1 **Dark Gold**, you can convert **Gold** into **Dark Gold**\n**Items**:\n%item%\n\nIn order to buy a item, type **%prefix%darkbuy <Item ID>**\nIn order to use the Item, type **%prefix%darkitem <Item ID>** Or if you have someone to use it on, type **%prefix%darkitem <Item ID> <@User>**",
         "alreadyshot": "You have already shot someone",
         "plspickitem": "**Please pick an Item ID to buy/use!** (You can find this at the end of an item in the shop by ID:)",
         "unknownitem": "**That is an unknown Item ID!**",
@@ -273,7 +280,7 @@
         }, {
             "name": "Eternal Justice",
             "price": 1,
-            "description": "Automatically given to the Assassin, each time he lynches someone, his vote counts twice, but isn't given away.",
+            "description": "Automatically given to the Assassin, each time they lynch someone, his vote counts twice, but isn't given away.",
             "id": 6,
             "usable": 0,
             "isDark": 1
@@ -309,8 +316,8 @@
         "shopthin": "You have already bought this item!",
         "shopthings": "Sorry but you cannot use this item as it isnt usable!",
         "shopthing": "Sorry but you cannot use items or buy items in this Mode!",
-        "blacklistusersed": "Hello there, Sorry but you are blacklisted! If you want to appeal please type mm!appealserver and join that server then appeal your blacklist!",
-        "blacklistguildjsa": "Hello there, Sorry but your guild is blacklisted! If you want to appeal your guild, please type mm!appealserver and join that server then appeal your blacklist!",
+        "blacklistusersed": "Hello there, Sorry but you are blacklisted! If you want to appeal please type %prefix%appealserver and join that server then appeal your blacklist!",
+        "blacklistguildjsa": "Hello there, Sorry but your guild is blacklisted! If you want to appeal your guild, please type %prefix%appealserver and join that server then appeal your blacklist!",
         "alreadyjoinn": "**Sorry but someone is joining the game! Please wait until they have joined the game.**",
         "cmdonlyworks": "**This command only works for %modename%.**",
         "notrightarguments": "**Those weren't the right arguments!**\n%modename% Commands:",
@@ -326,338 +333,99 @@
             "kill": "**Successfully killed %user%!**",
             "setgold": "**Successfully set the dark gold/gold to `%goldamount%` for %user%!**",
             "addgold": "**Successfully added `%goldamount%` for %user%!**",
-            "removegold": "**Successfully removed `%goldamount%` for %user%!**"
+            "removegold": "**Successfully removed `%goldamount%` for %user%!**",
+            "useralreadyhas": "**ERROR** User already has item"
         },
-        "dmsdisabled": "**I cannot DM you, please enable DMs!**"
-    },
-    "Dutch": {
-        "botownerjoin": "👑 De Bot Eigenaar `",
-        "botownerjointwo": "` is de server binnengetreden! 👑",
-        "botadminjoin": ":gear: Een Bot Administrator `",
-        "botadminjointwo": "` is de server binnengetreden! :gear:",
-        "youarea": "Je bent een ",
-        "youarean": "Je bent een ",
-        "wasthe": "was de",
-        "wasa": "was een",
-        "wasan": "was een",
-        "errors": {
-            "error498code": "Error Code 498 bij roleupdate",
-            "errorroleupdate": "`ERROR` Rol ID niet gevonden ",
-            "roleexisting": "Deze rol bestaat niet! (Let op, het is hoofdlettergevoelig)",
-            "hostrole": "Je hebt de host rol niet in de database gezet, of verwijderd!",
-            "hostrolenotfound": "Error...\nHost Rol Niet Gevonden!",
-            "mmrolenotfound": "Error...\nMurder Mystery Rol Niet Gevonden!",
-            "startcmd": "Je hebt nog geen spel gestart! Type `mm!game start` om het spel te starten!",
-            "database": "Je hebt je data nog niet in de database gezet! Type mm!game setupdata\nom je data in de database te zetten"
+        "dmsdisabled": "**I cannot DM you, please enable DMs!**",
+        "nocmddm": "I cannot respond with this command in DMS.",
+        "spectatecmd": {
+            "one": "**You are now spectating the game!**\nYou may not be able to see role channels however, due to the risk of spectators calling out the Murderer, spectators also cannot send messages.",
+            "two": "**You are already spectating the game!**",
+            "three": "**You cannot spectate as you are already playing.**"
         },
-        "about": "Hallo! Ik ben %user% ontwikkeld door  <@126119057232625664> en <@280158289667555328>!\nIk ben gebaseerd op het Hypixel spel \"Murder Mystery\"; Ik was privé voor twee maanden en dertig dagen (Superlang...) maar ik ben openbaar sinds 24 augustus 2017!\nAls je hulp nodig hebt, doe dan **mm!help** of als je mijn statistieken nodig hebt, **mm!stats**, Is er een fout? Gebruik **mm!bug [report]** om een bugreport te versturen",
-        "lookindms": "Kijk alsjeblieft in je DM's! (Als je geen privebericht ziet, vergeet deze dan niet aan te zetten.)",
-        "fixgame": "Bezig met het repareren van het spel... (Zorg ervoor dat alle kanalen die Murder Mystery Bot heeft gemaakt zijn verwijderd, evenals de rol)",
-        "fixedgame": "Spel is met succes gerepareerd! Hopelijk werkt het nu ._.",
-        "hostroleperms": "Je hebt geen toestemming dit commando te gebruiken!\nJe hebt de \"Game Hoster\" rol nodig",
-        "manageroles": "Je hebt geen toestemming om de \"Host\" rol toe te voegen! Je moet de `MANAGE_ROLES` permissie hebben",
-        "manageroless": "Sorry, maar je hebt de `ROLLEN BEHEREN` permissie nodig om dit command te gebruiken!",
-        "koefk": "Met succes de rol `",
-        "keeod": "` in de database!",
-        "tjeoi": "Er is al een spel bezig!",
-        "kreor": "Je kan niet meer hebben dan ",
-        "people": "spelers",
-        "wekfo": "Je hebt meer nodig dan 0+ spelers.",
-        "murdergameregular": "Hallo iedereen! Laten we een spelletje Murder Mystery spelen, zullen we? Laten we uitzoeken wie de moordenaar is! Als je sterft, stuur ik je deze DM:\nhttp://prntscr.com/gcaf7d\nZodra de speler hun Laatste Wens heeft ingevuld zal deze waarschijnlijk op de server worden aangekondigd, als er een admin meedoet die de permissie `Administrator` heeft, kunnen ze valsspelen! (tenzij ze zo eerlijk zijn om niet in de andere kanalen te kijken?)\nAls je een stemming wilt doen om iemand te vermoorden, type dan mm!votehang en dan zal er stemming over zijn dood starten!\nDat is het spel! Moge de Onschuldigen winnen!",
-        "gamestart": "Spel is gestart! Veel Succes! (als je een fout ziet, stop dan het spel - als het spel niet goed verloopt, neem dan contact op met FireMario211 door naar zijn server te gaan. (mm!server))",
-        "murdergamemurderparty": "Hallo everyone! Laten we een spelletje Murder Mystery spelen, zullen we? Laten we uitzoeken wie de moordenaar is! **Iedereen** is een Moordenaar...wacht waarom is **Iedereen** een moordenaar...? Daar is er toch maar één van?...OH ik weet het weer! We spelen Murder Party Modus! Dat betekent dat IEDEREEN een moordenaar is, en dat je NIEMAND moet vertrouwen! Als je sterft, stuur ik je deze DM:\nhttp://prntscr.com/ffad0j\nZodra de speler hun Laatste Wens heeft ingevuld zal deze waarschijnlijk op de server worden aangekondigd, waar de dode spelers in de chat zijn, en als er een Admin is met de `Administrator` permissie, maakt het niks uit want iedereen is een moordenaar\nAls je een stemming wilt doen om iemand te vermoorden, type dan mm!votehang en dan zal er stemming over zijn dood starten!\nThat is the game! ~~Moge de Onschuldigen winnen!~~",
-        "keofr": "Je hebt niet genoeg spelers! Je hebt 1 of meer mensen nodig om te spelen",
-        "keofra": "Je hebt niet genoeg spelers! Je hebt 2 of meer mensen nodig om te spelen",
-        "wdkdd": "Je kan niet meer dan 8 spelers hebben!",
-        "fkeow": "YJe hebt niet genoeg spelers! Je hebt 6 of meer mensen nodig om te spelen",
-        "fkeowa": "YJe hebt niet genoeg spelers! Je hebt 4 of meer mensen nodig om te spelen",
-        "gamehasntstart": "Het spel is nog niet begonnen!",
-        "gamealreadystart": "Sorry, maar het spel is al begonnen!",
-        "hasbeenvoted": " is om gestemd, ",
-        "morevotes": " meer stemmen nodig totdat hij ter dood veroordeeld wordt.",
-        "hasaroundvote": " is om gestemd, en heeft rond de ",
-        "hasaroundvote2": " stemmen, Hij zal nu ter dood gebracht worden...",
-        "youhavedied": ":skull: Je bent dood gegaan! :skull:",
-        "hasbeenhung": " was opgehangen :skull:",
-        "fkefoekf": "Je kan niet op jezelf stemmen!",
-        "dke": "Je kan niet op jezelf schieten 🤔",
-        "userisnotingame": "Deze gebruiker doet niet mee aan het spel!",
-        "userdoesntexist": "Deze gebruiker bestaat niet!",
-        "assigneddmd": ":fearful: Je voelt alsof je bent uitgekozen... :cold_sweat:",
-        "joinedgame": " Je bent met succes in het spel gegaan! Wacht alsjeblieft op de andere spelers die mee willen doen...",
-        "alreadyingame": " Je zit al in het spel",
-        "thatuserhasntjoined": "Deze gebruiker is nog niet in het spel!",
-        "startc": "You have already started the game",
-        "kfofee": " heeft een ",
-        "dkodee": " Murder Mystery Game gestart! Als je mee wilt doen, type dan\nmm!game join\nom mee te doen aan het spel!",
-        "modedoesntexist": "Deze spelmodus bestaat niet!\nKies een spelmodus uit deze categorieën:\n```md\nRegular - Klassiek Murder Mystery! (regular)\n\nMurder Party - Iedereen is een moordenaar! (murderparty)\n\nMensen VS Bots - Extra computerspelers in het spel (nog niet toegevoegd)\n\nKiller Mode - Er is een één detective en iedereen is een moordenaar (nog niet toegevoegd)\n\nSpecialist Town - Iedereen is hetzelfde, Moordenaar, detective, genezer, etc (nog niet toegevoegd)\n\n50/50 - 50 moordenaars, 50 detectives (nog niet toegevoegd)\n\n2 birds 1 stone - 2 moordenaars 1 detective of 2 detectives en 1 moordenaar (nog niet toegevoegd)\nSnelle modus - Klassiek variant, maar de tijd verloopt sneller (fastermode)\n\nTijd modus - Overdag kan de moordenaar aanvallen, maar niet s'nachts. (nog niet toegevoegd)\n\n1v1 Modus - 1 Detective en 1 Moordenaar, SLECHTS 2 mensen kunnen dit spelen. (1v1)\n\nBot Moordenaar Modus - s'Nachts typt de bot `mm!kill (random) (nog niet toegevoegd)\n\nOnbeperkte Spelers Modus - Meer dan 8 spelers? Gebruik dan deze modus! Je kan net zoveel spelers hebben als je wilt! (unlimitedmode)\n\nKorte rollen - Wil je Murder Mystery spelen met slechts 4 rollen en 4 personen? Dit is de modus! (shortroles)\n\nKrankzinnig - Elke dag kan moord op elk moment doden en sheriff (insane)\n\nSandbox - Je hebt toegang tot alles. (sandbox)\n\nDat zijn alle modi!\n```",
-        "stoppedgame": "Is gestopt met het spel!",
-        "stoppedgameglob": "Het spel is gestopt door `",
-        "jobchannelmsgs": {
-            "murderer": {
-                "channel": "Hallo, Je bent een  **Moordenaar**, Je probeert zoveel mogelijk mensen te vermoorden als je kan! Maar onthoud, wordt niet gepakt! De Detective probeert erachter te komen wie de moordenaar is! Er is ook een Genezer die andere mensen beter kan maken, dus houd daar rekening mee, het is natuurlijk het beste om de Detective te vinden en hem/haar te vermoorden. Je kan mensen vermoorden door\nmm!kill `@user` te typen.\nEr wordt dan iemand vermoord! Maar onthoud, dit wordt bijgehouden! Het zal echter niet je naam laten zien, dus spreek niet in openbare kanalen, anders weten mensen wie de moordenaar is! Als je sterft, is het spel voorbij! Als je wint, win je. Duhhh! Veel succes met moorden... ;)",
-                "channel2": " is de Moordenaar EN\n",
-                "channel3": ", **JIJ** bent de moordenaar. ;)",
-                "channel4": " is de moordenaar.",
-                "stabstab": "Je stak `",
-                "stabbady": "`! Maar onthoud....De Genezer kan hem redden..."
+        "lastwillcmd": {
+            "one": "Please type in a last will!",
+            "two": "Success! Your will is now:\n```\n%will%\n```"
+        },
+        "settingscmd": {
+            "settings": "Settings",
+            "daytime": "**Successfully set on how long a day should last!**\nThe day will last `%time% seconds`",
+            "nighttime": "**Successfully set on how long a night should last!**\nThe night will last `%time% seconds`",
+            "category": {
+                "err": "`ERROR` category name not found",
+                "catenair": "**Successfully set the category!**\nNow if Murder Mystery Bot creates a game, it will put the channels inside of that category! Else if the category wont exist, it'll automatically reset this. (Meaning that if you want it in a category, youll have to set it again)"
             },
-            "detective": {
-                "channel": "Hallo, Je bent een **Detective**, Je probeert erachter te komen wie de moordenaar is! De beste optie is om iedereen te wantrouwen, Doe je best om de moordenaar te ontdekken, Als je sterft kan er een nieuwe Detective komen, Als je op iemand schiet kan je je wapen niet terugkrijgen, dat heb je dan verpest maat. Als je sterft kan je praten in #general (of de hoofdchat) (als een admin heeft ingesteld dat mensen met Murder Mystery Rol niet kunnen praten)\nOm iemand te doorzoeken, om te zien of hij een moordenaar is, type je mm!search `@user`\n(of mm!searchid `(userid)`)\nOm op iemand te schieten, type je mm!shoot `@user`\n(of mm!shootid `(userid)`)\nMaar misbruik je wapen niet!\nDat was het, hopelijk kan je erachter komen wie de moordenaar is!",
-                "shoot": "Je schoot op <@%user%> en zw waren een **%role%**!",
-                "sent": ":skull: Je bent neergeschoten door een **Detective**! :skull:",
-                "sent2": " was neergeschoten door de **Detective** en was een **%role%**! :gun:"
-            },
-            "healer": {
-                "channel": "Hallo, Je bent een **Genezer**, Je kan mensen terug uit de dood brengen! Als jij sterft, kan je niemand meer genezen, het is daarom het beste om niet te zeggen wat je bent. Als je iemant wilt helen, type je\nmm!heal `@user`\nen zal je iemand genezen.! Hopelijk word je niet vermoord! Veel succes!",
-                "wasteheal": "Je realiseert je je dat je zojuist jezelf hebt genezen, en een Eerstehulpdoos hebt verspild. Wat vreselijk, hier is er nog een *geeft er nog een*. Gebruik deze nu niet op jezelf!",
-                "hasbeenrevived": " is teruggebracht door een **Genezer** :angel:",
-                "youhavehealed": "Je genas ",
-                "youhavehealed2": "!\nDe volgende ochtend zal hij/ze weer leven!",
-                "dm": ":angel: Je bent teruggebracht door een **Genezer**! Morgen ben je weer in leven. :angel:"
-            },
-            "jailor": {
-                "channel": "Hallo, Jij bent een **Cipier**, Elke nacht zet jij mensen in het gevang en ondervraag je ze. Als je denkt dat deze persoon de moordenaar is, voel je dan vrij om \n**mm!execute** te typen.\nom hem te executeren. Als je iemand in het gevang wilt gooien, type je\nmm!jail `@user`\nOm deze persoon in het gevang te stoppen, of type\nmm!jailid `id`\nOm iemand in het gevang te zetten, maar dit wordt in een lijst hieronder aangekondigd. Als je iemand executeert, wordt dit aangekondigd in het #murdergame kanaal, Hopelijk kan je erachter komen wie de moordenaar is!",
-                "jailchannel": "Hallo, Welkom in de **Gevangenis**, dit is waar gevangenen zitten die je kan ondervragen. Ook hallo Gevangene! Welkom in de gevangenis, Als de Cipier je verdacht vindt, zal hij je waarschijnlijk executeren, Als je de Cipier dood hebben ze misschien een Laatste Wens, die dan in de openbare chat komt, en laat zien wie ze gevangen hebben genomen. Hoe dan ook, probeer niet geëxecuteerd te worden, anders eindig je als Schaduw die z'n hoofd kwijtraakte. Hoe dan ook, hopelijk lukt het je niet geëxecuteerd te worden!",
-                "alreadyinjail": "Deze persoon zit al in de gevangenis!",
-                "isntinjail": "Deze persoon zit niet in de gevangenis!",
-                "youhaveexecuted": "Je executeerde ",
-                "wasmurderer": " en ze waren de **Moordenaar**!",
-                "wasdetective": " and ze waren een **Detective**",
-                "washealer": " en ze waren een **Genezer**",
-                "wasradio": " en ze waren een **Radiohost**",
-                "wasassassin": " en ze waren een **Huurmoordenaar**",
-                "wasinnocent": " en ze waren een **Onschuldige**",
-                "fekfe": " was geëxecuteerd door een **Cipier**",
-                "alreadyexecuted": "Je hebt al iemand geëxecuteerd!",
-                "cantexeute": "Je kan jezelf niet executeren",
-                "havesss": ":skull: Je bent geëxecuteerd door een **Cipier** :skull:",
-                "jailingurself": "Je kan jezelf niet in het Gevang stoppen."
-            },
-            "radioperson": {
-                "channel": "Hallo! Je bent een **Radiohost** en je hebt de mogelijkheid om anoniem alles wat je wilt in de openbare chat te plaatsen. Als je niets te zeggen hebt, is dat ook goed. Als je iets wilt aankondigen, type je \nmm!broadcast (message)\nOm een bericht te versturen naar #murdergame!",
-                "broadcast": "A Radio Person has broadcasted!",
-                "broadcast2": "Je hebt een globaal bericht naar het nieuws gestuurd! Iedereen heeft gezien wat je zei!\n\nOp TV - SHOCKEREND/REGULIER NIEUWS\nHallo mensen, Ik ben je host %username%, en vandaag praten we over iets wat er is gebeurd!\n"
-            },
-            "assassin": {
-                "channel": "Hallo! Je bent een **Huurmoordenaar**, Jij probeert je doelwit dood te krijgen, als je doelwit dood gaat ontvang jij $3 en krijg je een nieuw doelwit om te doden... Je hoofddoel is om je doelwit te doden, De Moordenaar weet wie de Huurmoordenaar is, maar jij weet niet wie de Moordenaar is. Je krijgt een DM met informatie over je volgende doelwit. Zorg ervoor dat de Moordenaar een doelwit kan designeren EN eens per nacht kan doden. (Economie systeem binnenkort beschikbaar)"
-            },
-            "zombie": {
-                "channel": "Brainzzz...Je bent een **Zombie**, het is jouw taak om te proberen zoveel mogelijk mensen te laten winnen!\nJe kunt mensen infecteren door mm!bite <@User/UserID> in te voeren, maar het zal ongeveer 1 dag duren voordat ze in een zombie veranderen!",
-                "alreadybitten": "**U hebben al iemand besmet!**",
-                "bitten": "**U hebt %user% besmet!**\nHet duurt ongeveer een dag voordat %user% verandert in een **Zombie**! (tenzij genezen door de Genezer)\nDe speler weet echter dat ze zijn geïnfecteerd, maar dit is niet aangekondigd in de chat.",
-                "turnedintozombie": "%user% is omgezet in een **Zombie**, hun vorige rol was **%role%**.",
-                "turnedintozombiedm": "**Het is de tweede dag en je bent veranderd in een `Zombie`!**\nGa alsjeblieft naar #zombie en scrol omhoog om te zien wat je kunt doen.",
-                "infecteddm": "**Je bent gebeten door een **Zombie**!\nJe hebt een dag totdat je in een Zombie verandert, tenzij je wordt genezen door de Genezer!",
-                "healer": "**De genezer heeft je genezen en je bent niet langer geïnfecteerd!**"
+            "defaultchannel": "**Successfully set your channel to %channel%!**",
+            "prefix": "**Successfully set your new prefix to `%newprefix%`!**\nOld prefix was `%oldprefix%`",
+            "prefixtwo": "**Please set the new prefix!**",
+            "locales": {
+                "apply": {
+                    "one": "**Please look in DMS**",
+                    "two": "**Want to become a translator? Well here is the link! Just DM fire the template and your good!**\nYou must not use Google Translate for this.\nhttps://discord.gg/rdqDEGG",
+                    "three": "**ERROR** I cant seem to send messages to you!\nError log:"
+                },
+                "list": {
+                    "one": "```prolog\nAvaliable Locales:\n"
+                },
+                "set": {
+                    "one": "**Please select a option!**\n```prolog\n      --------- Language Options ------------\n      Use \"mm!settings locales set [lang]\" to set your locale!\n      Use \"mm!settings locales list\" to see the list of languages available!\n      Use \"mm!settings locales apply\" to apply to be a translator!\n\n    Avaliable Languages:",
+                    "two": "That language doesn't exist!\n**Please select a Language!**\nLanguages Available:\n"
+                },
+                "one": "**Please select an option!**\n```\napply\nlist\nset\n```"
             }
         },
-        "enoughplayers": "Er zijn al genoeg spelers! (Je kan eventueel naar een andere server gaan, Onbeperkte Spelers spelen of 50/50 modus spelen.)",
-        "settings": "Hallo! Welkom in het **Instellingen/Help Menu**! Hier zijn de commando's!\n\nmm!game settings locales (taal) - Stelt je taal in! (Als je een andere taal wilt gebruiken.)\nmm!settings daytime <Lengte van de dag in seconden> - Dit bepaalt hoe lang een dag in de game moet duren!\nmm!settings nighttime <Lengte van de nachttijd in seconden> - Dit bepaalt hoe lang een nacht in de game moet duren!\nmm!settings category <Categorie / Categorie Kanaalnaam> - Stel de categorie in van wat Murder Mystery Bot de kanalen voor het spel zou moeten instellen!",
-        "langsuccess": "**Taal gewijzigd naar** `",
-        "thatpersonisdead": "Deze persoon is dood!",
-        "thatpersonisalreadydead": "Deze persoon is al dood!",
-        "thatpersonisntdead": "Deze persoon is niet dood!",
-        "fekrofr": " is gevangen genomen! Probeer hem te ondervragen, als hij/zij verdacht klinkt, kan je executeren door mm!execute te typen.",
-        "reee": " is geëxecuteer door de **Cipier** en ze waren de **Moordenaar**",
-        "eeer": "Je kan dit niet overdag doen.",
-        "nogamegoingon": "Er is geen spel bezig!",
-        "reeeeee": "**Het lukt mij niet om je een Privébericht te sturen...**",
-        "alreadyvote": "Je hebt al gestemd!",
-        "alreadymurder": "Je hebt al iemand vermoord!",
-        "alreadysearch": "Je hebt al iemand doorzocht/neergeschoten!",
-        "alreadyexecute": "Je hebt al iemand geëxecuteerd!",
-        "alreadybroadcast": "Je hebt al omgeroepen!",
-        "alreadyjailed": "Je hebt al iemand gevangengenomen!",
-        "stabbed": " is neergestoken door de **Moordenaar**! :dagger:",
-        "stabbed2": ":skull: Je bent neergestoken door de **Moordenaar** :skull:",
-        "stabbed3": "Een Moordenaar probeerde je aan te vallen! Maar je zat al in de gevangenis!",
-        "stabbed4": "Iemand probeerde je aan te vallen! Maar je zat al in de gevangenis!",
-        "reeeess": "Je kan jezelf niet vermoorden...Probeer je soms zelfmoord te plegen?",
-        "welluhh": "Deze persoon is je partner!",
-        "lola": "Je kan dit niet s'nachts doen!",
-        "lolaa": "Je kan dit niet s'nachts dag!",
-        "dledee": "Je valt aan, maar deze persoon is opgesloten. Ze zitten misschien in de gevangenis...",
-        "isntingame": "Je bent niet in dit spel!",
-        "b": "Je hebt al gestemd!",
-        "c": "Votehang is uitgeschakeld in deze modus.",
-        "goodnight": "Welterusten...",
-        "goodmorning": "Goedemorgen!\nOm een stemming te houden over wie je moet ophangen, type je mm!votehang `@user`\nDe ochtend duurt één minuut.\nNu het morgen is,kan je met andere praten om te achterhalen wie de Moordenaar/Huurmoordenaar is!",
-        "help": "`Help Commando`\n\n***Gewone Commando's***\n**mm!invite** - Nodig Murder Mystery Bot uit naar jouw server!\n**mm!shardinfo**\n**mm!server** - Geeft je een uitnodiging naar de officiële Murder Mystery Game server!\n**mm!suggest** - Geef een suggestie voor de bot! (Misbruik zal resulteren in een plek op de blacklist.)\n**mm!globalgames** - Het globale spelcommando!\n**mm!leave** - Verlaat een wereldwijd gamespel (Ingame commando)\n**mm!profile** - Toont uw profielstatus!\n**mm!taunt** - Gebruik een taunt! (Globale spellen Ingame-opdracht)\n\n***Game Commands***\n**mm!game** - Geeft je details over het spel en hoe je moet spelen\n**mm!game rules** - Laat je de spelregels zien!\n**mm!game start** - Start een spel!\n**mm!game fixgame** - Doet een poging het spel te repareren.\n**mm!game join** - Doe mee aan een spel!\n**mm!game setupdata** - Voeg je serverdata toen aan onze database!\n**mm!game modecmds <Options>** - Verander de game opties! (Momenteel alleen gebruikt in de Zandbak Modus)\n**mm!game addhostrole <role name>** - Voeg je Host rol toe aan de database!\n**mm!game leave** - Verlaat het spel!\n**mm!game gamestart** - Start een spel waar alle rollen en kanalen automatisch worden aangemaakt, etc...\n**mm!game stop** - Stop het spel!\n\n***Ingame Commands***\n**mm!kill <@user>** - Vermoord iemand! (Moordenaar Permissie Nodig)\n**mm!search <@user>** - Doorzoek een gebruiker om te zien of hij/zij de moordenaar is!\n**mm!shoot <@user>** - Schiet iemand neer die je verdenkt de moordenaar te zijn!\n**mm!broadcast** - Kondig een bericht aan in het nieuws!\n**mm!votehang <@user>** - Doe een stemming om een verdacht persoon te vermoorden!\n**mm!jail <@user>** - Neem iemand gevangen om hem te ondervragen\n**mm!execute <@user>** - Executeerd een verdachte speler...\n**mm!heal <@user>** - Breng de speler terug tot leven!\n**mm!lastwill <will>** - Als je sterft of opgehangen wordt, laat je een Laatste Wens zien aan iedereen voordat je daadwerkelijk sterft.\n**mm!item <item> <@User (optional)>** - Bought an item? Well you can use your item!\n\n***Bot gemaakt door FireMario211***\nVersie %version%\nOnthoudt dat er fouten kunnen zijn. Als je die ziet, type dan mm!bug (bericht)",
-        "shop": "Welkom in de **Winkel**! Hier kan je dingen kopen om jezelf te verdedigen of om de verdachte moordenaar mee om te leggen...\nWe gebruiken de valuta \"**Goud**\", Je krijgt 1 **Goud** per dag, tenzij je dood of vervloekt bent.\n**Voorwerpen**:\n%item%\n\nOm een voorwerp te kopen, type je **mm!buy <Item ID>**\nOm het voorwerp te gebruiken, type je **mm!item <Item ID>** of als je iemand hebt om het op te gebruiken, type dan **mm!item <Item ID> <@User>**",
-        "darkshop": "Welkom in de **Donker Winkel**! Deze winkel wordt aangeboden door de moordenaars die hebben geprobeerd iedereen in de stad te vermoorden... Hier kun je dingen kopen die je beschermen of kopen voor het doden van anderen, of zelfs het universum ontploffen...\nDe moordenaars en moordenaars gebruiken valuta genaamd \"**Dark Gold**\", Je kunt elke dag 0.5 **Dark Gold** krijgen, tenzij je dood bent...Als je nu 1 **Dark Gold** wilt, kun je **Gold converteren** in **Donker goud**\n**Items**:\n%item%\n\nType **mm!darkbuy <Item ID>**\nNom een ​​item te kopen Item, type **mm!darkitem <Item ID>** Of gebruik iemand om het te gebruiken, type **mm!darkitem <Item ID> <@User>**",
-        "alreadyshot": "Je hebt al iemand beschoten",
-        "plspickitem": "**Kies een voorwerp ID om te kopen/gebruiken!** (Dit staat bij het einde van het voorwerp in de winkel:)",
-        "unknownitem": "**Dit voorwerp ID is niet bekend!**",
-        "notenoughgold": "**Je hebt niet genoeg goud! Je hebt** `%golamount%` **nodig om dit voorwerp te kunnen kopen!**",
-        "notenoughgolddark": "**Je hebt niet genoeg donker goud! Je hebt** `%golamount%` **nodig om dit voorwep te kunnen kopen!**",
-        "bought": "**Je kocht (een)** `%itemname%`!",
-        "plstypemsg": "**Type alstublieft een bericht!**",
-        "hasnotbought": "**Sorry, maar je hebt dit voorwerp niet gekocht!**",
-        "shopclosed": "**De winkel is s'nachts gesloten...**",
-        "defaultchannel": "Vermeld een kanaal! (Voorbeeld: #general)",
-        "enternumber": "**Voer alstublieft een nummer in!**",
-        "shopitems": [{
-                "name": "Verdedigingsmes",
-                "price": 10,
-                "description": "Een nieuw scherp mes klaar om te snijden.",
-                "id": 0,
-                "usable": 0,
-                "sent": ":skull: Je bent neergestoken door de persoon die je wou neerschieten/doden! Je bent dood :skull:",
-                "sent2": ":dagger: Iemand probeerde je te vermoorden! Je steekt en vermoord hem! Niemand weet gelukkig dat jij het was. :dagger:",
-                "sent3": ":dagger: De **Detective** probeerde op iemand te schieten maar de **Detective** was neergestoken! :dagger:",
-                "isDark": 0
-            }, {
-                "name": "Boog",
-                "price": 10,
-                "description": "Dit voorwerp heeft 50% kans om iemand te doden.",
-                "id": 1,
-                "usable": 1,
-                "msg": "Je schoot op <@%user%> en die was een **%role%!**",
-                "msgs": "Je schoot op <@%user%> en die was een **%role%!**",
-                "msgss": "Je schoot op <@%user%> en die was de **%role%!**",
-                "sent": ":skull: Je bent beschoten door een **Boog**! :skull:",
-                "msgsss": "De Winkelier zag je dat je een **Onschuldige** hebt beschoten! Hij laat je de boog niet meer kopen!",
-                "seller": "Sorry, maar je kan dit voorwerp niet meer kopen/gebruiken omdat de Winkelier je heeft verboden het te kopen/gebruiken!",
-                "isDark": 0
-            },
-            {
-                "name": "Privébericht",
-                "price": 5,
-                "description": "Stuur iemand overdag een bericht, De bot stuurt je bericht en rol naar de verlangde persoon [Voorwerp wordt verwijderd na gebruik]",
-                "id": 2,
-                "usable": 1,
-                "privatemsg": "**Je hebt een privébericht ontvangen van je Huis door een Onbekend Persoon**\n```\n%msg%\n```",
-                "sent": "**Je hebt een privebericht verzonden naar ** <@%us%>'s **Huis**...",
-                "isDark": 0
-            },
-            {
-                "name": "Goud naar donker goud",
-                "price": 2,
-                "description": "Zet goud om in donker goud! *Het heeft geen zin...*",
-                "id": 3,
-                "usable": 0,
-                "isDark": 1
-            }, {
-                "name": "Emmer met spek",
-                "price": 1,
-                "description": "Een emmer gevuld met spek. Perfect voor (n)iets.",
-                "id": 4,
-                "usable": 0,
-                "isDark": 0
-            }, {
-                "name": "Emmer met kokende olie",
-                "price": 1,
-                "description": "Een emmer met kokende olie, bevat mogelijk giftige stoffen.",
-                "id": 5,
-                "usable": 0,
-                "isDark": 0
-            }, {
-                "name": "Emmer met kaas",
-                "price": 1,
-                "description": "Een emmer gevuld met kaas, of is het gele verf?",
-                "id": 6,
-                "usable": 0,
-                "isDark": 0
+        "bugreport": "Your bug has been submitted! Please do not abuse this command or we will have to block your guild from the bot.",
+        "thefjw": "**The prefix is `%prefix%`.**",
+        "pingthe": "**The ping is `%ping% ms`.**",
+        "categorystart": "**The setting you've entered for \"category\" had been reset because the category you've provided doesn't exist!",
+        "leavecmd": {
+            "one": "**You haven't joined the game!**",
+            "two": "**ERROR**\nGamemode not found in DB!",
+            "three": "**Since you are the Murderer, the game will end due to there not being any murderers",
+            "four": "**Leaving the game...**",
+            "five": "%user%, You have successfully left the game!",
+            "six": "**Are you sure you want to leave?**\nYou can still win the game! If you have to go or you are about to lose then that's fine!\n\nIf you don't want to leave, type `dontleave`. If you want to leave, type `leave`",
+            "seven": "**Okay, your not leaving then!**",
+            "leave": "leave"
+        },
+        "joincmd": {
+            "one": "**Inserting player...**"
+        },
+        "sorrytointerrupt": "Sorry to interrupt! But the game has been stopped because the bot couldn't find a certain channel!\nThink this is a mistake? Contact the Bot Developer to fix this issue by reporting the bug! (mm!bug)",
+        "balance": "**You have**\n`%gold%` Gold\n`%darkgold%` Dark Gold",
+        "gamecmd": {
+            "rules": "***RULES OF MURDER MYSTERY***\n**These are the game rules of Murder Mystery, You must follow them or else you will get a punishment! (if your playing it on the MMBO server)**\n\n:one: **Look at a channel if you have the permission Administrator** If you aren't playing the game, thats fine, but if you are playing and your an administrator and show people who the murderer is, you will get a punishment\n**Punishment:** Warning if once, if twice then Timeout - 5 minutes\n:two: **Gamethrowing** Gamethrowing isn't fun, If you get caught gamethrowing, like show that your detective and show who the murderer is, Also same as if you have an Administrator Permission.\n**Punishment:** No warning, Timeout for 10 minutes\n:three: **Cheating** If some how you exploited the bot, it isn't really fair to be cheating from the bot, if you crash the bot or somehow found away to get by the permissions, its a big no no. Another way of cheating is using a \"Selfbot\" to see the channel permissions\n**Punishment:** Permanant Ban from the Game.",
+            "howtoactuallyplay": {
+                "rea": "Murder Mystery Game Help (Page %page%/%maxpages%)",
+                "one": "```fix\n> - Welcome to Murder Mystery! - <\n```\nThis is a game where YOU the player try to find out who the Evils are or the Murderer!\nThere are a total of 8 roles, however the extra 1 is for a separate mode.\n```md\n## Main Roles ##\n```\nThe first role is the **Murderer**, which kills one person each night. However, the **Detective** can search and find who the Murderer is then shoot them, or the **Jailor** can jail the murderer to find out no one has been murdered, and finally if you try to attack someone while they were in jail, the **Jailor** will find out exactly who tried to attack the person who was jailed and the person will be notified but not know who attacked. If you are the **Murderer**, be careful of who you try to kill. If someone asks for your role, try claiming that you are **Innocent**, or if someone is dead, try making sure people forget that person died and if someone asks for your role, say that you are that role. I would not advice claiming as a **Radio Person** as people will say to broadcast something to prove that you are, if either the **Jailor** is dead or the **Detective** is dead and everyone forgot, that they were dead, then if you claim that, everyone may listen to you as they are the most important roles. The **Murderer** also has a partner which is the **Assassin**, only the **Murderer** can assign targets for the **Assassin** who will try their best to get them killed. The **Assassin** does not know who the **Murderer** is and the **Murderer** cannot kill any of their partners.",
+                "two": "The second role is the **Detective**, where the **Detective** will try to find and shoot **All Evils**, but they cannot search or shoot people in jail,. If they attempt to shoot someone in jail, the **Jailor**, the **Jailor** will be notified that the person who was jailed was attempted to have been killed, same with the person who was in jail. If they attempt to search someone while they are in jail, they will not be able to search them since the person who the **Detective** is attempting to search is in jail.\n\nThe third role is the **Healer**, which can resurrect people if they were killed, murdered, shot, etc. However they cannot attempt to heal people in jail. The **Healer** is also a target for **Evils** as of now, the **Healer** can heal anyone without any limit, which can frustrate the **Murderer** or any evil roles.\n\nThe fourth role is the **Radio Person** who can broadcast anything anonymously at night.",
+                "three": "The firth role is the **Assassin**, which is the **Murderer**s partner, however the **Assassin** does not know who the **Murderer** is, but the **Murderer** knows who the **Assassin** is, the **Murderer** can assign targets for the **Assassin** to try and convince people to kill, if they succeed and the person dies, they will receive +3 gold, however if the person was voted to be killed, it will show that they were assigned as a target. The **Assassin** also cannot be killed by the **Murderer** as they are partners.\n\nThe sixth role is **Jailor**, which can jail people to interrogate them, if someone is jailed, they cannot use any role commands, this makes it convenient for the **Jailor** to see if anyone murders, or the **Murderer** can bait the **Jailor** to execute the person by not killing at all. The **Jailor** can decide if the person that they jailed should be executed or not, executing will reveal what their role was in the public chat and (not a feature yet) if they execute someone who was **Innocent** or wasn't evil, will not be able to execute anyone, but they can still jail people.",
+                "four": "```md\n## Exclusive Roles ##\n```The seventh role is the **Zombie** role, which is exclusive to the game mode; **Zombie Mode**, **Zombies** can bite people at night, however, it takes until the next 2 days for the person to become a **Zombie** if **Healer** doesn't heal the person in time. If the **Healer** does heal the person in time, they will not be turned into a **Zombie**, however if the person who was infected turns into a **Zombie**, their role will be revealed in the private zombie chat and they will not be able to use their normal role commands again, besides using the zombie role commands. They are also considered **Evil**.",
+                "five": "Those are all the roles and the information about them, there are different strategies for each role which can determine how the game will play out for you and for the rest of the players. If you want to play Murder Mystery, it's recommended to have 6 or more people in order to play most of the other modes, else if you have a small group, as in 4 players or 3, then you can play short roles mode, bot 1v1, murder party, or 1v1 mode. The game is not meant to be played with 1 player.",
+                "six": "That is all the information you need to know about **Murder Mystery Bot** and the roles. As always...**Good luck**...\n\nNOTE: If you need any help or found a bug, please contact <@126119057232625664> (FireMario211#2948), <@281397352177074177> (Noah's Gaming and More#6946) or <@553971625679126549> (Firee#7982) and we will try our best to fix it as possible!\n**If you want to join our server, type mm!server**\n\n:warning: ***PLEASE READ*** :warning:\nIf the game ends, all channels should be deleted and the role that the bot should be deleted **by the bot itself**, if not then that may be a bug and you should report it. If you see a channel that **you cannot delete** even though you have permission, you should reload your discord first as it is a **Discord Bug** that I and the Bot cannot fixed and is caused by the bot deleting the game channels, and can be resolved by just reloading your discord client.\n\n:exclamation: ***Beware of Selfbots*** :exclamation:\n**People can use selfbots to see the channel permissions and cheat, they can use an eval or some other source and then know exactly who the exact murderer is by channel permissions, If you encounter this, it is against the Discord Terms of Service/Guidelines and should report them. Or you can just ban/kick the person from the server. This is just my opinion if you don't want to report the user.**\n\n***If you want to see the rules of the game, please type mm!game rules*** (Only for MMBO server)\n\nI would also want to thank Noah for giving me the idea to make this bot and betterface for giving me gamemode ideas (In alpha version of the bot)\nI would also like to thank you for inviting this bot and playing Murder Mystery with it!"
             }
-        ],
-        "darkshopitems": [{
-            "name": "Vernietig het Universum",
-            "price": 20,
-            "description": "Vernietig het universum en dood iedereen!",
-            "id": 1,
-            "usable": 1,
-            "isDark": 1,
-            "sent": "De **Moordenaar** heeft een bom geplaatst in de kern van de aarde! Biep, biep, biep, **bop** *BOEM*",
-            "sent2": "Je hebt een ontsteker gekocht en geplant in de aarde. Je zet de timer op **2 minuten* en wacht."
-        }, {
-            "name": "Beschuldigen",
-            "price": 5,
-            "description": "Beschuldig iemand en wissel hun rol naar Moordenaar voor een dag!",
-            "id": 2,
-            "usable": 1,
-            "isDark": 1,
-            "sent": "**Je hebt de rol van %user%'s voor de nacht veranderd.**"
-        }, {
-            "name": "Uitzenden",
-            "price": 1,
-            "description": "Neem de positie van de radiohost in en zend iets uit!",
-            "id": 3,
-            "usable": 1,
-            "isDark": 1
-        }, {
-            "name": "De Radio Saboteur",
-            "price": 4,
-            "description": "Deactiveert de radio voor de volgende dag.",
-            "id": 4,
-            "usable": 0,
-            "isDark": 1,
-            "sent": "**Er is een communicatie probleem met het radio systeem, probeer het later nog eens.**"
-        }, {
-            "name": "De Groot Verdiener (Mes)",
-            "price": 2,
-            "description": "Voor iedere moord, krijg je 1 goud.",
-            "id": 5,
-            "usable": 0,
-            "isDark": 1
-        }, {
-            "name": "Eeuwige Gerechtigheid",
-            "price": 1,
-            "description": "Automatisch gegeven aan de Assassin, elke keer dat hij iemand lyncheert, telt zijn stem twee keer, maar wordt niet weggegeven.",
-            "id": 6,
-            "usable": 0,
-            "isDark": 1
-        }, {
-            "name": "Eeuwige kracht (Mes)",
-            "price": 4,
-            "description": "Elke keer dat je iemand vermoordt, wordt voor elk goud dat ze hebben, de hoeveelheid van hoeveel donker goud je krijgt; Als ze 3 goud hadden, krijg je 2 donker goud.",
-            "id": 7,
-            "usable": 0,
-            "isDark": 1
-        }],
-        "roles": {
-            "murderer": "Moordenaar",
-            "detective": "Detective",
-            "healer": "Genezer",
-            "radioperson": "Radiohost",
-            "assassin": "Huurmoordenaar",
-            "jailor": "Cipier",
-            "zombie": "Zombie",
-            "innocent": "Onschuldige"
         },
-        "deakofk": " was neergeschoten door de **Detective** en hij/zij was de **%role%**! :gun:",
-        "deakofks": " was neergeschoten door de **Detective** en hij/zij was een **%role%**! :gun:",
-        "deakofak": " was neergeschoten door de **Detective** en hij/zij was een **%role%**! :gun:",
-        "assignation": "Je kan jezelf niet toekennen.",
-        "assignationis": "Je hebt al iemand toegekend!",
-        "assignationisathing": "Je kan je partner niet toekennen!",
-        "ekfoekfefef": "<@%author%> heeft <@%user%> neergeschoten, en die was een **%role%**!",
-        "fekrofa": "Je doelwit was vermoord! Je hebt 3 goud verdiend <:gold:384017291316297729>!\nJe hebt geen nieuwe Doelwitten.",
-        "haha": "Je doelwit is ",
-        "playersxd": "**Je hebt ongeveer **%playercount%** spelers in het spel!**",
-        "shotdetect": ":skull: Je bent neergeschoten door een **Detective**! :skull:",
-        "shopthin": "Je hebt dit voorwerp al gekocht!",
-        "shopthings": "Sorry, maar je kan dit voorwerp niet gebruiken, want het is niet bruikbaar!",
-        "shopthing": "Sorry, maar je kan geen items kopen/gebruiken in deze modus!",
-        "blacklistusersed": "Hallo, het spijt ons, maar je staat op de zwarte lijst! Als je een bezwaar wilt indienen, type dan mm!appealserver en wordt lid van die server om je bezwaar te maken!",
-        "blacklistguildjsa": "Hallo, het spijt ons, maar je server staat op de zwarte lijst! If you want to appeal your guild, type dan mm!appealserver en wordt lid van die server om je bezwaar te maken!",
-        "alreadyjoinn": "**Sorry, maar iemand neemt deel aan het spel! Even geduld tot ze zich bij het spel hebben gevoegd.**",
-        "cmdonlyworks": "**Dit commando werkt alleen voor %modename%.**",
-        "notrightarguments": "**Dat waren niet de juiste argumenten!**\n%modename% commandos:",
-        "sandboxmode": {
-            "typeofgold": "**Vul a.u.b. het type goud in!** <Normal/Dark>",
-            "typeofitem": "**Voer het type item in!** <Normal/Dark>",
-            "pleaseenteramount": "**Vul a.u.b. de hoeveelheid goud in.**",
-            "pleaseenteritemid": "**Voer de Item ID in!**",
-            "destruction": "**Iedereen succesvol vermoord**",
-            "daytime": "**Tijd met succes ingesteld op dag**",
-            "nighttime": "**TIjd met succes ingesteld op nacht**",
-            "revive": "**Succesvol nieuw leven ingeblazen bij %user%!**",
-            "kill": "**%user% is met succes vermoord.!**",
-            "setgold": "**Stel met succes het donkere goud/goud in op `%goldamount%` voor %user%!**",
-            "addgold": "**Succesvol toegevoegd `%goldamount%` voor %user%!**",
-            "removegold": "**Succesvol verwijderde `%goldamount%` voor %user%!**"
+        "gamevicor": {
+            "iftheyjustsay": "If they just say N/A, then ignore it.",
+            "victory": "Innocents win! The town survived!",
+            "nonvict": "The town has lost. The evils have won.",
+            "murderparty": "The evils have won, the town is dead"
         },
-        "dmsdisabled": "**Ik kan u geen bericht sturen, schakel Direct berichten in!**"
+        "server": "**So you want to join our Offical server? Here is the invite: https://discord.gg/Hh5ttkf**",
+        "plsgivepermissionone": "Please give me the permission `MANAGE_ROLES` so you can play Murder Mystery!",
+        "plsgivepermissiontwo": "Please give me the permission `MANAGE_CHANNELS` so you can play Murder Mystery!",
+        "plsgivepermissionthree": "**Please set the default channel!** You can do this by typing mm!settings defaultchannel <#ChannelName>",
+        "gamestartcmd": {
+            "errors": {
+                "one": "**That mode has not been added yet.**",
+                "two": "This mode has been added but it has been put as a development build due to bugs and stuff. If you want to test out this build, you must be on our testing server. (Not public)"
+            },
+            "gamemodes": {
+                "regular": {
+                    "name": "Regular",
+                    "desc": "Classic Murder Mystery!"
+                }
+            }
+        }
     }
 }
